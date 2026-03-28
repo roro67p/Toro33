@@ -18,6 +18,31 @@ const initialClients = [
   { id: 2, name: 'Marie Martin', email: 'marie.martin@email.fr', phone: '06 98 76 54 32', address: '5 avenue Victor Hugo, Lyon', notes: 'Végétarienne' },
 ]
 
+const initialFournisseurs = [
+  { id: 1, name: 'Boucherie Centrale', contact: 'Michel Lebrun', phone: '01 23 45 67 89', email: 'michel@boucheriecentrale.fr', address: '15 rue du Commerce, Paris', produits: 'Steak, Poulet, Veau', delai: '48h', notes: 'Livraison mardi et vendredi' },
+  { id: 2, name: 'Légumes du Marché', contact: 'Sophie Bernard', phone: '01 98 76 54 32', email: 'contact@legumesdumarche.fr', address: '8 avenue des Fleurs, Rungis', produits: 'Salade, Frites, Légumes', delai: '24h', notes: 'Commande min. 50€' },
+  { id: 3, name: 'Cave & Vins', contact: 'Pierre Dupuis', phone: '01 11 22 33 44', email: 'pierre@cavedesvins.fr', address: '3 rue du Château, Bordeaux', produits: 'Vins, Champagne', delai: '72h', notes: '' },
+]
+
+const initialStock = [
+  { id: 1, name: 'Steak (kg)', fournisseurId: 1, quantite: 15, unite: 'kg', seuilAlerte: 5, prixUnitaire: 18.0 },
+  { id: 2, name: 'Poulet (kg)', fournisseurId: 1, quantite: 10, unite: 'kg', seuilAlerte: 4, prixUnitaire: 8.5 },
+  { id: 3, name: 'Salade (pièces)', fournisseurId: 2, quantite: 20, unite: 'pcs', seuilAlerte: 8, prixUnitaire: 1.2 },
+  { id: 4, name: 'Pommes de terre (kg)', fournisseurId: 2, quantite: 30, unite: 'kg', seuilAlerte: 10, prixUnitaire: 0.8 },
+  { id: 5, name: 'Vin rouge (bouteilles)', fournisseurId: 3, quantite: 24, unite: 'btl', seuilAlerte: 6, prixUnitaire: 6.5 },
+  { id: 6, name: 'Saumon (kg)', fournisseurId: 2, quantite: 3, unite: 'kg', seuilAlerte: 4, prixUnitaire: 22.0 },
+]
+
+const initialTables = [
+  { id: 1, numero: 1, capacite: 2, zone: 'Salle', statut: 'Libre' },
+  { id: 2, numero: 2, capacite: 4, zone: 'Salle', statut: 'Libre' },
+  { id: 3, numero: 3, capacite: 4, zone: 'Salle', statut: 'Libre' },
+  { id: 4, numero: 4, capacite: 6, zone: 'Salle', statut: 'Libre' },
+  { id: 5, numero: 5, capacite: 2, zone: 'Terrasse', statut: 'Libre' },
+  { id: 6, numero: 6, capacite: 4, zone: 'Terrasse', statut: 'Libre' },
+  { id: 7, numero: 7, capacite: 8, zone: 'Salon privé', statut: 'Libre' },
+]
+
 export const useStore = create(
   persist(
     (set, get) => ({
@@ -72,6 +97,28 @@ export const useStore = create(
       }),
       updateInvoiceStatus: (id, status) => set((s) => ({ invoices: s.invoices.map((i) => i.id === id ? { ...i, status } : i) })),
       deleteInvoice: (id) => set((s) => ({ invoices: s.invoices.filter((i) => i.id !== id) })),
+
+      // Fournisseurs
+      fournisseurs: initialFournisseurs,
+      addFournisseur: (f) => set((s) => ({ fournisseurs: [...s.fournisseurs, { ...f, id: Date.now() }] })),
+      updateFournisseur: (id, data) => set((s) => ({ fournisseurs: s.fournisseurs.map((f) => f.id === id ? { ...f, ...data } : f) })),
+      deleteFournisseur: (id) => set((s) => ({ fournisseurs: s.fournisseurs.filter((f) => f.id !== id) })),
+
+      // Stock
+      stock: initialStock,
+      addStockItem: (item) => set((s) => ({ stock: [...s.stock, { ...item, id: Date.now() }] })),
+      updateStockItem: (id, data) => set((s) => ({ stock: s.stock.map((i) => i.id === id ? { ...i, ...data } : i) })),
+      deleteStockItem: (id) => set((s) => ({ stock: s.stock.filter((i) => i.id !== id) })),
+      ajusterStock: (id, delta) => set((s) => ({
+        stock: s.stock.map((i) => i.id === id ? { ...i, quantite: Math.max(0, i.quantite + delta) } : i)
+      })),
+
+      // Tables
+      tables: initialTables,
+      addTable: (t) => set((s) => ({ tables: [...s.tables, { ...t, id: Date.now(), statut: 'Libre' }] })),
+      updateTable: (id, data) => set((s) => ({ tables: s.tables.map((t) => t.id === id ? { ...t, ...data } : t) })),
+      deleteTable: (id) => set((s) => ({ tables: s.tables.filter((t) => t.id !== id) })),
+      setTableStatut: (id, statut) => set((s) => ({ tables: s.tables.map((t) => t.id === id ? { ...t, statut } : t) })),
     }),
     { name: 'restaurant-storage' }
   )

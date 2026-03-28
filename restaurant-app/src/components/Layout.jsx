@@ -1,14 +1,18 @@
 import { useState } from 'react'
 import {
-  LayoutDashboard, UtensilsCrossed, Users, ShoppingCart, FileText, Menu, X, ChefHat
+  LayoutDashboard, UtensilsCrossed, Users, ShoppingCart, FileText,
+  Menu, X, ChefHat, Truck, Package, Table2
 } from 'lucide-react'
 
 const navItems = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
   { id: 'menu', label: 'Menu', icon: UtensilsCrossed },
+  { id: 'tables', label: 'Tables', icon: Table2 },
   { id: 'clients', label: 'Clients', icon: Users },
   { id: 'orders', label: 'Commandes', icon: ShoppingCart },
   { id: 'invoices', label: 'Factures', icon: FileText },
+  { id: 'fournisseurs', label: 'Fournisseurs', icon: Truck },
+  { id: 'stock', label: 'Stock', icon: Package },
 ]
 
 export default function Layout({ page, setPage, children }) {
@@ -22,7 +26,7 @@ export default function Layout({ page, setPage, children }) {
           <ChefHat className="text-amber-400 shrink-0" size={28} />
           {sidebarOpen && <span className="font-bold text-lg text-amber-400">RestoPro</span>}
         </div>
-        <nav className="flex-1 p-2 space-y-1 mt-2">
+        <nav className="flex-1 p-2 space-y-1 mt-2 overflow-y-auto">
           {navItems.map(({ id, label, icon: Icon }) => (
             <button
               key={id}

@@ -6,18 +6,24 @@ import MenuPage from './components/Menu'
 import Clients from './components/Clients'
 import Orders from './components/Orders'
 import Invoices from './components/Invoices'
+import Fournisseurs from './components/Fournisseurs'
+import Stock from './components/Stock'
+import Tables from './components/Tables'
 
 export default function App() {
   const [page, setPage] = useState('dashboard')
 
   const renderPage = () => {
     switch (page) {
-      case 'dashboard': return <Dashboard setPage={setPage} />
-      case 'menu': return <MenuPage />
-      case 'clients': return <Clients />
-      case 'orders': return <Orders setPage={setPage} />
-      case 'invoices': return <Invoices />
-      default: return <Dashboard setPage={setPage} />
+      case 'dashboard':    return <Dashboard setPage={setPage} />
+      case 'menu':         return <MenuPage />
+      case 'tables':       return <Tables setPage={setPage} />
+      case 'clients':      return <Clients />
+      case 'orders':       return <Orders setPage={setPage} />
+      case 'invoices':     return <Invoices />
+      case 'fournisseurs': return <Fournisseurs setPage={setPage} />
+      case 'stock':        return <Stock />
+      default:             return <Dashboard setPage={setPage} />
     }
   }
 
