@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, UtensilsCrossed, Users, ShoppingCart, FileText,
-  Menu, X, ChefHat, Truck, Package, Table2
+  Menu, X, ChefHat, Truck, Package, Table2, ClipboardList
 } from 'lucide-react'
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { id: 'orders', label: 'Commandes', icon: ShoppingCart },
   { id: 'invoices', label: 'Factures', icon: FileText },
   { id: 'fournisseurs', label: 'Fournisseurs', icon: Truck },
+  { id: 'commandes-fournisseurs', label: 'Achats', icon: ClipboardList },
   { id: 'stock', label: 'Stock', icon: Package },
 ]
 

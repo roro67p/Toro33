@@ -9,6 +9,7 @@ import Invoices from './components/Invoices'
 import Fournisseurs from './components/Fournisseurs'
 import Stock from './components/Stock'
 import Tables from './components/Tables'
+import CommandesFournisseurs from './components/CommandesFournisseurs'
 
 export default function App() {
   const [page, setPage] = useState('dashboard')
@@ -21,8 +22,9 @@ export default function App() {
       case 'clients':      return <Clients />
       case 'orders':       return <Orders setPage={setPage} />
       case 'invoices':     return <Invoices />
-      case 'fournisseurs': return <Fournisseurs setPage={setPage} />
-      case 'stock':        return <Stock />
+      case 'fournisseurs':          return <Fournisseurs setPage={setPage} />
+      case 'commandes-fournisseurs': return <CommandesFournisseurs />
+      case 'stock':                 return <Stock />
       default:             return <Dashboard setPage={setPage} />
     }
   }

@@ -119,6 +119,40 @@ export const useStore = create(
       updateTable: (id, data) => set((s) => ({ tables: s.tables.map((t) => t.id === id ? { ...t, ...data } : t) })),
       deleteTable: (id) => set((s) => ({ tables: s.tables.filter((t) => t.id !== id) })),
       setTableStatut: (id, statut) => set((s) => ({ tables: s.tables.map((t) => t.id === id ? { ...t, statut } : t) })),
+
+      // Commandes Fournisseurs
+      commandesFournisseurs: [],
+      addCommandeFournisseur: (cmd) => set((s) => ({
+        commandesFournisseurs: [...s.commandesFournisseurs, {
+          ...cmd,
+          id: Date.now(),
+          date: new Date().toISOString(),
+          statut: 'En attente',
+          number: `ACH-${String(s.commandesFournisseurs.length + 1).padStart(4, '0')}`,
+        }],
+      })),
+      // Marquer comme reçue => met à jour le stock automatiquement
+      recevoirCommande: (id) => set((s) => {
+        const cmd = s.commandesFournisseurs.find((c) => c.id === id)
+        if (!cmd) return s
+        const newStock = s.stock.map((item) => {
+          const ligne = cmd.lignes.find((l) => l.stockId === item.id)
+          if (ligne) return { ...item, quantite: item.quantite + Number(ligne.quantite) }
+          return item
+        })
+        return {
+          stock: newStock,
+          commandesFournisseurs: s.commandesFournisseurs.map((c) =>
+            c.id === id ? { ...c, statut: 'Reçue', dateReception: new Date().toISOString() } : c
+          ),
+        }
+      }),
+      updateCommandeStatut: (id, statut) => set((s) => ({
+        commandesFournisseurs: s.commandesFournisseurs.map((c) => c.id === id ? { ...c, statut } : c),
+      })),
+      deleteCommandeFournisseur: (id) => set((s) => ({
+        commandesFournisseurs: s.commandesFournisseurs.filter((c) => c.id !== id),
+      })),
     }),
     { name: 'restaurant-storage' }
   )
