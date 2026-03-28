@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OL — Olympique Lyonnais 2025/2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
+::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:#1a1a1a} ::-webkit-scrollbar-thumb{background:#b5121b;border-radius:3px}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#b5121b 0%,#8a0d14 60%,#1a1a1a 100%);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(181,18,27,0.5)}
+.header-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:20px;height:64px}
+.logo{width:48px;height:48px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#b5121b;font-size:14px;letter-spacing:-0.5px;flex-shrink:0}
+.header h1{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.header h1 span{color:#fff;opacity:0.6;font-weight:400;font-size:14px;margin-left:8px}
+.season-badge{margin-left:auto;background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+
+/* NAV */
+.nav{background:#111;border-bottom:1px solid #222;overflow-x:auto}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;gap:0}
+.nav-btn{background:none;border:none;color:#888;padding:14px 18px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all 0.2s;letter-spacing:0.3px}
+.nav-btn:hover{color:#fff}
+.nav-btn.active{color:#b5121b;border-bottom-color:#b5121b}
+
+/* MAIN */
+.main{max-width:1200px;margin:0 auto;padding:24px 20px}
+.page{display:none} .page.active{display:block}
+
+/* CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:20px;text-align:center}
+.stat-card .val{font-size:32px;font-weight:800;color:#b5121b}
+.stat-card .lbl{font-size:12px;color:#666;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+
+/* SECTION */
+.section-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';width:4px;height:18px;background:#b5121b;border-radius:2px;display:inline-block}
+
+/* TABLE */
+.table-wrap{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+th{background:#111;padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:0.5px}
+td{padding:12px 16px;border-top:1px solid #222;font-size:13px;vertical-align:middle}
+tr:hover td{background:#222}
+
+/* PLAYER CARD */
+.players-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.player-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s}
+.player-card:hover{border-color:#b5121b;background:#1f1f1f}
+.player-card.selected{border-color:#b5121b;background:#1f1010}
+.player-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.player-num{width:40px;height:40px;background:#b5121b;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.player-name{font-weight:700;font-size:14px}
+.player-pos{font-size:11px;color:#666;margin-top:2px}
+.player-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ps{text-align:center;background:#111;border-radius:6px;padding:6px 4px}
+.ps .v{font-size:16px;font-weight:800;color:#fff}
+.ps .l{font-size:9px;color:#555;text-transform:uppercase;margin-top:1px}
+
+/* MATCH */
+.match-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center}
+.match-date{font-size:11px;color:#555;width:80px;flex-shrink:0}
+.match-comp{font-size:10px;color:#b5121b;font-weight:700;width:60px;flex-shrink:0}
+.match-teams{flex:1;display:flex;align-items:center;justify-content:center;gap:12px}
+.team-name{font-size:13px;font-weight:600;width:140px}
+.team-name.home{text-align:right}
+.team-name.away{text-align:left}
+.score{background:#111;border-radius:6px;padding:4px 12px;font-size:15px;font-weight:800;min-width:60px;text-align:center}
+.score.win{color:#22c55e}
+.score.loss{color:#ef4444}
+.score.draw{color:#f59e0b}
+.match-result{width:60px;text-align:right;flex-shrink:0}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700}
+.badge-w{background:#14532d;color:#22c55e}
+.badge-l{background:#450a0a;color:#ef4444}
+.badge-n{background:#451a03;color:#f59e0b}
+
+/* CLASSEMENT */
+.rank-ol{background:#1a0a0a !important;border-color:#b5121b !important}
+.rank-ol td{color:#fff !important}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{background:#1a1a1a;border:1px solid #2a2a2a;color:#888;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer}
+.filter-btn:hover{border-color:#b5121b;color:#fff}
+.filter-btn.active{background:#b5121b;border-color:#b5121b;color:#fff}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:#1a1a1a;border:1px solid #333;border-radius:16px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-header{padding:20px;border-bottom:1px solid #222;display:flex;align-items:center;gap:16px}
+.modal-num{width:56px;height:56px;background:#b5121b;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex-shrink:0}
+.modal-body{padding:20px}
+.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.ms{background:#111;border-radius:8px;padding:12px;text-align:center}
+.ms .v{font-size:24px;font-weight:800;color:#b5121b}
+.ms .l{font-size:10px;color:#555;text-transform:uppercase;margin-top:2px}
+.modal-close{margin-left:auto;background:none;border:none;color:#555;font-size:24px;cursor:pointer;line-height:1}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #222;font-size:13px}
+.info-row .k{color:#666}
+.info-row .v{font-weight:600}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .players-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .players-grid{grid-template-columns:1fr}
+  .team-name{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">OL</div>
+    <h1>Olympique Lyonnais <span>Saison 2025/2026</span></h1>
+    <div class="season-badge">Ligue 1</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showPage('accueil',this)">Accueil</button>
+    <button class="nav-btn" onclick="showPage('effectif',this)">Effectif</button>
+    <button class="nav-btn" onclick="showPage('resultats',this)">Résultats</button>
+    <button class="nav-btn" onclick="showPage('classement',this)">Classement</button>
+    <button class="nav-btn" onclick="showPage('stats',this)">Statistiques</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ACCUEIL -->
+<div id="page-accueil" class="page active">
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val">4e</div><div class="lbl">Classement</div></div>
+    <div class="stat-card"><div class="val">52</div><div class="lbl">Points</div></div>
+    <div class="stat-card"><div class="val">48</div><div class="lbl">Buts marqués</div></div>
+    <div class="stat-card"><div class="val">+17</div><div class="lbl">Diff. de buts</div></div>
+  </div>
+
+  <div class="section-title">Derniers résultats</div>
+  <div id="last5"></div>
+
+  <div class="section-title">Meilleurs buteurs</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Joueur</th><th>Poste</th><th>Buts</th><th>Passes</th><th>Matchs</th></tr></thead>
+      <tbody id="top-scorers"></tbody>
+    </table>
+  </div>
+
+  <div class="section-title">Prochains matchs</div>
+  <div id="next-matches"></div>
+</div>
+
+<!-- EFFECTIF -->
+<div id="page-effectif" class="page">
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterPos('tous',this)">Tous</button>
+    <button class="filter-btn" onclick="filterPos('Gardien',this)">Gardiens</button>
+    <button class="filter-btn" onclick="filterPos('Défenseur',this)">Défenseurs</button>
+    <button class="filter-btn" onclick="filterPos('Milieu',this)">Milieux</button>
+    <button class="filter-btn" onclick="filterPos('Attaquant',this)">Attaquants</button>
+  </div>
+  <div class="players-grid" id="players-grid"></div>
+</div>
+
+<!-- RESULTATS -->
+<div id="page-resultats" class="page">
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterComp('tous',this)">Tous</button>
+    <button class="filter-btn" onclick="filterComp('L1',this)">Ligue 1</button>
+    <button class="filter-btn" onclick="filterComp('CDR',this)">Coupe de France</button>
+    <button class="filter-btn" onclick="filterComp('UEL',this)">Ligue Europa</button>
+  </div>
+  <div id="all-results"></div>
+</div>
+
+<!-- CLASSEMENT -->
+<div id="page-classement" class="page">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Pos.</th><th>Club</th><th>J</th><th>G</th><th>N</th><th>P</th><th>BP</th><th>BC</th><th>Diff</th><th>Pts</th></tr></thead>
+      <tbody id="classement-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="page-stats" class="page">
+  <div class="section-title">Buteurs — Ligue 1</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Joueur</th><th>Buts</th><th>Assists</th><th>Matchs</th><th>Tirs/m</th><th>Moy.</th></tr></thead>
+      <tbody id="stats-body"></tbody>
+    </table>
+  </div>
+
+  <div class="section-title">Gardiens — Performances</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Joueur</th><th>Matchs</th><th>Buts encaissés</th><th>Clean sheets</th><th>Arrêts</th></tr></thead>
+      <tbody id="gk-body"></tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<!-- MODAL JOUEUR -->
+<div class="modal-bg" id="player-modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-num" id="m-num"></div>
+      <div>
+        <div style="font-size:18px;font-weight:800" id="m-name"></div>
+        <div style="font-size:12px;color:#666;margin-top:2px" id="m-pos"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('player-modal').classList.remove('open')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-stats">
+        <div class="ms"><div class="v" id="m-buts">0</div><div class="l">Buts</div></div>
+        <div class="ms"><div class="v" id="m-assists">0</div><div class="l">Assists</div></div>
+        <div class="ms"><div class="v" id="m-matchs">0</div><div class="l">Matchs</div></div>
+        <div class="ms"><div class="v" id="m-tirs">0</div><div class="l">Tirs</div></div>
+        <div class="ms"><div class="v" id="m-tacles">0</div><div class="l">Tacles</div></div>
+        <div class="ms"><div class="v" id="m-passes">0</div><div class="l">Passes clés</div></div>
+      </div>
+      <div id="m-info"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const players = [
+  // Gardiens
+  {id:1,num:1,nom:'Lucas Perri',nat:'🇧🇷',poste:'Gardien',age:26,taille:'187cm',pied:'D',matchs:26,buts:0,assists:0,tirs:0,tacles:2,passes:1,arrets:74,cs:8,be:28,note:6.8},
+  {id:2,num:16,nom:'Anthony Lopes',nat:'🇵🇹',poste:'Gardien',age:34,taille:'185cm',pied:'D',matchs:4,buts:0,assists:0,tirs:0,tacles:0,passes:0,arrets:11,cs:1,be:5,note:6.4},
+  // Défenseurs
+  {id:3,num:5,nom:'Nicolas Tagliafico',nat:'🇦🇷',poste:'Défenseur',age:33,taille:'172cm',pied:'G',matchs:24,buts:2,assists:3,tirs:18,tacles:42,passes:28,note:6.9},
+  {id:4,num:4,nom:'Duje Caleta-Car',nat:'🇭🇷',poste:'Défenseur',age:29,taille:'194cm',pied:'G',matchs:22,buts:1,assists:1,tirs:12,tacles:56,passes:8,note:6.7},
+  {id:5,num:3,nom:'Jake O\'Brien',nat:'🇺🇸',poste:'Défenseur',age:23,taille:'196cm',pied:'D',matchs:20,buts:2,assists:0,tirs:14,tacles:48,passes:6,note:6.8},
+  {id:6,num:2,nom:'Saël Kumbedi',nat:'🇫🇷',poste:'Défenseur',age:21,taille:'180cm',pied:'D',matchs:23,buts:0,assists:4,tirs:8,tacles:38,passes:22,note:6.6},
+  {id:7,num:6,nom:'Moussa Niakhaté',nat:'🇫🇷',poste:'Défenseur',age:29,taille:'188cm',pied:'D',matchs:18,buts:1,assists:0,tirs:10,tacles:44,passes:5,note:6.5},
+  {id:8,num:27,nom:'Clinton Mata',nat:'🇦🇴',poste:'Défenseur',age:30,taille:'181cm',pied:'D',matchs:14,buts:0,assists:2,tirs:6,tacles:28,passes:14,note:6.4},
+  // Milieux
+  {id:9,num:8,nom:'Corentin Tolisso',nat:'🇫🇷',poste:'Milieu',age:31,taille:'181cm',pied:'D',matchs:22,buts:4,assists:6,tirs:32,tacles:52,passes:44,note:7.1},
+  {id:10,num:28,nom:'Maxence Caqueret',nat:'🇫🇷',poste:'Milieu',age:25,taille:'175cm',pied:'D',matchs:24,buts:3,assists:7,tirs:28,tacles:46,passes:58,note:7.0},
+  {id:11,num:18,nom:'Ainsley Maitland-Niles',nat:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',poste:'Milieu',age:28,taille:'176cm',pied:'D',matchs:19,buts:1,assists:3,tirs:14,tacles:34,passes:36,note:6.6},
+  {id:12,num:14,nom:'Paul Akouokou',nat:'🇫🇷',poste:'Milieu',age:27,taille:'183cm',pied:'D',matchs:20,buts:0,assists:2,tirs:8,tacles:58,passes:18,note:6.5},
+  {id:13,num:21,nom:'Malick Fofana',nat:'🇧🇪',poste:'Milieu',age:19,taille:'174cm',pied:'G',matchs:21,buts:5,assists:6,tirs:38,tacles:18,passes:32,note:7.2},
+  // Attaquants
+  {id:14,num:10,nom:'Rayan Cherki',nat:'🇫🇷',poste:'Attaquant',age:22,taille:'172cm',pied:'D',matchs:26,buts:10,assists:9,tirs:68,tacles:14,passes:54,note:7.6},
+  {id:15,num:9,nom:'Alexandre Lacazette',nat:'🇫🇷',poste:'Attaquant',age:34,taille:'175cm',pied:'D',matchs:24,buts:13,assists:5,tirs:72,tacles:12,passes:38,note:7.4},
+  {id:16,num:11,nom:'Ernest Nuamah',nat:'🇬🇭',poste:'Attaquant',age:22,taille:'178cm',pied:'D',matchs:22,buts:7,assists:4,tirs:54,tacles:16,passes:22,note:7.0},
+  {id:17,num:7,nom:'Gift Orban',nat:'🇳🇬',poste:'Attaquant',age:23,taille:'176cm',pied:'D',matchs:18,buts:6,assists:2,tirs:44,tacles:8,passes:14,note:6.8},
+  {id:18,num:17,nom:'Georges Mikautadze',nat:'🇬🇪',poste:'Attaquant',age:24,taille:'175cm',pied:'D',matchs:16,buts:5,assists:3,tirs:36,tacles:6,passes:18,note:6.9},
+  {id:19,num:19,nom:'Wilson Odobert',nat:'🇫🇷',poste:'Attaquant',age:20,taille:'174cm',pied:'G',matchs:20,buts:4,assists:5,tirs:42,tacles:12,passes:28,note:7.0},
+]
+
+const results = [
+  {date:'08/03/26',comp:'L1',dom:'Olympique Lyonnais',ext:'AS Monaco',sd:2,se:1,lieu:'dom'},
+  {date:'01/03/26',comp:'L1',dom:'Stade Rennais',ext:'Olympique Lyonnais',sd:0,se:2,lieu:'ext'},
+  {date:'22/02/26',comp:'UEL',dom:'Olympique Lyonnais',ext:'AS Roma',sd:3,se:1,lieu:'dom'},
+  {date:'15/02/26',comp:'L1',dom:'Olympique Lyonnais',ext:'RC Lens',sd:1,se:1,lieu:'dom'},
+  {date:'08/02/26',comp:'L1',dom:'Lille OSC',ext:'Olympique Lyonnais',sd:0,se:1,lieu:'ext'},
+  {date:'01/02/26',comp:'CDR',dom:'Olympique Lyonnais',ext:'Montpellier HSC',sd:4,se:0,lieu:'dom'},
+  {date:'25/01/26',comp:'L1',dom:'Olympique Lyonnais',ext:'Paris Saint-Germain',sd:1,se:3,lieu:'dom'},
+  {date:'18/01/26',comp:'L1',dom:'OGC Nice',ext:'Olympique Lyonnais',sd:2,se:2,lieu:'ext'},
+  {date:'11/01/26',comp:'L1',dom:'Olympique Lyonnais',ext:'Stade de Reims',sd:3,se:0,lieu:'dom'},
+  {date:'04/01/26',comp:'L1',dom:'Olympique Lyonnais',ext:'Girondins de Bordeaux',sd:2,se:1,lieu:'dom'},
+  {date:'21/12/25',comp:'L1',dom:'Olympique Marseille',ext:'Olympique Lyonnais',sd:1,se:2,lieu:'ext'},
+  {date:'14/12/25',comp:'UEL',dom:'Olympique Lyonnais',ext:'Fenerbahçe',sd:2,se:0,lieu:'dom'},
+  {date:'07/12/25',comp:'L1',dom:'Olympique Lyonnais',ext:'Toulouse FC',sd:2,se:0,lieu:'dom'},
+  {date:'30/11/25',comp:'L1',dom:'RC Strasbourg',ext:'Olympique Lyonnais',sd:1,se:2,lieu:'ext'},
+  {date:'23/11/25',comp:'L1',dom:'Olympique Lyonnais',ext:'Stade Brestois',sd:1,se:0,lieu:'dom'},
+]
+
+const nextMatches = [
+  {date:'15/03/26',comp:'UEL',dom:'Olympique Lyonnais',ext:'Ajax Amsterdam',heure:'21:00'},
+  {date:'22/03/26',comp:'L1',dom:'FC Nantes',ext:'Olympique Lyonnais',heure:'17:00'},
+  {date:'05/04/26',comp:'L1',dom:'Olympique Lyonnais',ext:'RC Strasbourg',heure:'15:00'},
+]
+
+const classement = [
+  {pos:1,club:'Paris Saint-Germain',j:29,g:22,n:3,p:4,bp:68,bc:24,pts:69,ol:false},
+  {pos:2,club:'Olympique de Marseille',j:29,g:18,n:4,p:7,bp:55,bc:30,pts:58,ol:false},
+  {pos:3,club:'Lille OSC',j:29,g:16,n:5,p:8,bp:48,bc:29,pts:53,ol:false},
+  {pos:4,club:'Olympique Lyonnais',j:29,g:15,n:7,p:7,bp:48,bc:31,pts:52,ol:true},
+  {pos:5,club:'AS Monaco',j:29,g:15,n:5,p:9,bp:52,bc:38,pts:50,ol:false},
+  {pos:6,club:'OGC Nice',j:29,g:13,n:8,p:8,bp:44,bc:34,pts:47,ol:false},
+  {pos:7,club:'RC Lens',j:29,g:13,n:6,p:10,bp:42,bc:36,pts:45,ol:false},
+  {pos:8,club:'Stade Rennais',j:29,g:12,n:7,p:10,bp:40,bc:38,pts:43,ol:false},
+  {pos:9,club:'Stade Brestois',j:29,g:11,n:8,p:10,bp:38,bc:37,pts:41,ol:false},
+  {pos:10,club:'Toulouse FC',j:29,g:11,n:6,p:12,bp:36,bc:40,pts:39,ol:false},
+  {pos:11,club:'RC Strasbourg',j:29,g:10,n:7,p:12,bp:34,bc:42,pts:37,ol:false},
+  {pos:12,club:'Montpellier HSC',j:29,g:9,n:7,p:13,bp:32,bc:44,pts:34,ol:false},
+  {pos:13,club:'FC Nantes',j:29,g:8,n:9,p:12,bp:30,bc:40,pts:33,ol:false},
+  {pos:14,club:'Stade de Reims',j:29,g:8,n:8,p:13,bp:28,bc:42,pts:32,ol:false},
+  {pos:15,club:'Le Havre AC',j:29,g:7,n:9,p:13,bp:26,bc:44,pts:30,ol:false},
+  {pos:16,club:'Girondins de Bordeaux',j:29,g:7,n:8,p:14,bp:26,bc:48,pts:29,ol:false},
+  {pos:17,club:'Clermont Foot',j:29,g:6,n:8,p:15,bp:24,bc:50,pts:26,ol:false},
+  {pos:18,club:'Angers SCO',j:29,g:5,n:7,p:17,bp:22,bc:56,pts:22,ol:false},
+]
+
+// ==================== RENDER ====================
+function getScore(m) {
+  const olDom = m.dom === 'Olympique Lyonnais'
+  const golOL = olDom ? m.sd : m.se
+  const golAdv = olDom ? m.se : m.sd
+  const cls = golOL > golAdv ? 'win' : golOL < golAdv ? 'loss' : 'draw'
+  const badge = golOL > golAdv ? 'badge-w' : golOL < golAdv ? 'badge-l' : 'badge-n'
+  const badgeTxt = golOL > golAdv ? 'V' : golOL < golAdv ? 'D' : 'N'
+  return {cls, badge, badgeTxt, score: m.sd + ' - ' + m.se}
+}
+
+function renderMatchCard(m) {
+  const {cls, badge, badgeTxt, score} = getScore(m)
+  return `<div class="match-card">
+    <div class="match-date">${m.date}</div>
+    <div class="match-comp">${m.comp}</div>
+    <div class="match-teams">
+      <div class="team-name home">${m.dom}</div>
+      <div class="score ${cls}">${score}</div>
+      <div class="team-name away">${m.ext}</div>
+    </div>
+    <div class="match-result"><span class="badge ${badge}">${badgeTxt}</span></div>
+  </div>`
+}
+
+function renderNextCard(m) {
+  return `<div class="match-card">
+    <div class="match-date">${m.date}</div>
+    <div class="match-comp">${m.comp}</div>
+    <div class="match-teams">
+      <div class="team-name home">${m.dom}</div>
+      <div class="score" style="color:#888;font-size:13px">${m.heure}</div>
+      <div class="team-name away">${m.ext}</div>
+    </div>
+    <div class="match-result"></div>
+  </div>`
+}
+
+// Accueil
+document.getElementById('last5').innerHTML = results.slice(0,5).map(renderMatchCard).join('')
+document.getElementById('next-matches').innerHTML = nextMatches.map(renderNextCard).join('')
+
+const scorers = [...players].filter(p=>p.buts>0).sort((a,b)=>b.buts-a.buts).slice(0,8)
+document.getElementById('top-scorers').innerHTML = scorers.map((p,i)=>`
+  <tr onclick="openModal(${p.id})" style="cursor:pointer">
+    <td style="color:#b5121b;font-weight:700">${i+1}</td>
+    <td><strong>${p.nom}</strong> ${p.nat}</td>
+    <td style="color:#666;font-size:12px">${p.poste}</td>
+    <td><strong style="color:#b5121b">${p.buts}</strong></td>
+    <td>${p.assists}</td>
+    <td>${p.matchs}</td>
+  </tr>`).join('')
+
+// Effectif
+function renderPlayers(list) {
+  document.getElementById('players-grid').innerHTML = list.map(p=>`
+    <div class="player-card" onclick="openModal(${p.id})">
+      <div class="player-top">
+        <div class="player-num">${p.num}</div>
+        <div>
+          <div class="player-name">${p.nom} ${p.nat}</div>
+          <div class="player-pos">${p.poste} · ${p.age} ans</div>
+        </div>
+      </div>
+      <div class="player-stats">
+        <div class="ps"><div class="v">${p.buts}</div><div class="l">Buts</div></div>
+        <div class="ps"><div class="v">${p.assists}</div><div class="l">Assists</div></div>
+        <div class="ps"><div class="v">${p.matchs}</div><div class="l">Matchs</div></div>
+        <div class="ps"><div class="v">${p.note||'-'}</div><div class="l">Note</div></div>
+      </div>
+    </div>`).join('')
+}
+renderPlayers(players)
+
+function filterPos(pos, btn) {
+  document.querySelectorAll('.filters .filter-btn').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  const list = pos === 'tous' ? players : players.filter(p=>p.poste===pos)
+  renderPlayers(list)
+}
+
+// Résultats
+let currentComp = 'tous'
+function renderResults(comp) {
+  const list = comp === 'tous' ? results : results.filter(r=>r.comp===comp)
+  document.getElementById('all-results').innerHTML = list.map(renderMatchCard).join('')
+}
+renderResults('tous')
+
+function filterComp(comp, btn) {
+  document.querySelectorAll('#page-resultats .filter-btn').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  renderResults(comp)
+}
+
+// Classement
+document.getElementById('classement-body').innerHTML = classement.map(c=>`
+  <tr class="${c.ol?'rank-ol':''}">
+    <td><strong style="${c.pos<=3?'color:#f59e0b':c.pos<=5?'color:#22c55e':c.pos>=16?'color:#ef4444':''}">${c.pos}</strong></td>
+    <td><strong>${c.ol?'<span style="color:#b5121b">⬤</span> ':''} ${c.club}</strong></td>
+    <td>${c.j}</td><td>${c.g}</td><td>${c.n}</td><td>${c.p}</td>
+    <td>${c.bp}</td><td>${c.bc}</td>
+    <td style="${c.bp-c.bc>0?'color:#22c55e':c.bp-c.bc<0?'color:#ef4444':''}">${c.bp-c.bc>0?'+':''}${c.bp-c.bc}</td>
+    <td><strong>${c.pts}</strong></td>
+  </tr>`).join('')
+
+// Stats
+const outfield = players.filter(p=>p.poste!=='Gardien').sort((a,b)=>b.buts-a.buts)
+document.getElementById('stats-body').innerHTML = outfield.map((p,i)=>`
+  <tr onclick="openModal(${p.id})" style="cursor:pointer">
+    <td style="color:#b5121b;font-weight:700">${i+1}</td>
+    <td><strong>${p.nom}</strong></td>
+    <td><strong style="color:#b5121b">${p.buts}</strong></td>
+    <td>${p.assists}</td>
+    <td>${p.matchs}</td>
+    <td>${(p.tirs/Math.max(p.matchs,1)).toFixed(1)}</td>
+    <td>${p.note}</td>
+  </tr>`).join('')
+
+const gks = players.filter(p=>p.poste==='Gardien')
+document.getElementById('gk-body').innerHTML = gks.map(p=>`
+  <tr onclick="openModal(${p.id})" style="cursor:pointer">
+    <td><strong>${p.nom}</strong></td>
+    <td>${p.matchs}</td>
+    <td>${p.be||'-'}</td>
+    <td>${p.cs||'-'}</td>
+    <td>${p.arrets||'-'}</td>
+  </tr>`).join('')
+
+// MODAL
+function openModal(id) {
+  const p = players.find(x=>x.id===id)
+  if(!p) return
+  document.getElementById('m-num').textContent = p.num
+  document.getElementById('m-name').textContent = p.nom + ' ' + p.nat
+  document.getElementById('m-pos').textContent = p.poste + ' · ' + (p.age) + ' ans · ' + p.nat
+  document.getElementById('m-buts').textContent = p.buts
+  document.getElementById('m-assists').textContent = p.assists
+  document.getElementById('m-matchs').textContent = p.matchs
+  document.getElementById('m-tirs').textContent = p.tirs||0
+  document.getElementById('m-tacles').textContent = p.tacles||0
+  document.getElementById('m-passes').textContent = p.passes||0
+  document.getElementById('m-info').innerHTML = `
+    <div class="info-row"><span class="k">Nationalité</span><span class="v">${p.nat}</span></div>
+    <div class="info-row"><span class="k">Âge</span><span class="v">${p.age} ans</span></div>
+    <div class="info-row"><span class="k">Taille</span><span class="v">${p.taille}</span></div>
+    <div class="info-row"><span class="k">Pied fort</span><span class="v">${p.pied==='D'?'Droit':'Gauche'}</span></div>
+    <div class="info-row"><span class="k">Note moyenne</span><span class="v" style="color:#b5121b">${p.note}/10</span></div>
+    ${p.poste==='Gardien'?`
+    <div class="info-row"><span class="k">Buts encaissés</span><span class="v">${p.be}</span></div>
+    <div class="info-row"><span class="k">Clean sheets</span><span class="v">${p.cs}</span></div>
+    <div class="info-row"><span class="k">Arrêts</span><span class="v">${p.arrets}</span></div>`:''}
+  `
+  document.getElementById('player-modal').classList.add('open')
+}
+
+function closeModal(e) {
+  if(e.target.id==='player-modal') document.getElementById('player-modal').classList.remove('open')
+}
+
+// NAV
+function showPage(page, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+  document.getElementById('page-'+page).classList.add('active')
+}
+</script>
+</body>
+</html>
