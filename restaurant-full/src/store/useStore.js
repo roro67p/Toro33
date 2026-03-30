@@ -312,8 +312,18 @@ const useStore = create(
     }),
     {
       name: 'restaurant-storage',
-      partialize: (state) => ({
-        data: state.data,
+      partialize: (state) => ({ data: state.data }),
+      merge: (persisted, current) => ({
+        ...current,
+        data: {
+          ...DEFAULT_DATA,
+          ...persisted.data,
+          restaurant: { ...DEFAULT_DATA.restaurant, ...(persisted.data?.restaurant || {}) },
+          suppliers:     persisted.data?.suppliers     ?? DEFAULT_DATA.suppliers,
+          stock:         persisted.data?.stock         ?? DEFAULT_DATA.stock,
+          purchaseOrders: persisted.data?.purchaseOrders ?? DEFAULT_DATA.purchaseOrders,
+          caisse:        persisted.data?.caisse        ?? DEFAULT_DATA.caisse,
+        }
       }),
     }
   )
