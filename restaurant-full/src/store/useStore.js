@@ -254,6 +254,60 @@ const useStore = create(
           data: { ...state.data, adminPassword: newPassword }
         })),
 
+      // ── STOCK ──────────────────────────────────────────────────
+      addStockItem: (item) => set((state) => ({
+        data: { ...state.data, stock: [...state.data.stock, { ...item, id: `stk_${Date.now()}`, lastUpdated: new Date().toISOString().split('T')[0] }] }
+      })),
+      updateStockItem: (id, updates) => set((state) => ({
+        data: { ...state.data, stock: state.data.stock.map(s => s.id === id ? { ...s, ...updates, lastUpdated: new Date().toISOString().split('T')[0] } : s) }
+      })),
+      deleteStockItem: (id) => set((state) => ({
+        data: { ...state.data, stock: state.data.stock.filter(s => s.id !== id) }
+      })),
+      adjustStock: (id, delta) => set((state) => ({
+        data: { ...state.data, stock: state.data.stock.map(s => s.id === id ? { ...s, quantity: Math.max(0, s.quantity + delta), lastUpdated: new Date().toISOString().split('T')[0] } : s) }
+      })),
+
+      // ── SUPPLIERS ─────────────────────────────────────────────
+      addSupplier: (supplier) => set((state) => ({
+        data: { ...state.data, suppliers: [...state.data.suppliers, { ...supplier, id: `sup_${Date.now()}` }] }
+      })),
+      updateSupplier: (id, updates) => set((state) => ({
+        data: { ...state.data, suppliers: state.data.suppliers.map(s => s.id === id ? { ...s, ...updates } : s) }
+      })),
+      deleteSupplier: (id) => set((state) => ({
+        data: { ...state.data, suppliers: state.data.suppliers.filter(s => s.id !== id) }
+      })),
+
+      // ── PURCHASE ORDERS ───────────────────────────────────────
+      addPurchaseOrder: (order) => set((state) => ({
+        data: { ...state.data, purchaseOrders: [...state.data.purchaseOrders, { ...order, id: `po_${Date.now()}`, createdAt: new Date().toISOString().split('T')[0], status: 'pending' }] }
+      })),
+      updatePurchaseOrder: (id, updates) => set((state) => ({
+        data: { ...state.data, purchaseOrders: state.data.purchaseOrders.map(o => o.id === id ? { ...o, ...updates } : o) }
+      })),
+      deletePurchaseOrder: (id) => set((state) => ({
+        data: { ...state.data, purchaseOrders: state.data.purchaseOrders.filter(o => o.id !== id) }
+      })),
+      receivePurchaseOrder: (orderId) => set((state) => {
+        const order = state.data.purchaseOrders.find(o => o.id === orderId)
+        if (!order) return state
+        const updatedStock = state.data.stock.map(s => {
+          const line = order.items.find(i => i.stockId === s.id)
+          if (line) return { ...s, quantity: s.quantity + line.quantity, lastUpdated: new Date().toISOString().split('T')[0] }
+          return s
+        })
+        return { data: { ...state.data, stock: updatedStock, purchaseOrders: state.data.purchaseOrders.map(o => o.id === orderId ? { ...o, status: 'received' } : o) } }
+      }),
+
+      // ── CAISSE ────────────────────────────────────────────────
+      addCaisseEntry: (entry) => set((state) => ({
+        data: { ...state.data, caisse: [...state.data.caisse, { ...entry, id: `ca_${Date.now()}` }] }
+      })),
+      updateCaisseEntry: (id, updates) => set((state) => ({
+        data: { ...state.data, caisse: state.data.caisse.map(c => c.id === id ? { ...c, ...updates } : c) }
+      })),
+
       resetData: () => set({ data: DEFAULT_DATA }),
     }),
     {

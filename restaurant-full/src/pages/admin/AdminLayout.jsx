@@ -6,18 +6,27 @@ import MenuAdmin from './MenuAdmin'
 import DrinksAdmin from './DrinksAdmin'
 import EventsAdmin from './EventsAdmin'
 import SettingsAdmin from './SettingsAdmin'
+import SuppliersAdmin from './SuppliersAdmin'
+import StockAdmin from './StockAdmin'
+import OrdersAdmin from './OrdersAdmin'
+import CaisseAdmin from './CaisseAdmin'
 import {
   LayoutDashboard, Calendar, UtensilsCrossed, Wine,
-  PartyPopper, Settings, ArrowLeft, Menu, X, LogOut
+  PartyPopper, Settings, ArrowLeft, Menu, X, LogOut,
+  Truck, Package, ShoppingCart, Euro
 } from 'lucide-react'
 
 const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'reservations', label: 'Réservations', icon: Calendar },
-  { id: 'menu', label: 'Menu', icon: UtensilsCrossed },
-  { id: 'drinks', label: 'Boissons', icon: Wine },
-  { id: 'events', label: 'Soirées', icon: PartyPopper },
-  { id: 'settings', label: 'Paramètres', icon: Settings },
+  { id: 'dashboard',     label: 'Dashboard',      icon: LayoutDashboard },
+  { id: 'reservations',  label: 'Réservations',   icon: Calendar },
+  { id: 'caisse',        label: 'Caisse & CA',     icon: Euro },
+  { id: 'menu',          label: 'Menu',            icon: UtensilsCrossed },
+  { id: 'drinks',        label: 'Boissons',        icon: Wine },
+  { id: 'events',        label: 'Soirées',         icon: PartyPopper },
+  { id: 'stock',         label: 'Stock',           icon: Package },
+  { id: 'suppliers',     label: 'Fournisseurs',    icon: Truck },
+  { id: 'orders',        label: 'Commandes',       icon: ShoppingCart },
+  { id: 'settings',      label: 'Paramètres',      icon: Settings },
 ]
 
 export default function AdminLayout() {
@@ -40,6 +49,10 @@ export default function AdminLayout() {
       case 'drinks':        return <DrinksAdmin />
       case 'events':        return <EventsAdmin />
       case 'settings':      return <SettingsAdmin />
+      case 'suppliers':     return <SuppliersAdmin />
+      case 'stock':         return <StockAdmin />
+      case 'orders':        return <OrdersAdmin />
+      case 'caisse':        return <CaisseAdmin />
       default:              return <Dashboard />
     }
   }

@@ -102,5 +102,48 @@ export const DEFAULT_DATA = {
     { id: "res3", name: "Famille Leclerc", phone: "04 72 11 22 33", email: "leclerc@email.fr", date: "2026-03-31", time: "12h30", guests: 6, notes: "", status: "pending", createdAt: "2026-03-28" },
     { id: "res4", name: "Thomas Roux", phone: "07 55 44 33 22", email: "thomas@email.fr", date: "2026-04-01", time: "19h00", guests: 3, notes: "Végétarien", status: "pending", createdAt: "2026-03-29" },
     { id: "res5", name: "Claire Morel", phone: "06 33 22 11 00", email: "claire@email.fr", date: "2026-04-05", time: "20h30", guests: 2, notes: "", status: "confirmed", createdAt: "2026-03-25" }
+  ],
+
+  suppliers: [
+    { id: "sup1", name: "Maison Dupré", contact: "Jean Dupré", phone: "04 72 11 00 11", email: "jean@maisondupre.fr", category: "Viandes & Charcuterie", address: "Zone Industrielle, 69006 Lyon", notes: "Livraison mardi et vendredi matin", active: true },
+    { id: "sup2", name: "Les Jardins du Rhône", contact: "Marie Fontaine", phone: "06 11 22 33 44", email: "marie@jardinsrhone.fr", category: "Fruits & Légumes", address: "Marché de gros, 69009 Lyon", notes: "Commande avant 18h la veille", active: true },
+    { id: "sup3", name: "Cave Bertrand", contact: "Pierre Bertrand", phone: "04 72 55 66 77", email: "cave.bertrand@gmail.com", category: "Vins & Alcools", address: "15 Rue des Vignes, 69005 Lyon", notes: "Minimum 6 bouteilles par commande", active: true },
+    { id: "sup4", name: "Fromagerie Martin", contact: "Lucie Martin", phone: "04 72 88 99 00", email: "fromagerie.martin@mail.fr", category: "Produits laitiers", address: "Marché Paul Bocuse, Lyon", notes: "Livraison mercredi uniquement", active: true },
+    { id: "sup5", name: "ProDist Épicerie", contact: "Ahmed Chaoui", phone: "04 78 12 34 56", email: "contact@prodist.fr", category: "Épicerie & Condiments", address: "Entrepôt Nord, 69100 Villeurbanne", notes: "Commande en ligne disponible", active: true }
+  ],
+
+  stock: [
+    { id: "stk1", name: "Filet de bœuf", supplierId: "sup1", category: "Viandes", unit: "kg", quantity: 8.5, minThreshold: 5, costPrice: 28.00, lastUpdated: "2026-03-28" },
+    { id: "stk2", name: "Poitrine de porc", supplierId: "sup1", category: "Viandes", unit: "kg", quantity: 6.0, minThreshold: 4, costPrice: 12.00, lastUpdated: "2026-03-28" },
+    { id: "stk3", name: "Sole entière", supplierId: "sup1", category: "Poissons", unit: "kg", quantity: 3.0, minThreshold: 3, costPrice: 22.00, lastUpdated: "2026-03-29" },
+    { id: "stk4", name: "Tomates cerises", supplierId: "sup2", category: "Légumes", unit: "kg", quantity: 4.5, minThreshold: 2, costPrice: 3.50, lastUpdated: "2026-03-29" },
+    { id: "stk5", name: "Salade frisée", supplierId: "sup2", category: "Légumes", unit: "pièces", quantity: 12, minThreshold: 8, costPrice: 1.20, lastUpdated: "2026-03-29" },
+    { id: "stk6", name: "Champignons de Paris", supplierId: "sup2", category: "Légumes", unit: "kg", quantity: 2.5, minThreshold: 2, costPrice: 4.00, lastUpdated: "2026-03-28" },
+    { id: "stk7", name: "Côtes du Rhône rouge", supplierId: "sup3", category: "Vins", unit: "bouteilles", quantity: 24, minThreshold: 12, costPrice: 8.50, lastUpdated: "2026-03-25" },
+    { id: "stk8", name: "Mâcon Blanc", supplierId: "sup3", category: "Vins", unit: "bouteilles", quantity: 18, minThreshold: 6, costPrice: 9.00, lastUpdated: "2026-03-25" },
+    { id: "stk9", name: "Champagne brut", supplierId: "sup3", category: "Vins", unit: "bouteilles", quantity: 6, minThreshold: 6, costPrice: 18.00, lastUpdated: "2026-03-20" },
+    { id: "stk10", name: "Comté 18 mois", supplierId: "sup4", category: "Fromages", unit: "kg", quantity: 2.0, minThreshold: 1, costPrice: 16.00, lastUpdated: "2026-03-27" },
+    { id: "stk11", name: "Beurre demi-sel", supplierId: "sup4", category: "Produits laitiers", unit: "kg", quantity: 3.5, minThreshold: 2, costPrice: 8.00, lastUpdated: "2026-03-27" },
+    { id: "stk12", name: "Crème fraîche épaisse", supplierId: "sup4", category: "Produits laitiers", unit: "L", quantity: 4.0, minThreshold: 2, costPrice: 5.50, lastUpdated: "2026-03-27" },
+    { id: "stk13", name: "Farine T55", supplierId: "sup5", category: "Épicerie", unit: "kg", quantity: 12, minThreshold: 5, costPrice: 1.10, lastUpdated: "2026-03-20" },
+    { id: "stk14", name: "Huile d'olive extra vierge", supplierId: "sup5", category: "Épicerie", unit: "L", quantity: 5.0, minThreshold: 2, costPrice: 12.00, lastUpdated: "2026-03-22" },
+    { id: "stk15", name: "Escargots (douzaine)", supplierId: "sup5", category: "Épicerie", unit: "boîtes", quantity: 8, minThreshold: 4, costPrice: 7.50, lastUpdated: "2026-03-26" }
+  ],
+
+  purchaseOrders: [
+    { id: "po1", supplierId: "sup2", status: "received", createdAt: "2026-03-25", deliveryDate: "2026-03-27", items: [{ stockId: "stk4", name: "Tomates cerises", quantity: 5, unit: "kg", unitPrice: 3.50 }, { stockId: "stk5", name: "Salade frisée", quantity: 20, unit: "pièces", unitPrice: 1.20 }], notes: "Livraison reçue conforme", total: 41.50 },
+    { id: "po2", supplierId: "sup1", status: "received", createdAt: "2026-03-26", deliveryDate: "2026-03-28", items: [{ stockId: "stk1", name: "Filet de bœuf", quantity: 10, unit: "kg", unitPrice: 28.00 }, { stockId: "stk2", name: "Poitrine de porc", quantity: 8, unit: "kg", unitPrice: 12.00 }], notes: "", total: 376.00 },
+    { id: "po3", supplierId: "sup3", status: "ordered", createdAt: "2026-03-29", deliveryDate: "2026-04-02", items: [{ stockId: "stk7", name: "Côtes du Rhône rouge", quantity: 24, unit: "bouteilles", unitPrice: 8.50 }, { stockId: "stk8", name: "Mâcon Blanc", quantity: 12, unit: "bouteilles", unitPrice: 9.00 }], notes: "Commande urgente - stock bas", total: 312.00 },
+    { id: "po4", supplierId: "sup4", status: "pending", createdAt: "2026-03-30", deliveryDate: "2026-04-02", items: [{ stockId: "stk10", name: "Comté 18 mois", quantity: 3, unit: "kg", unitPrice: 16.00 }, { stockId: "stk11", name: "Beurre demi-sel", quantity: 5, unit: "kg", unitPrice: 8.00 }], notes: "", total: 88.00 }
+  ],
+
+  caisse: [
+    { id: "ca1", date: "2026-03-24", covers: 42, revenue: 1240.00, lunchRevenue: 480.00, dinnerRevenue: 760.00, topDish: "Bœuf bourguignon" },
+    { id: "ca2", date: "2026-03-25", covers: 38, revenue: 1085.00, lunchRevenue: 390.00, dinnerRevenue: 695.00, topDish: "Quenelles de brochet" },
+    { id: "ca3", date: "2026-03-26", covers: 56, revenue: 1680.00, lunchRevenue: 620.00, dinnerRevenue: 1060.00, topDish: "Côte de cochon fermier" },
+    { id: "ca4", date: "2026-03-27", covers: 64, revenue: 1920.00, lunchRevenue: 0, dinnerRevenue: 1920.00, topDish: "Bœuf bourguignon" },
+    { id: "ca5", date: "2026-03-28", covers: 78, revenue: 2340.00, lunchRevenue: 840.00, dinnerRevenue: 1500.00, topDish: "Filet de sole" },
+    { id: "ca6", date: "2026-03-29", covers: 52, revenue: 1456.00, lunchRevenue: 0, dinnerRevenue: 1456.00, topDish: "Risotto champignons" },
+    { id: "ca7", date: "2026-03-30", covers: 0, revenue: 0, lunchRevenue: 0, dinnerRevenue: 0, topDish: "" }
   ]
 }
