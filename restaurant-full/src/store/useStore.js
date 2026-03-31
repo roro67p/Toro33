@@ -367,19 +367,39 @@ const useStore = create(
     {
       name: 'restaurant-storage',
       partialize: (state) => ({ data: state.data }),
-      merge: (persisted, current) => ({
-        ...current,
-        data: {
-          ...DEFAULT_DATA,
-          ...persisted.data,
-          restaurant: { ...DEFAULT_DATA.restaurant, ...(persisted.data?.restaurant || {}) },
-          suppliers:      persisted.data?.suppliers      ?? DEFAULT_DATA.suppliers,
-          stock:          persisted.data?.stock          ?? DEFAULT_DATA.stock,
-          purchaseOrders: persisted.data?.purchaseOrders ?? DEFAULT_DATA.purchaseOrders,
-          caisse:         persisted.data?.caisse         ?? DEFAULT_DATA.caisse,
-          customerOrders: persisted.data?.customerOrders ?? [],
+      merge: (persisted, current) => {
+        // Inject default images into existing items that don't have one yet
+        const injectImages = (persistedCats, defaultCats) => {
+          if (!persistedCats) return defaultCats
+          return persistedCats.map(cat => {
+            const defCat = defaultCats.find(dc => dc.id === cat.id)
+            if (!defCat) return cat
+            return {
+              ...cat,
+              items: cat.items.map(item => {
+                if (item.image) return item
+                const defItem = defCat.items.find(di => di.id === item.id)
+                return defItem?.image ? { ...item, image: defItem.image } : item
+              })
+            }
+          })
         }
-      }),
+        return {
+          ...current,
+          data: {
+            ...DEFAULT_DATA,
+            ...persisted.data,
+            restaurant:     { ...DEFAULT_DATA.restaurant, ...(persisted.data?.restaurant || {}) },
+            suppliers:      persisted.data?.suppliers      ?? DEFAULT_DATA.suppliers,
+            stock:          persisted.data?.stock          ?? DEFAULT_DATA.stock,
+            purchaseOrders: persisted.data?.purchaseOrders ?? DEFAULT_DATA.purchaseOrders,
+            caisse:         persisted.data?.caisse         ?? DEFAULT_DATA.caisse,
+            customerOrders: persisted.data?.customerOrders ?? [],
+            menuCategories:  injectImages(persisted.data?.menuCategories,  DEFAULT_DATA.menuCategories),
+            drinkCategories: injectImages(persisted.data?.drinkCategories, DEFAULT_DATA.drinkCategories),
+          }
+        }
+      },
     }
   )
 )

@@ -86,7 +86,8 @@ export default function Menu() {
                   {item.image && (
                     <div style={{ height: '160px', overflow: 'hidden' }}>
                       <img src={item.image} alt={item.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={e => { e.target.parentElement.style.display = 'none' }} />
                     </div>
                   )}
                   <div className="p-5">
