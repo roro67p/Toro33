@@ -6,6 +6,7 @@ import Drinks from './Drinks'
 import Events from './Events'
 import Reservation from './Reservation'
 import Contact from './Contact'
+import Cart from '../../components/Cart'
 import { Menu as MenuIcon, X, UtensilsCrossed, CalendarCheck } from 'lucide-react'
 
 export default function PublicLayout({ onOpenLogin }) {
@@ -136,7 +137,7 @@ export default function PublicLayout({ onOpenLogin }) {
 
       {/* Floating Reservation CTA */}
       {activePage !== 'reservation' && (
-        <div className="fixed bottom-6 right-6 z-30 no-print">
+        <div className="fixed z-30 no-print" style={{ bottom: '24px', right: '120px' }}>
           <button
             onClick={() => navigate('reservation')}
             className="flex items-center gap-2 px-5 py-3 rounded-full text-white font-semibold shadow-2xl transition-all duration-200 hover:scale-105"
@@ -147,6 +148,9 @@ export default function PublicLayout({ onOpenLogin }) {
           </button>
         </div>
       )}
+
+      {/* Cart */}
+      <Cart />
 
       {/* Footer */}
       <footer style={{ backgroundColor: '#1C1917', color: '#D6D3D1' }}>

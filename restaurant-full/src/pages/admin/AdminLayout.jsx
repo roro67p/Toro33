@@ -10,27 +10,30 @@ import SuppliersAdmin from './SuppliersAdmin'
 import StockAdmin from './StockAdmin'
 import OrdersAdmin from './OrdersAdmin'
 import CaisseAdmin from './CaisseAdmin'
+import CustomerOrdersAdmin from './CustomerOrdersAdmin'
 import {
   LayoutDashboard, Calendar, UtensilsCrossed, Wine,
   PartyPopper, Settings, ArrowLeft, Menu, X, LogOut,
-  Truck, Package, ShoppingCart, Euro
+  Truck, Package, ShoppingCart, Euro, ShoppingBag
 } from 'lucide-react'
 
 const NAV_ITEMS = [
-  { id: 'dashboard',     label: 'Dashboard',      icon: LayoutDashboard },
-  { id: 'reservations',  label: 'Réservations',   icon: Calendar },
-  { id: 'caisse',        label: 'Caisse & CA',     icon: Euro },
-  { id: 'menu',          label: 'Menu',            icon: UtensilsCrossed },
-  { id: 'drinks',        label: 'Boissons',        icon: Wine },
-  { id: 'events',        label: 'Soirées',         icon: PartyPopper },
-  { id: 'stock',         label: 'Stock',           icon: Package },
-  { id: 'suppliers',     label: 'Fournisseurs',    icon: Truck },
-  { id: 'orders',        label: 'Commandes',       icon: ShoppingCart },
-  { id: 'settings',      label: 'Paramètres',      icon: Settings },
+  { id: 'dashboard',       label: 'Dashboard',          icon: LayoutDashboard },
+  { id: 'customer-orders', label: 'Commandes clients',  icon: ShoppingBag },
+  { id: 'reservations',    label: 'Réservations',       icon: Calendar },
+  { id: 'caisse',          label: 'Caisse & CA',         icon: Euro },
+  { id: 'menu',            label: 'Menu',                icon: UtensilsCrossed },
+  { id: 'drinks',          label: 'Boissons',            icon: Wine },
+  { id: 'events',          label: 'Soirées',             icon: PartyPopper },
+  { id: 'stock',           label: 'Stock',               icon: Package },
+  { id: 'suppliers',       label: 'Fournisseurs',        icon: Truck },
+  { id: 'orders',          label: 'Commandes fourn.',    icon: ShoppingCart },
+  { id: 'settings',        label: 'Paramètres',          icon: Settings },
 ]
 
 export default function AdminLayout() {
   const { data, activeAdminPage, setActiveAdminPage, logoutAdmin } = useStore()
+  const newOrdersCount = (data.customerOrders || []).filter(o => o.status === 'new').length
   const { restaurant } = data
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
@@ -51,8 +54,9 @@ export default function AdminLayout() {
       case 'settings':      return <SettingsAdmin />
       case 'suppliers':     return <SuppliersAdmin />
       case 'stock':         return <StockAdmin />
-      case 'orders':        return <OrdersAdmin />
-      case 'caisse':        return <CaisseAdmin />
+      case 'orders':           return <OrdersAdmin />
+      case 'caisse':           return <CaisseAdmin />
+      case 'customer-orders':  return <CustomerOrdersAdmin />
       default:              return <Dashboard />
     }
   }
@@ -98,7 +102,13 @@ export default function AdminLayout() {
             transition: 'all 0.15s', textAlign: 'left'
           }}>
             <Icon size={18} />
-            {label}
+            <span style={{ flex: 1 }}>{label}</span>
+            {id === 'customer-orders' && newOrdersCount > 0 && (
+              <span style={{
+                fontSize: '11px', fontWeight: 700, backgroundColor: '#EF4444',
+                color: 'white', borderRadius: '999px', padding: '1px 6px', minWidth: '18px', textAlign: 'center'
+              }}>{newOrdersCount}</span>
+            )}
           </button>
         ))}
       </nav>

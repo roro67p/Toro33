@@ -11,6 +11,32 @@ const useStore = create(
       activePage: 'home',
       activeAdminPage: 'dashboard',
 
+      // ── CART (non-persisted, session only) ────────────────────
+      cart: [],
+
+      addToCart: (item) => set((state) => {
+        const existing = state.cart.find(c => c.cartId === item.cartId)
+        if (existing) {
+          return { cart: state.cart.map(c => c.cartId === item.cartId ? { ...c, quantity: c.quantity + 1 } : c) }
+        }
+        return { cart: [...state.cart, { ...item, quantity: 1 }] }
+      }),
+
+      removeFromCart: (cartId) => set((state) => ({
+        cart: state.cart.filter(c => c.cartId !== cartId)
+      })),
+
+      updateCartQty: (cartId, qty) => set((state) => {
+        if (qty <= 0) return { cart: state.cart.filter(c => c.cartId !== cartId) }
+        return { cart: state.cart.map(c => c.cartId === cartId ? { ...c, quantity: qty } : c) }
+      }),
+
+      updateCartNote: (cartId, note) => set((state) => ({
+        cart: state.cart.map(c => c.cartId === cartId ? { ...c, note } : c)
+      })),
+
+      clearCart: () => set({ cart: [] }),
+
       setActivePage: (page) => set({ activePage: page }),
       setActiveAdminPage: (page) => set({ activeAdminPage: page }),
 
@@ -308,6 +334,34 @@ const useStore = create(
         data: { ...state.data, caisse: state.data.caisse.map(c => c.id === id ? { ...c, ...updates } : c) }
       })),
 
+      // ── CUSTOMER ORDERS ───────────────────────────────────────
+      addCustomerOrder: (order) => set((state) => ({
+        data: {
+          ...state.data,
+          customerOrders: [
+            ...( state.data.customerOrders || []),
+            {
+              ...order,
+              id: `cord_${Date.now()}`,
+              createdAt: new Date().toISOString(),
+              status: 'new'
+            }
+          ]
+        }
+      })),
+      updateCustomerOrder: (id, updates) => set((state) => ({
+        data: {
+          ...state.data,
+          customerOrders: (state.data.customerOrders || []).map(o => o.id === id ? { ...o, ...updates } : o)
+        }
+      })),
+      deleteCustomerOrder: (id) => set((state) => ({
+        data: {
+          ...state.data,
+          customerOrders: (state.data.customerOrders || []).filter(o => o.id !== id)
+        }
+      })),
+
       resetData: () => set({ data: DEFAULT_DATA }),
     }),
     {
@@ -319,10 +373,11 @@ const useStore = create(
           ...DEFAULT_DATA,
           ...persisted.data,
           restaurant: { ...DEFAULT_DATA.restaurant, ...(persisted.data?.restaurant || {}) },
-          suppliers:     persisted.data?.suppliers     ?? DEFAULT_DATA.suppliers,
-          stock:         persisted.data?.stock         ?? DEFAULT_DATA.stock,
+          suppliers:      persisted.data?.suppliers      ?? DEFAULT_DATA.suppliers,
+          stock:          persisted.data?.stock          ?? DEFAULT_DATA.stock,
           purchaseOrders: persisted.data?.purchaseOrders ?? DEFAULT_DATA.purchaseOrders,
-          caisse:        persisted.data?.caisse        ?? DEFAULT_DATA.caisse,
+          caisse:         persisted.data?.caisse         ?? DEFAULT_DATA.caisse,
+          customerOrders: persisted.data?.customerOrders ?? [],
         }
       }),
     }
