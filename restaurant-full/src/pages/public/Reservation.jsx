@@ -1,287 +1,349 @@
 import { useState } from 'react'
 import useStore from '../../store/useStore'
-import { CalendarCheck, CheckCircle } from 'lucide-react'
+import { CalendarCheck, CheckCircle, Clock, Users, ChevronDown } from 'lucide-react'
 
-const TIME_OPTIONS = ['12h00', '12h30', '13h00', '13h30', '14h00', '19h00', '19h30', '20h00', '20h30', '21h00', '21h30']
+const TIME_OPTIONS = [
+  '12h00', '12h30', '13h00', '13h30', '14h00',
+  '19h00', '19h30', '20h00', '20h30', '21h00', '21h30'
+]
+
+const GUEST_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+function getTodayStr() {
+  return new Date().toISOString().split('T')[0]
+}
 
 export default function Reservation() {
-  const { addReservation, data } = useStore()
-  const { restaurant } = data
-
+  const { addReservation } = useStore()
+  const [step, setStep] = useState(1) // 1=form, 2=confirm, 3=success
   const [form, setForm] = useState({
     name: '',
     phone: '',
     email: '',
     date: '',
-    time: '',
+    time: TIME_OPTIONS[5],
     guests: 2,
+    occasion: '',
     notes: ''
   })
-  const [submitted, setSubmitted] = useState(false)
   const [errors, setErrors] = useState({})
+
+  const OCCASIONS = [
+    { value: '', label: 'Aucune occasion particulière' },
+    { value: 'birthday', label: '🎂 Anniversaire' },
+    { value: 'anniversary', label: '💑 Anniversaire de mariage' },
+    { value: 'business', label: '💼 Repas d\'affaires' },
+    { value: 'family', label: '👨‍👩‍👧 Repas de famille' },
+    { value: 'date', label: '❤️ Rendez-vous romantique' },
+    { value: 'other', label: '✨ Autre' },
+  ]
+
+  const set = (field, value) => {
+    setForm(f => ({ ...f, [field]: value }))
+    if (errors[field]) setErrors(e => ({ ...e, [field]: '' }))
+  }
 
   const validate = () => {
     const e = {}
     if (!form.name.trim()) e.name = 'Nom requis'
     if (!form.phone.trim()) e.phone = 'Téléphone requis'
     if (!form.date) e.date = 'Date requise'
+    else if (form.date < getTodayStr()) e.date = 'La date doit être dans le futur'
     if (!form.time) e.time = 'Heure requise'
-    if (!form.guests || form.guests < 1) e.guests = 'Nombre de couverts requis'
-    return e
+    setErrors(e)
+    return Object.keys(e).length === 0
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
-      return
-    }
-    addReservation(form)
-    setSubmitted(true)
+  const handleSubmit = () => {
+    if (!validate()) return
+    setStep(2)
+  }
+
+  const handleConfirm = () => {
+    addReservation({
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      date: form.date,
+      time: form.time,
+      guests: form.guests,
+      occasion: form.occasion,
+      notes: form.notes,
+    })
+    setStep(3)
+  }
+
+  const handleReset = () => {
+    setForm({ name: '', phone: '', email: '', date: '', time: TIME_OPTIONS[5], guests: 2, occasion: '', notes: '' })
     setErrors({})
+    setStep(1)
   }
 
-  const handleChange = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }))
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }))
-  }
-
-  const inputClass = (field) => `w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none focus:ring-2`
   const inputStyle = (field) => ({
-    borderColor: errors[field] ? '#DC2626' : '#E5E7EB',
-    backgroundColor: 'white',
+    width: '100%',
+    padding: '12px 16px',
+    borderRadius: '12px',
+    border: `1.5px solid ${errors[field] ? '#FCA5A5' : '#E7E5E4'}`,
+    backgroundColor: errors[field] ? '#FFF5F5' : 'white',
+    fontSize: '14px',
     color: '#1C1917',
-    focusRingColor: '#D97706'
+    outline: 'none',
+    boxSizing: 'border-box',
   })
 
-  const today = new Date().toISOString().split('T')[0]
-
-  if (submitted) {
-    return (
-      <div style={{ backgroundColor: '#FFFBEB', minHeight: '100vh' }}>
-        {/* Header */}
-        <div className="py-16 text-center" style={{ background: 'linear-gradient(135deg, #1C1917, #292524)' }}>
-          <h1 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: 'Georgia, serif', color: 'white' }}>
-            Réservation
-          </h1>
-        </div>
-
-        <div className="max-w-xl mx-auto px-4 sm:px-6 py-20 text-center">
-          <div className="bg-white rounded-2xl p-10 shadow-lg">
-            <CheckCircle size={64} className="mx-auto mb-6" style={{ color: '#D97706' }} />
-            <h2 className="text-2xl font-bold mb-3" style={{ color: '#1C1917', fontFamily: 'Georgia, serif' }}>
-              Réservation envoyée !
-            </h2>
-            <p className="text-base mb-2" style={{ color: '#44403C' }}>
-              Merci <strong>{form.name}</strong>, votre demande de réservation a bien été reçue.
-            </p>
-            <p className="text-sm mb-6" style={{ color: '#78716C' }}>
-              Pour {form.guests} couvert{form.guests > 1 ? 's' : ''} le {form.date} à {form.time}
-            </p>
-            <div className="rounded-xl p-4 mb-6" style={{ backgroundColor: '#FEF3C7' }}>
-              <p className="text-sm" style={{ color: '#92400E' }}>
-                Nous vous contacterons au <strong>{form.phone}</strong> pour confirmer votre réservation.
-              </p>
-            </div>
-            <button
-              onClick={() => setSubmitted(false)}
-              className="px-6 py-3 rounded-xl text-white font-semibold transition-all hover:opacity-90"
-              style={{ backgroundColor: '#D97706' }}
-            >
-              Faire une autre réservation
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const labelStyle = { display: 'block', fontSize: '13px', fontWeight: '600', color: '#57534E', marginBottom: '6px' }
 
   return (
     <div style={{ backgroundColor: '#FFFBEB', minHeight: '100vh' }}>
-      {/* Page Header */}
+      {/* Header */}
       <div className="py-16 text-center" style={{ background: 'linear-gradient(135deg, #1C1917, #292524)' }}>
         <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: '#D97706' }}>
-          En ligne, 24h/24
+          Réservez votre table
         </p>
         <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ fontFamily: 'Georgia, serif', color: 'white' }}>
-          Réserver une table
+          Réservation
         </h1>
         <div className="divider-gold w-24 mx-auto" />
         <p className="mt-4 text-base max-w-xl mx-auto" style={{ color: '#A8A29E' }}>
-          Remplissez le formulaire ci-dessous et nous confirmerons votre réservation rapidement.
+          Réservez en quelques secondes. Confirmation immédiate — notre équipe vous attend.
         </p>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="px-3 py-2 flex items-center gap-2" style={{ backgroundColor: '#D97706' }}>
-            <CalendarCheck size={20} style={{ color: 'white' }} />
-            <span className="text-sm font-semibold text-white">Demande de réservation</span>
+      {/* Steps indicator */}
+      {step < 3 && (
+        <div className="max-w-2xl mx-auto px-4 pt-8">
+          <div className="flex items-center justify-center gap-3">
+            {[1, 2].map((s) => (
+              <div key={s} className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                    style={{
+                      backgroundColor: step >= s ? '#D97706' : '#E7E5E4',
+                      color: step >= s ? 'white' : '#78716C'
+                    }}
+                  >
+                    {s}
+                  </div>
+                  <span className="text-sm font-medium" style={{ color: step >= s ? '#D97706' : '#78716C' }}>
+                    {s === 1 ? 'Vos informations' : 'Confirmation'}
+                  </span>
+                </div>
+                {s < 2 && <div style={{ width: '40px', height: '2px', backgroundColor: step > 1 ? '#D97706' : '#E7E5E4' }} />}
+              </div>
+            ))}
           </div>
+        </div>
+      )}
 
-          <form onSubmit={handleSubmit} className="p-8 space-y-5">
-            {/* Name & Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 pb-16">
+        {/* Step 1 — Form */}
+        {step === 1 && (
+          <div className="bg-white rounded-2xl shadow-md p-8">
+            <div className="grid gap-5">
+              {/* Name */}
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                  Nom complet <span style={{ color: '#DC2626' }}>*</span>
-                </label>
+                <label style={labelStyle}>Nom complet *</label>
                 <input
                   type="text"
-                  placeholder="Jean Dupont"
                   value={form.name}
-                  onChange={e => handleChange('name', e.target.value)}
-                  className={inputClass('name')}
-                  style={{
-                    borderColor: errors.name ? '#DC2626' : '#E5E7EB',
-                    backgroundColor: 'white',
-                    color: '#1C1917'
-                  }}
+                  onChange={e => set('name', e.target.value)}
+                  placeholder="Jean Dupont"
+                  style={inputStyle('name')}
                 />
                 {errors.name && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.name}</p>}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                  Téléphone <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="06 12 34 56 78"
-                  value={form.phone}
-                  onChange={e => handleChange('phone', e.target.value)}
-                  className={inputClass('phone')}
-                  style={{
-                    borderColor: errors.phone ? '#DC2626' : '#E5E7EB',
-                    backgroundColor: 'white',
-                    color: '#1C1917'
-                  }}
-                />
-                {errors.phone && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.phone}</p>}
-              </div>
-            </div>
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="jean@email.fr"
-                value={form.email}
-                onChange={e => handleChange('email', e.target.value)}
-                className={inputClass('email')}
-                style={{
-                  borderColor: '#E5E7EB',
-                  backgroundColor: 'white',
-                  color: '#1C1917'
-                }}
-              />
-            </div>
-
-            {/* Date, Time, Guests */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                  Date <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <input
-                  type="date"
-                  min={today}
-                  value={form.date}
-                  onChange={e => handleChange('date', e.target.value)}
-                  className={inputClass('date')}
-                  style={{
-                    borderColor: errors.date ? '#DC2626' : '#E5E7EB',
-                    backgroundColor: 'white',
-                    color: '#1C1917'
-                  }}
-                />
-                {errors.date && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.date}</p>}
+              {/* Phone + Email */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label style={labelStyle}>Téléphone *</label>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={e => set('phone', e.target.value)}
+                    placeholder="06 12 34 56 78"
+                    style={inputStyle('phone')}
+                  />
+                  {errors.phone && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.phone}</p>}
+                </div>
+                <div>
+                  <label style={labelStyle}>Email (optionnel)</label>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={e => set('email', e.target.value)}
+                    placeholder="jean@email.com"
+                    style={inputStyle('email')}
+                  />
+                </div>
               </div>
+
+              {/* Date + Time */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label style={labelStyle}>Date *</label>
+                  <input
+                    type="date"
+                    value={form.date}
+                    min={getTodayStr()}
+                    onChange={e => set('date', e.target.value)}
+                    style={inputStyle('date')}
+                  />
+                  {errors.date && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.date}</p>}
+                </div>
+                <div>
+                  <label style={labelStyle}>Heure *</label>
+                  <select
+                    value={form.time}
+                    onChange={e => set('time', e.target.value)}
+                    style={{ ...inputStyle('time'), appearance: 'none' }}
+                  >
+                    {TIME_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                  {errors.time && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.time}</p>}
+                </div>
+              </div>
+
+              {/* Guests */}
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                  Heure <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <select
-                  value={form.time}
-                  onChange={e => handleChange('time', e.target.value)}
-                  className={inputClass('time')}
-                  style={{
-                    borderColor: errors.time ? '#DC2626' : '#E5E7EB',
-                    backgroundColor: 'white',
-                    color: form.time ? '#1C1917' : '#9CA3AF'
-                  }}
-                >
-                  <option value="">Choisir</option>
-                  {TIME_OPTIONS.map(t => (
-                    <option key={t} value={t}>{t}</option>
+                <label style={labelStyle}>Nombre de personnes *</label>
+                <div className="flex flex-wrap gap-2">
+                  {GUEST_OPTIONS.map(n => (
+                    <button
+                      key={n}
+                      onClick={() => set('guests', n)}
+                      className="w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-150"
+                      style={{
+                        backgroundColor: form.guests === n ? '#D97706' : '#F5F5F4',
+                        color: form.guests === n ? 'white' : '#57534E'
+                      }}
+                    >
+                      {n}
+                    </button>
                   ))}
-                </select>
-                {errors.time && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.time}</p>}
+                </div>
               </div>
+
+              {/* Occasion */}
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                  Couverts <span style={{ color: '#DC2626' }}>*</span>
-                </label>
+                <label style={labelStyle}>Occasion spéciale</label>
                 <select
-                  value={form.guests}
-                  onChange={e => handleChange('guests', parseInt(e.target.value))}
-                  className={inputClass('guests')}
-                  style={{
-                    borderColor: errors.guests ? '#DC2626' : '#E5E7EB',
-                    backgroundColor: 'white',
-                    color: '#1C1917'
-                  }}
+                  value={form.occasion}
+                  onChange={e => set('occasion', e.target.value)}
+                  style={{ ...inputStyle('occasion'), appearance: 'none' }}
                 >
-                  {Array.from({ length: 20 }, (_, i) => i + 1).map(n => (
-                    <option key={n} value={n}>{n} personne{n > 1 ? 's' : ''}</option>
-                  ))}
+                  {OCCASIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
-                {errors.guests && <p className="text-xs mt-1" style={{ color: '#DC2626' }}>{errors.guests}</p>}
               </div>
-            </div>
 
-            {/* Notes */}
-            <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#1C1917' }}>
-                Notes / Allergies / Occasion spéciale
-              </label>
-              <textarea
-                rows={3}
-                placeholder="Ex: Allergie aux noix, anniversaire, chaise haute nécessaire..."
-                value={form.notes}
-                onChange={e => handleChange('notes', e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none resize-none"
-                style={{
-                  borderColor: '#E5E7EB',
-                  backgroundColor: 'white',
-                  color: '#1C1917'
-                }}
-              />
-            </div>
-
-            {/* Info box */}
-            <div className="rounded-xl p-4" style={{ backgroundColor: '#FEF3C7' }}>
-              <p className="text-sm" style={{ color: '#92400E' }}>
-                <strong>Confirmation :</strong> Nous vous contacterons sous 2h pour confirmer votre réservation. Pour une réservation urgente, appelez-nous directement au{' '}
-                <a href={`tel:${restaurant.phone}`} className="font-semibold" style={{ color: '#D97706' }}>
-                  {restaurant.phone}
-                </a>
-              </p>
+              {/* Notes */}
+              <div>
+                <label style={labelStyle}>Demandes particulières</label>
+                <textarea
+                  value={form.notes}
+                  onChange={e => set('notes', e.target.value)}
+                  rows={3}
+                  placeholder="Allergie, chaise haute, table en terrasse..."
+                  style={{ ...inputStyle('notes'), resize: 'vertical' }}
+                />
+              </div>
             </div>
 
             <button
-              type="submit"
-              className="w-full py-4 rounded-xl text-white font-semibold text-base transition-all hover:opacity-90 hover:scale-[1.01] flex items-center justify-center gap-2 shadow-lg"
+              onClick={handleSubmit}
+              className="mt-8 w-full py-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{ backgroundColor: '#D97706', fontSize: '15px' }}
+            >
+              <CalendarCheck size={18} />
+              Continuer vers la confirmation
+            </button>
+          </div>
+        )}
+
+        {/* Step 2 — Confirm */}
+        {step === 2 && (
+          <div className="bg-white rounded-2xl shadow-md p-8">
+            <h2 className="text-xl font-bold mb-6" style={{ color: '#1C1917', fontFamily: 'Georgia, serif' }}>
+              Récapitulatif de votre réservation
+            </h2>
+            <div className="space-y-3">
+              {[
+                { label: 'Nom', value: form.name },
+                { label: 'Téléphone', value: form.phone },
+                form.email && { label: 'Email', value: form.email },
+                { label: 'Date', value: form.date.split('-').reverse().join('/') },
+                { label: 'Heure', value: form.time },
+                { label: 'Personnes', value: `${form.guests} personne${form.guests > 1 ? 's' : ''}` },
+                form.occasion && { label: 'Occasion', value: OCCASIONS.find(o => o.value === form.occasion)?.label },
+                form.notes && { label: 'Notes', value: form.notes },
+              ].filter(Boolean).map(({ label, value }) => (
+                <div key={label} className="flex justify-between py-2" style={{ borderBottom: '1px solid #F5F5F4' }}>
+                  <span className="text-sm font-medium" style={{ color: '#78716C' }}>{label}</span>
+                  <span className="text-sm font-semibold" style={{ color: '#1C1917' }}>{value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 p-4 rounded-xl" style={{ backgroundColor: '#FEF3C7' }}>
+              <p className="text-sm" style={{ color: '#92400E' }}>
+                En confirmant, vous acceptez nos conditions de réservation. En cas d'annulation, merci de nous prévenir au moins 24h à l'avance.
+              </p>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={() => setStep(1)}
+                className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
+                style={{ backgroundColor: '#F5F5F4', color: '#57534E' }}
+              >
+                Modifier
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="flex-1 py-3 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90"
+                style={{ backgroundColor: '#D97706' }}
+              >
+                <CheckCircle size={16} />
+                Confirmer la réservation
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3 — Success */}
+        {step === 3 && (
+          <div className="bg-white rounded-2xl shadow-md p-10 text-center">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+              style={{ backgroundColor: '#F0FDF4' }}>
+              <CheckCircle size={40} style={{ color: '#16A34A' }} />
+            </div>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: '#1C1917', fontFamily: 'Georgia, serif' }}>
+              Réservation confirmée !
+            </h2>
+            <p className="text-sm mb-1" style={{ color: '#78716C' }}>
+              Merci <strong>{form.name}</strong> — nous vous attendons le
+            </p>
+            <p className="text-lg font-bold mb-1" style={{ color: '#D97706' }}>
+              {form.date.split('-').reverse().join('/')} à {form.time}
+            </p>
+            <p className="text-sm" style={{ color: '#78716C' }}>
+              pour {form.guests} personne{form.guests > 1 ? 's' : ''}.
+            </p>
+            {form.phone && (
+              <p className="text-sm mt-3" style={{ color: '#78716C' }}>
+                Notre équipe peut vous joindre au <strong>{form.phone}</strong> si nécessaire.
+              </p>
+            )}
+            <button
+              onClick={handleReset}
+              className="mt-8 px-8 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
               style={{ backgroundColor: '#D97706' }}
             >
-              <CalendarCheck size={20} />
-              Envoyer ma demande de réservation
+              Faire une nouvelle réservation
             </button>
-          </form>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
