@@ -362,6 +362,29 @@ const useStore = create(
         }
       })),
 
+      // ── REVIEWS ──────────────────────────────────────────────
+      addReview: (review) => set((state) => ({
+        data: {
+          ...state.data,
+          reviews: [
+            ...(state.data.reviews || []),
+            { ...review, id: `rev_${Date.now()}`, date: new Date().toISOString().split('T')[0], approved: false, reply: null }
+          ]
+        }
+      })),
+      updateReview: (id, updates) => set((state) => ({
+        data: {
+          ...state.data,
+          reviews: (state.data.reviews || []).map(r => r.id === id ? { ...r, ...updates } : r)
+        }
+      })),
+      deleteReview: (id) => set((state) => ({
+        data: {
+          ...state.data,
+          reviews: (state.data.reviews || []).filter(r => r.id !== id)
+        }
+      })),
+
       resetData: () => set({ data: DEFAULT_DATA }),
     }),
     {
@@ -397,6 +420,7 @@ const useStore = create(
             customerOrders: persisted.data?.customerOrders ?? [],
             menuCategories:  injectImages(persisted.data?.menuCategories,  DEFAULT_DATA.menuCategories),
             drinkCategories: injectImages(persisted.data?.drinkCategories, DEFAULT_DATA.drinkCategories),
+            reviews:         persisted.data?.reviews         ?? DEFAULT_DATA.reviews,
           }
         }
       },

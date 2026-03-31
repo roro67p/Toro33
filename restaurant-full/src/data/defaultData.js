@@ -22,29 +22,29 @@ export const DEFAULT_DATA = {
     {
       id: "cat1", name: "Entrées", icon: "🥗",
       items: [
-        { id: "e1", name: "Salade lyonnaise",     description: "Frisée, lardons, œuf poché, croûtons",              price: 12.50, available: true, image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "e2", name: "Terrine maison",        description: "Terrine de campagne, cornichons, pain grillé",       price: 9.00,  available: true, image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "e3", name: "Velouté de saison",     description: "Velouté du moment selon arrivage",                   price: 8.50,  available: true, image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "e4", name: "Escargots de Bourgogne",description: "6 escargots, beurre persillé",                       price: 14.00, available: true, image: "https://images.unsplash.com/photo-1609167830220-7164aa360951?w=500&h=300&auto=format&fit=crop&q=80" }
+        { id: "e1", name: "Salade lyonnaise",     description: "Frisée, lardons, œuf poché, croûtons",              price: 12.50, available: true, badge: "populaire",  allergens: "Œuf, Gluten", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "e2", name: "Terrine maison",        description: "Terrine de campagne, cornichons, pain grillé",       price: 9.00,  available: true, badge: "signature",   allergens: "Gluten",       image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "e3", name: "Velouté de saison",     description: "Velouté du moment selon arrivage",                   price: 8.50,  available: true, badge: "nouveau",     allergens: "Lait",         image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "e4", name: "Escargots de Bourgogne",description: "6 escargots, beurre persillé",                       price: 14.00, available: true, badge: null,          allergens: "Lait, Gluten", image: "https://images.unsplash.com/photo-1609167830220-7164aa360951?w=500&h=300&auto=format&fit=crop&q=80" }
       ]
     },
     {
       id: "cat2", name: "Plats", icon: "🍽️",
       items: [
-        { id: "p1", name: "Bœuf bourguignon",       description: "Bœuf braisé au vin rouge, carottes, champignons",   price: 22.00, available: true, image: "https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "p2", name: "Quenelles de brochet",   description: "Quenelles maison, sauce Nantua",                    price: 19.50, available: true, image: "https://images.unsplash.com/photo-1519708227418-a2731516131f?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "p3", name: "Côte de cochon fermier", description: "Côte de porc, sauce moutarde, gratin dauphinois",   price: 21.00, available: true, image: "https://images.unsplash.com/photo-1432139555190-58524dde6841?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "p4", name: "Filet de sole meunière", description: "Sole, beurre citronné, haricots verts",              price: 24.00, available: true, image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "p5", name: "Risotto aux champignons",description: "Risotto crémeux, champignons des bois, parmesan",   price: 17.00, available: true, image: "https://images.unsplash.com/photo-1476124369491-e7dde7e9c23f?w=500&h=300&auto=format&fit=crop&q=80" }
+        { id: "p1", name: "Bœuf bourguignon",       description: "Bœuf braisé au vin rouge, carottes, champignons",   price: 22.00, available: true, badge: "coup de cœur", allergens: "Alcool",           image: "https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "p2", name: "Quenelles de brochet",   description: "Quenelles maison, sauce Nantua",                    price: 19.50, available: true, badge: "signature",    allergens: "Poisson, Lait",    image: "https://images.unsplash.com/photo-1519708227418-a2731516131f?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "p3", name: "Côte de cochon fermier", description: "Côte de porc, sauce moutarde, gratin dauphinois",   price: 21.00, available: true, badge: null,           allergens: "Lait, Moutarde",   image: "https://images.unsplash.com/photo-1432139555190-58524dde6841?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "p4", name: "Filet de sole meunière", description: "Sole, beurre citronné, haricots verts",              price: 24.00, available: true, badge: "populaire",    allergens: "Poisson, Lait",    image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "p5", name: "Risotto aux champignons",description: "Risotto crémeux, champignons des bois, parmesan",   price: 17.00, available: true, badge: "végétarien",   allergens: "Lait",             image: "https://images.unsplash.com/photo-1476124369491-e7dde7e9c23f?w=500&h=300&auto=format&fit=crop&q=80" }
       ]
     },
     {
       id: "cat3", name: "Desserts", icon: "🍮",
       items: [
-        { id: "d1", name: "Tarte Tatin maison",   description: "Pommes caramélisées, pâte feuilletée, crème fraîche", price: 9.00,  available: true, image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "d2", name: "Île flottante",         description: "Meringue pochée, crème anglaise, pralin",             price: 8.00,  available: true, image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "d3", name: "Fondant au chocolat",   description: "Fondant coulant, glace vanille",                      price: 9.50,  available: true, image: "https://images.unsplash.com/photo-1541544537887-0a63e5cf3e51?w=500&h=300&auto=format&fit=crop&q=80" },
-        { id: "d4", name: "Plateau de fromages",   description: "Sélection de 4 fromages, noix, raisins",             price: 12.00, available: true, image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500&h=300&auto=format&fit=crop&q=80" }
+        { id: "d1", name: "Tarte Tatin maison",   description: "Pommes caramélisées, pâte feuilletée, crème fraîche", price: 9.00,  available: true, badge: "populaire",   allergens: "Gluten, Lait, Œuf", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "d2", name: "Île flottante",         description: "Meringue pochée, crème anglaise, pralin",             price: 8.00,  available: true, badge: "signature",   allergens: "Œuf, Lait, Fruits à coque", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "d3", name: "Fondant au chocolat",   description: "Fondant coulant, glace vanille",                      price: 9.50,  available: true, badge: "coup de cœur",allergens: "Gluten, Lait, Œuf", image: "https://images.unsplash.com/photo-1541544537887-0a63e5cf3e51?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "d4", name: "Plateau de fromages",   description: "Sélection de 4 fromages, noix, raisins",             price: 12.00, available: true, badge: null,          allergens: "Lait, Fruits à coque", image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500&h=300&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -147,5 +147,13 @@ export const DEFAULT_DATA = {
     { id: "ca7", date: "2026-03-30", covers: 0,  revenue: 0,       lunchRevenue: 0,        dinnerRevenue: 0,       topDish: "" }
   ],
 
-  customerOrders: []
+  customerOrders: [],
+
+  reviews: [
+    { id: "rev1", name: "Marie L.",  rating: 5, comment: "Une adresse incontournable ! Le bœuf bourguignon était fondant, la salle chaleureuse et le service aux petits soins. On reviendra sans hésiter.", date: "2026-03-15", approved: true,  reply: "Merci infiniment Marie, c'est un plaisir de vous accueillir !" },
+    { id: "rev2", name: "Thomas R.", rating: 5, comment: "Soirée de jazz inoubliable. La cuisine était à la hauteur de l'événement, les quenelles de brochet exceptionnelles.", date: "2026-03-20", approved: true,  reply: null },
+    { id: "rev3", name: "Sophie B.", rating: 4, comment: "Très bonne table, cadre élégant. Petit bémol sur le temps d'attente mais la qualité des plats rattrape tout.", date: "2026-03-25", approved: true,  reply: "Merci Sophie pour ce retour sincère ! Nous travaillons à optimiser les délais." },
+    { id: "rev4", name: "Jean-Paul M.", rating: 5, comment: "Le meilleur restaurant de Lyon selon moi. La tarte tatin maison est tout simplement divine.", date: "2026-03-28", approved: true,  reply: null },
+    { id: "rev5", name: "Claire D.", rating: 4, comment: "Formule déjeuner excellent rapport qualité-prix. Menu varié et frais. Je recommande le risotto aux champignons.", date: "2026-03-29", approved: true,  reply: null }
+  ]
 }
