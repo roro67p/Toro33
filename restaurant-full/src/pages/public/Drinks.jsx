@@ -213,64 +213,73 @@ function DrinkCard({ item, catName, catIcon, onAdd, added, qty }) {
   const justAdded = added[glassKey] || added[bottleKey] || added[singleKey]
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md relative"
+    <div className="bg-white rounded-2xl shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md relative overflow-hidden"
       style={{ opacity: item.available === false ? 0.6 : 1 }}>
-      {item.available === false && (
-        <span className="absolute top-4 right-4 text-xs font-semibold px-3 py-1 rounded-full"
-          style={{ backgroundColor: '#FEE2E2', color: '#991B1B' }}>
-          Indisponible
-        </span>
+      {/* Image */}
+      {item.image && (
+        <div style={{ height: '150px', overflow: 'hidden' }}>
+          <img src={item.image} alt={item.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
       )}
-      <div className="flex justify-between items-start gap-3">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm">{catIcon}</span>
-            <span className="text-xs" style={{ color: '#94A3B8' }}>{catName}</span>
+      <div className="p-5">
+        {item.available === false && (
+          <span className="absolute top-4 right-4 text-xs font-semibold px-3 py-1 rounded-full"
+            style={{ backgroundColor: '#FEE2E2', color: '#991B1B' }}>
+            Indisponible
+          </span>
+        )}
+        <div className="flex justify-between items-start gap-3">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-sm">{catIcon}</span>
+              <span className="text-xs" style={{ color: '#94A3B8' }}>{catName}</span>
+            </div>
+            <h3 className="font-semibold text-base mb-1" style={{ color: '#1C1917' }}>{item.name}</h3>
+            {item.description && (
+              <p className="text-sm leading-relaxed" style={{ color: '#78716C' }}>{item.description}</p>
+            )}
           </div>
-          <h3 className="font-semibold text-base mb-1" style={{ color: '#1C1917' }}>{item.name}</h3>
-          {item.description && (
-            <p className="text-sm leading-relaxed" style={{ color: '#78716C' }}>{item.description}</p>
-          )}
+          <div className="text-right flex-shrink-0 ml-3">
+            {hasGlass && (
+              <div>
+                <div className="text-xs mb-0.5" style={{ color: '#94A3B8' }}>Verre</div>
+                <div className="text-lg font-bold" style={{ color: '#D97706' }}>{item.priceGlass.toFixed(2)}€</div>
+              </div>
+            )}
+            {hasBottle && (
+              <div className={hasGlass ? 'mt-1' : ''}>
+                <div className="text-xs mb-0.5" style={{ color: '#94A3B8' }}>Bouteille</div>
+                <div className="text-lg font-bold" style={{ color: '#1E3A5F' }}>{item.priceBottle.toFixed(2)}€</div>
+              </div>
+            )}
+            {hasSingle && !hasGlass && !hasBottle && (
+              <div className="text-xl font-bold" style={{ color: '#D97706' }}>{item.price.toFixed(2)}€</div>
+            )}
+          </div>
         </div>
-        <div className="text-right flex-shrink-0 ml-3">
-          {hasGlass && (
-            <div>
-              <div className="text-xs mb-0.5" style={{ color: '#94A3B8' }}>Verre</div>
-              <div className="text-lg font-bold" style={{ color: '#D97706' }}>{item.priceGlass.toFixed(2)}€</div>
-            </div>
-          )}
-          {hasBottle && (
-            <div className={hasGlass ? 'mt-1' : ''}>
-              <div className="text-xs mb-0.5" style={{ color: '#94A3B8' }}>Bouteille</div>
-              <div className="text-lg font-bold" style={{ color: '#1E3A5F' }}>{item.priceBottle.toFixed(2)}€</div>
-            </div>
-          )}
-          {hasSingle && !hasGlass && !hasBottle && (
-            <div className="text-xl font-bold" style={{ color: '#D97706' }}>{item.price.toFixed(2)}€</div>
-          )}
-        </div>
-      </div>
 
-      {item.available !== false && (
-        <div className="flex items-center justify-between mt-3">
-          <button
-            onClick={() => onAdd(item)}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200"
-            style={{
-              backgroundColor: justAdded ? '#D1FAE5' : '#FEF3C7',
-              color: justAdded ? '#065F46' : '#92400E',
-            }}
-          >
-            {justAdded ? <Check size={14} /> : <Plus size={14} />}
-            {justAdded ? 'Ajouté !' : hasGlass && hasBottle ? 'Choisir format' : 'Ajouter'}
-          </button>
-          {qty > 0 && (
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: '#D97706', color: 'white' }}>
-              {qty} dans panier
-            </span>
-          )}
-        </div>
-      )}
+        {item.available !== false && (
+          <div className="flex items-center justify-between mt-3">
+            <button
+              onClick={() => onAdd(item)}
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200"
+              style={{
+                backgroundColor: justAdded ? '#D1FAE5' : '#FEF3C7',
+                color: justAdded ? '#065F46' : '#92400E',
+              }}
+            >
+              {justAdded ? <Check size={14} /> : <Plus size={14} />}
+              {justAdded ? 'Ajouté !' : hasGlass && hasBottle ? 'Choisir format' : 'Ajouter'}
+            </button>
+            {qty > 0 && (
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: '#D97706', color: 'white' }}>
+                {qty} dans panier
+              </span>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

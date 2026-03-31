@@ -1,22 +1,24 @@
 import { useState } from 'react'
 import useStore from '../../store/useStore'
+import ImagePicker from '../../components/ImagePicker'
 import { Plus, Trash2, Edit2, Check, X, ChevronDown, ChevronUp } from 'lucide-react'
 
-const EMPTY_ITEM = { name: '', description: '', price_glass: '', price_bottle: '', available: true }
+const EMPTY_ITEM = { name: '', description: '', price_glass: '', price_bottle: '', available: true, image: null }
 
 function DrinkRow({ catId, item, onUpdate, onDelete }) {
   const [editing, setEditing] = useState(false)
   const [form, setForm] = useState({
     ...item,
     price_glass: item.price_glass != null ? item.price_glass.toString() : '',
-    price_bottle: item.price_bottle != null ? item.price_bottle.toString() : ''
+    price_bottle: item.price_bottle != null ? item.price_bottle.toString() : '',
+    image: item.image || null
   })
 
   const save = () => {
     onUpdate(catId, item.id, {
       ...form,
       price_glass: form.price_glass !== '' ? parseFloat(form.price_glass) : null,
-      price_bottle: form.price_bottle !== '' ? parseFloat(form.price_bottle) : null
+      price_bottle: form.price_bottle !== '' ? parseFloat(form.price_bottle) : null,
     })
     setEditing(false)
   }
@@ -32,7 +34,8 @@ function DrinkRow({ catId, item, onUpdate, onDelete }) {
           </div>
           <div>
             <label className="text-xs font-medium block mb-1" style={{ color: '#44403C' }}>Prix au verre (€)</label>
-            <input type="number" step="0.01" min="0" value={form.price_glass} onChange={e => setForm(p => ({ ...p, price_glass: e.target.value }))}
+            <input type="number" step="0.01" min="0" value={form.price_glass}
+              onChange={e => setForm(p => ({ ...p, price_glass: e.target.value }))}
               placeholder="laisser vide si N/A"
               className="w-full px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
           </div>
@@ -45,10 +48,15 @@ function DrinkRow({ catId, item, onUpdate, onDelete }) {
           </div>
           <div>
             <label className="text-xs font-medium block mb-1" style={{ color: '#44403C' }}>Prix bouteille (€)</label>
-            <input type="number" step="0.01" min="0" value={form.price_bottle} onChange={e => setForm(p => ({ ...p, price_bottle: e.target.value }))}
+            <input type="number" step="0.01" min="0" value={form.price_bottle}
+              onChange={e => setForm(p => ({ ...p, price_bottle: e.target.value }))}
               placeholder="laisser vide si N/A"
               className="w-full px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
           </div>
+        </div>
+        <div>
+          <label className="text-xs font-medium block mb-1" style={{ color: '#44403C' }}>Image</label>
+          <ImagePicker value={form.image} onChange={v => setForm(p => ({ ...p, image: v }))} />
         </div>
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 cursor-pointer">
@@ -68,6 +76,14 @@ function DrinkRow({ catId, item, onUpdate, onDelete }) {
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl group transition-all hover:shadow-sm" style={{ backgroundColor: 'white', border: '1px solid #F3F4F6' }}>
+      {item.image ? (
+        <img src={item.image} alt={item.name}
+          style={{ width: '44px', height: '44px', borderRadius: '10px', objectFit: 'cover', flexShrink: 0 }} />
+      ) : (
+        <div style={{ width: '44px', height: '44px', borderRadius: '10px', backgroundColor: '#F5F5F4', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+          🥤
+        </div>
+      )}
       <div className={`w-2 h-2 rounded-full flex-shrink-0 ${item.available ? 'bg-green-400' : 'bg-red-300'}`} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
@@ -81,10 +97,10 @@ function DrinkRow({ catId, item, onUpdate, onDelete }) {
         {item.price_bottle != null && <span>{item.price_bottle.toFixed(2)}€ <span className="text-xs font-normal text-gray-400">btl</span></span>}
       </div>
       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button onClick={() => setEditing(true)} className="p-1.5 rounded-lg transition-colors" style={{ color: '#9CA3AF' }} title="Modifier">
+        <button onClick={() => setEditing(true)} className="p-1.5 rounded-lg transition-colors" style={{ color: '#9CA3AF' }}>
           <Edit2 size={14} />
         </button>
-        <button onClick={() => onDelete(catId, item.id)} className="p-1.5 rounded-lg transition-colors hover:text-red-500" style={{ color: '#9CA3AF' }} title="Supprimer">
+        <button onClick={() => onDelete(catId, item.id)} className="p-1.5 rounded-lg transition-colors" style={{ color: '#9CA3AF' }}>
           <Trash2 size={14} />
         </button>
       </div>
@@ -105,7 +121,7 @@ function CategorySection({ category, onUpdateItem, onDeleteItem, onAddItem, onDe
       id: 'di' + Date.now(),
       ...newItem,
       price_glass: newItem.price_glass !== '' ? parseFloat(newItem.price_glass) : null,
-      price_bottle: newItem.price_bottle !== '' ? parseFloat(newItem.price_bottle) : null
+      price_bottle: newItem.price_bottle !== '' ? parseFloat(newItem.price_bottle) : null,
     })
     setNewItem({ ...EMPTY_ITEM })
     setAdding(false)
@@ -118,7 +134,9 @@ function CategorySection({ category, onUpdateItem, onDeleteItem, onAddItem, onDe
           <span className="text-xl">{category.icon}</span>
           {editingName ? (
             <div className="flex items-center gap-2">
-              <input value={catName} onChange={e => setCatName(e.target.value)} className="px-2 py-1 rounded border text-sm font-semibold outline-none" style={{ borderColor: '#D97706', color: '#1C1917' }} autoFocus />
+              <input value={catName} onChange={e => setCatName(e.target.value)}
+                className="px-2 py-1 rounded border text-sm font-semibold outline-none"
+                style={{ borderColor: '#D97706', color: '#1C1917' }} autoFocus />
               <button onClick={() => { onUpdateCategory(category.id, { name: catName }); setEditingName(false) }} className="text-green-600"><Check size={14} /></button>
               <button onClick={() => { setCatName(category.name); setEditingName(false) }} className="text-gray-400"><X size={14} /></button>
             </div>
@@ -127,10 +145,14 @@ function CategorySection({ category, onUpdateItem, onDeleteItem, onAddItem, onDe
               {category.name} <Edit2 size={12} className="inline ml-1 text-gray-400" />
             </button>
           )}
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: '#FDE68A', color: '#92400E' }}>{category.items.length} article{category.items.length > 1 ? 's' : ''}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: '#FDE68A', color: '#92400E' }}>
+            {category.items.length} article{category.items.length > 1 ? 's' : ''}
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => onDeleteCategory(category.id)} className="p-1.5 rounded-lg text-red-400 hover:text-red-600 transition-colors" title="Supprimer la catégorie"><Trash2 size={15} /></button>
+          <button onClick={() => onDeleteCategory(category.id)} className="p-1.5 rounded-lg text-red-400 hover:text-red-600 transition-colors">
+            <Trash2 size={15} />
+          </button>
           <button onClick={() => setCollapsed(c => !c)} className="p-1.5 rounded-lg transition-colors" style={{ color: '#9CA3AF' }}>
             {collapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
           </button>
@@ -147,24 +169,34 @@ function CategorySection({ category, onUpdateItem, onDeleteItem, onAddItem, onDe
               <div className="grid grid-cols-2 gap-3">
                 <input placeholder="Nom *" value={newItem.name} onChange={e => setNewItem(p => ({ ...p, name: e.target.value }))}
                   className="px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} autoFocus />
-                <input placeholder="Prix verre €" type="number" step="0.01" value={newItem.price_glass} onChange={e => setNewItem(p => ({ ...p, price_glass: e.target.value }))}
+                <input placeholder="Prix verre €" type="number" step="0.01" value={newItem.price_glass}
+                  onChange={e => setNewItem(p => ({ ...p, price_glass: e.target.value }))}
                   className="px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <input placeholder="Description" value={newItem.description} onChange={e => setNewItem(p => ({ ...p, description: e.target.value }))}
                   className="px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
-                <input placeholder="Prix bouteille €" type="number" step="0.01" value={newItem.price_bottle} onChange={e => setNewItem(p => ({ ...p, price_bottle: e.target.value }))}
+                <input placeholder="Prix bouteille €" type="number" step="0.01" value={newItem.price_bottle}
+                  onChange={e => setNewItem(p => ({ ...p, price_bottle: e.target.value }))}
                   className="px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
               </div>
+              <div>
+                <label className="text-xs font-medium block mb-1" style={{ color: '#92400E' }}>Image (optionnel)</label>
+                <ImagePicker value={newItem.image} onChange={v => setNewItem(p => ({ ...p, image: v }))} />
+              </div>
               <div className="flex justify-end gap-2">
-                <button onClick={() => { setAdding(false); setNewItem({ ...EMPTY_ITEM }) }} className="px-3 py-1.5 rounded-lg text-sm" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>Annuler</button>
+                <button onClick={() => { setAdding(false); setNewItem({ ...EMPTY_ITEM }) }}
+                  className="px-3 py-1.5 rounded-lg text-sm" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>
+                  Annuler
+                </button>
                 <button onClick={saveNew} className="px-3 py-1.5 rounded-lg text-sm font-medium" style={{ backgroundColor: '#D97706', color: 'white' }}>
                   <Check size={14} className="inline mr-1" />Ajouter
                 </button>
               </div>
             </div>
           ) : (
-            <button onClick={() => setAdding(true)} className="w-full py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all border-2 border-dashed hover:border-amber-400 hover:text-amber-600"
+            <button onClick={() => setAdding(true)}
+              className="w-full py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all border-2 border-dashed hover:border-amber-400 hover:text-amber-600"
               style={{ borderColor: '#E5E7EB', color: '#9CA3AF' }}>
               <Plus size={16} />Ajouter une boisson
             </button>
@@ -194,7 +226,8 @@ export default function DrinksAdmin() {
           <h2 className="text-xl font-bold" style={{ color: '#1C1917', fontFamily: 'Georgia, serif' }}>Carte des boissons</h2>
           <p className="text-sm mt-1" style={{ color: '#9CA3AF' }}>Gérez vos boissons et tarifs verre/bouteille</p>
         </div>
-        <button onClick={() => setAddingCat(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-90"
+        <button onClick={() => setAddingCat(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-90"
           style={{ backgroundColor: '#D97706', color: 'white' }}>
           <Plus size={16} />Nouvelle catégorie
         </button>
@@ -202,11 +235,20 @@ export default function DrinksAdmin() {
 
       {addingCat && (
         <div className="mb-4 p-4 rounded-2xl flex items-center gap-3" style={{ backgroundColor: '#FEF3C7', border: '1px dashed #FCD34D' }}>
-          <input value={newCatIcon} onChange={e => setNewCatIcon(e.target.value)} className="w-14 px-2 py-2 rounded-lg border text-center text-lg outline-none" style={{ borderColor: '#E5E7EB' }} placeholder="🥤" />
-          <input value={newCatName} onChange={e => setNewCatName(e.target.value)} placeholder="Nom de la catégorie" autoFocus
-            className="flex-1 px-3 py-2 rounded-lg border text-sm outline-none" style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
-          <button onClick={() => { setAddingCat(false); setNewCatName(''); }} className="px-3 py-2 rounded-lg text-sm" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>Annuler</button>
-          <button onClick={createCategory} className="px-3 py-2 rounded-lg text-sm font-medium" style={{ backgroundColor: '#D97706', color: 'white' }}>Créer</button>
+          <input value={newCatIcon} onChange={e => setNewCatIcon(e.target.value)}
+            className="w-14 px-2 py-2 rounded-lg border text-center text-lg outline-none"
+            style={{ borderColor: '#E5E7EB' }} placeholder="🥤" />
+          <input value={newCatName} onChange={e => setNewCatName(e.target.value)}
+            placeholder="Nom de la catégorie" autoFocus
+            className="flex-1 px-3 py-2 rounded-lg border text-sm outline-none"
+            style={{ borderColor: '#E5E7EB', color: '#1C1917' }} />
+          <button onClick={() => { setAddingCat(false); setNewCatName('') }}
+            className="px-3 py-2 rounded-lg text-sm" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>
+            Annuler
+          </button>
+          <button onClick={createCategory} className="px-3 py-2 rounded-lg text-sm font-medium" style={{ backgroundColor: '#D97706', color: 'white' }}>
+            Créer
+          </button>
         </div>
       )}
 
