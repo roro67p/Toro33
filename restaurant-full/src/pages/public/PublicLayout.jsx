@@ -6,6 +6,7 @@ import Drinks from './Drinks'
 import Events from './Events'
 import Reservation from './Reservation'
 import Contact from './Contact'
+import Reviews from './Reviews'
 import Cart from '../../components/Cart'
 import { Menu as MenuIcon, X, UtensilsCrossed, CalendarCheck } from 'lucide-react'
 
@@ -20,6 +21,7 @@ export default function PublicLayout({ onOpenLogin }) {
     { id: 'drinks', label: 'Boissons' },
     { id: 'events', label: 'Soirées' },
     { id: 'reservation', label: 'Réservation' },
+    { id: 'reviews', label: 'Avis' },
     { id: 'contact', label: 'Contact' },
   ]
 
@@ -35,6 +37,7 @@ export default function PublicLayout({ onOpenLogin }) {
       case 'drinks': return <Drinks />
       case 'events': return <Events />
       case 'reservation': return <Reservation />
+      case 'reviews': return <Reviews />
       case 'contact': return <Contact />
       default: return <Home />
     }

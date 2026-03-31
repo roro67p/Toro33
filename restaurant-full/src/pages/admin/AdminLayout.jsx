@@ -11,10 +11,11 @@ import StockAdmin from './StockAdmin'
 import OrdersAdmin from './OrdersAdmin'
 import CaisseAdmin from './CaisseAdmin'
 import CustomerOrdersAdmin from './CustomerOrdersAdmin'
+import ReviewsAdmin from './ReviewsAdmin'
 import {
   LayoutDashboard, Calendar, UtensilsCrossed, Wine,
   PartyPopper, Settings, ArrowLeft, Menu, X, LogOut,
-  Truck, Package, ShoppingCart, Euro, ShoppingBag
+  Truck, Package, ShoppingCart, Euro, ShoppingBag, Star
 } from 'lucide-react'
 
 const NAV_ITEMS = [
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { id: 'menu',            label: 'Menu',                icon: UtensilsCrossed },
   { id: 'drinks',          label: 'Boissons',            icon: Wine },
   { id: 'events',          label: 'Soirées',             icon: PartyPopper },
+  { id: 'reviews',         label: 'Avis clients',        icon: Star },
   { id: 'stock',           label: 'Stock',               icon: Package },
   { id: 'suppliers',       label: 'Fournisseurs',        icon: Truck },
   { id: 'orders',          label: 'Commandes fourn.',    icon: ShoppingCart },
@@ -34,6 +36,7 @@ const NAV_ITEMS = [
 export default function AdminLayout() {
   const { data, activeAdminPage, setActiveAdminPage, logoutAdmin } = useStore()
   const newOrdersCount = (data.customerOrders || []).filter(o => o.status === 'new').length
+  const pendingReviewsCount = (data.reviews || []).filter(r => !r.approved).length
   const { restaurant } = data
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
@@ -57,6 +60,7 @@ export default function AdminLayout() {
       case 'orders':           return <OrdersAdmin />
       case 'caisse':           return <CaisseAdmin />
       case 'customer-orders':  return <CustomerOrdersAdmin />
+      case 'reviews':          return <ReviewsAdmin />
       default:              return <Dashboard />
     }
   }
@@ -108,6 +112,12 @@ export default function AdminLayout() {
                 fontSize: '11px', fontWeight: 700, backgroundColor: '#EF4444',
                 color: 'white', borderRadius: '999px', padding: '1px 6px', minWidth: '18px', textAlign: 'center'
               }}>{newOrdersCount}</span>
+            )}
+            {id === 'reviews' && pendingReviewsCount > 0 && (
+              <span style={{
+                fontSize: '11px', fontWeight: 700, backgroundColor: '#7C3AED',
+                color: 'white', borderRadius: '999px', padding: '1px 6px', minWidth: '18px', textAlign: 'center'
+              }}>{pendingReviewsCount}</span>
             )}
           </button>
         ))}
