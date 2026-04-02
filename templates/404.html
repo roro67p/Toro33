@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Page introuvable — Chez Romu{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding: 5rem 2rem;">
+    <div style="font-size:5rem;">🍽️</div>
+    <h2 style="font-family:'Playfair Display',serif; font-size:2.5rem; color:#8B1A1A; margin:1rem 0;">
+        404 — Cette table n'existe pas
+    </h2>
+    <p style="font-size:1.2rem; color:#666; margin-bottom:2rem;">
+        On a cherché partout dans le restaurant, mais cette page est introuvable.<br>
+        Peut-être qu'elle est à la soirée disco ?
+    </p>
+    <a href="{{ url_for('index') }}" style="background:#8B1A1A; color:white; padding:0.8rem 2rem; border-radius:30px; text-decoration:none; font-weight:700;">
+        Retour à l'accueil
+    </a>
+</div>
+{% endblock %}

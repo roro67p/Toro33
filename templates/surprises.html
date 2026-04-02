@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Surprises — Chez Romu{% endblock %}
+
+{% block content %}
+<section class="page-hero surprises-hero">
+    <div class="surprises-hero-deco">✨ 🪄 ✨</div>
+    <h2 class="page-title">Les Surprises de la Maison</h2>
+    <p class="page-subtitle">
+        Chez Romu, on croit que les meilleurs moments sont souvent ceux qu'on n'a pas planifiés.
+        <br>Voici quelques-uns de nos petits secrets.
+    </p>
+</section>
+
+<div class="surprises-intro">
+    <p>Ces surprises ne sont pas dans la carte. Elles ne sont pas garanties. Elles arrivent quand elles arrivent.
+    C'est exactement ce qui les rend précieuses.</p>
+</div>
+
+<div class="surprises-grid">
+    {% for surprise in surprises %}
+    <div class="surprise-card" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+        <div class="surprise-emoji">{{ surprise.emoji }}</div>
+        <h3 class="surprise-title">{{ surprise.titre }}</h3>
+        <p class="surprise-desc">{{ surprise.description }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<section class="mystery-banner">
+    <div class="mystery-inner">
+        <div class="mystery-emoji">🔮</div>
+        <h3>Et il y en a d'autres…</h3>
+        <p>
+            Certaines surprises n'ont pas de nom. Certaines n'arrivent qu'une seule fois.
+            La seule façon de les découvrir, c'est de passer la porte.
+        </p>
+        <p class="mystery-quote">
+            <em>"On ne raconte pas toutes les surprises. Sinon, ce ne sont plus des surprises."</em>
+            <br>— Romu
+        </p>
+    </div>
+</section>
+{% endblock %}

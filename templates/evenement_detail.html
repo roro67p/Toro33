@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ evt.nom }} — Chez Romu{% endblock %}
+
+{% block content %}
+<div class="event-detail color-{{ evt.couleur }}">
+    <div class="event-detail-hero">
+        <a href="{{ url_for('evenements') }}" class="back-link">← Tous les événements</a>
+        <div class="event-detail-emoji">{{ evt.emoji }}</div>
+        <h2 class="event-detail-title">{{ evt.nom }}</h2>
+        <p class="event-detail-subtitle">{{ evt.sous_titre }}</p>
+    </div>
+
+    <div class="event-detail-body">
+        <div class="event-detail-desc">
+            <p>{{ evt.description }}</p>
+        </div>
+
+        <div class="event-detail-info">
+            <div class="event-details-box">
+                <h3>📋 Les détails</h3>
+                <ul>
+                    {% for detail in evt.details %}
+                    <li>✓ {{ detail }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="event-next-box">
+                <h3>📅 Prochaine date</h3>
+                <p>{{ evt.prochain }}</p>
+                <div class="event-contact-note">
+                    Pour toute information ou réservation, venez nous voir au restaurant ou appelez-nous directement.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

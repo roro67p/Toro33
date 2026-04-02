@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Événements — Chez Romu{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <h2 class="page-title">Nos Événements</h2>
+    <p class="page-subtitle">Parce qu'un bon repas, c'est encore meilleur avec une bonne raison de se retrouver</p>
+</section>
+
+<div class="events-grid">
+    {% for evt in evenements %}
+    <a href="{{ url_for('evenement_detail', slug=evt.slug) }}" class="event-card color-{{ evt.couleur }}">
+        <div class="event-card-emoji">{{ evt.emoji }}</div>
+        <div class="event-card-body">
+            <h3 class="event-card-title">{{ evt.nom }}</h3>
+            <p class="event-card-subtitle">{{ evt.sous_titre }}</p>
+            <p class="event-card-desc">{{ evt.description[:150] }}…</p>
+            <div class="event-card-next">
+                <span class="next-label">📅</span> {{ evt.prochain }}
+            </div>
+        </div>
+        <div class="event-card-arrow">→</div>
+    </a>
+    {% endfor %}
+</div>
+
+<section class="cta-section">
+    <div class="cta-inner">
+        <h3>🎊 Vous organisez un événement privé ?</h3>
+        <p>Anniversaires, soirées d'entreprise, réunions de famille… Chez Romu peut privatiser ses espaces pour votre occasion spéciale. Passez nous voir pour en parler autour d'un verre.</p>
+    </div>
+</section>
+{% endblock %}

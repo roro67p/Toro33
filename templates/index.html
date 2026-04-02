@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Menus & Boissons — Chez Romu{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <h2 class="page-title">Nos Menus</h2>
+    <p class="page-subtitle">Des créations du chef pour tous les appétits et toutes les occasions</p>
+</section>
+
+<!-- Tabs Navigation -->
+<div class="tabs-container">
+    <div class="tabs-nav" id="menuTabs">
+        {% for key, menu in menus.items() %}
+        <button class="tab-btn {% if loop.first %}active{% endif %}" data-tab="menu-{{ key }}">
+            {{ menu.emoji }} {{ menu.nom }}
+        </button>
+        {% endfor %}
+        <button class="tab-btn" data-tab="boissons">
+            🥤 Boissons
+        </button>
+    </div>
+
+    <!-- Menu Panels -->
+    {% for key, menu in menus.items() %}
+    <div class="tab-panel {% if loop.first %}active{% endif %}" id="menu-{{ key }}">
+        <div class="menu-header">
+            <div class="menu-title-area">
+                <span class="menu-big-emoji">{{ menu.emoji }}</span>
+                <div>
+                    <h2 class="menu-name">{{ menu.nom }}</h2>
+                    <p class="menu-description">{{ menu.description }}</p>
+                </div>
+            </div>
+            <div class="menu-price-badge">{{ menu.prix }}<span class="price-label">/ pers.</span></div>
+        </div>
+
+        <div class="menu-courses">
+            <div class="course-section">
+                <h3 class="course-title"><span class="course-icon">🥗</span> Entrées</h3>
+                <ul class="course-list">
+                    {% for item in menu.entrees %}
+                    <li class="course-item">
+                        <span class="item-name">{{ item.nom }}</span>
+                        <span class="item-dots"></span>
+                        <span class="item-detail">{{ item.detail }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="course-section">
+                <h3 class="course-title"><span class="course-icon">🍖</span> Plats</h3>
+                <ul class="course-list">
+                    {% for item in menu.plats %}
+                    <li class="course-item">
+                        <span class="item-name">{{ item.nom }}</span>
+                        <span class="item-dots"></span>
+                        <span class="item-detail">{{ item.detail }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="course-section">
+                <h3 class="course-title"><span class="course-icon">🍮</span> Desserts</h3>
+                <ul class="course-list">
+                    {% for item in menu.desserts %}
+                    <li class="course-item">
+                        <span class="item-name">{{ item.nom }}</span>
+                        <span class="item-dots"></span>
+                        <span class="item-detail">{{ item.detail }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        {% if key == 'surprise' %}
+        <div class="surprise-notice">
+            <p>🤫 Le chef se réserve le droit de tout changer à la dernière minute. C'est ça, la surprise.</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <!-- Boissons Panel -->
+    <div class="tab-panel" id="boissons">
+        <div class="page-hero" style="padding: 1rem 0 2rem;">
+            <h2 class="page-title" style="font-size:2rem;">Notre Carte des Boissons</h2>
+            <p class="page-subtitle">Du sérieux, du moins sérieux, et une grande fierté de la maison</p>
+        </div>
+
+        <div class="boissons-grid">
+            {% for boisson in boissons %}
+            <div class="boisson-card {% if boisson.badge %}featured{% endif %}">
+                {% if boisson.badge %}
+                <div class="boisson-badge">{{ boisson.badge }}</div>
+                {% endif %}
+                <div class="boisson-emoji">{{ boisson.emoji }}</div>
+                <h3 class="boisson-name">{{ boisson.nom }}</h3>
+                <div class="boisson-price">{{ boisson.prix }}</div>
+                <p class="boisson-desc">{{ boisson.description }}</p>
+                <p class="boisson-accord"><em>{{ boisson.accord }}</em></p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<section class="reservation-banner">
+    <div class="reservation-inner">
+        <h3>🗓️ Réservez votre table</h3>
+        <p>Pour les grands groupes ou les soirées événements, n'hésitez pas à passer nous voir directement.</p>
+        <div class="reservation-note">Nous accueillons jusqu'à 40 couverts — pensez à réserver pour les soirs de semaine !</div>
+    </div>
+</section>
+{% endblock %}
