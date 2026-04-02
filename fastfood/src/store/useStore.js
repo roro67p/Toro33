@@ -139,6 +139,14 @@ const useStore = create(
         return promo
       },
 
+      // COMMANDES SPÉCIALES
+      toggleOpen: () => set((state) => ({ data: { ...state.data, isOpen: !state.data.isOpen } })),
+      toggleRushMode: () => set((state) => ({ data: { ...state.data, rushMode: !state.data.rushMode } })),
+      setWaitTime: (t) => set((state) => ({ data: { ...state.data, waitTime: t } })),
+      setFlashMessage: (msg) => set((state) => ({ data: { ...state.data, flashMessage: msg || null } })),
+      setMenuDuJour: (items) => set((state) => ({ data: { ...state.data, menuDuJour: items } })),
+      updateHappyHour: (updates) => set((state) => ({ data: { ...state.data, happyHour: { ...state.data.happyHour, ...updates } } })),
+
       // TABLES
       addTable: (t) => set((state) => ({ data: { ...state.data, tables: [...(state.data.tables || []), { ...t, id: `tb_${Date.now()}` }] } })),
       updateTable: (id, updates) => set((state) => ({ data: { ...state.data, tables: (state.data.tables || []).map(t => t.id === id ? { ...t, ...updates } : t) } })),
@@ -177,6 +185,12 @@ const useStore = create(
           promoCodes:      persisted.data?.promoCodes      ?? DEFAULT_DATA.promoCodes,
           extras:          persisted.data?.extras          ?? DEFAULT_DATA.extras,
           tables:          persisted.data?.tables          ?? DEFAULT_DATA.tables,
+          isOpen:          persisted.data?.isOpen          ?? DEFAULT_DATA.isOpen,
+          rushMode:        persisted.data?.rushMode        ?? false,
+          flashMessage:    persisted.data?.flashMessage    ?? null,
+          waitTime:        persisted.data?.waitTime        ?? DEFAULT_DATA.waitTime,
+          menuDuJour:      persisted.data?.menuDuJour      ?? [],
+          happyHour:       persisted.data?.happyHour       ?? DEFAULT_DATA.happyHour,
         }
       }),
     }

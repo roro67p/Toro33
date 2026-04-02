@@ -14,11 +14,13 @@ import ReviewsAdmin from './ReviewsAdmin'
 import PromosAdmin from './PromosAdmin'
 import ExtrasAdmin from './ExtrasAdmin'
 import TablesAdmin from './TablesAdmin'
+import ActionsAdmin from './ActionsAdmin'
 import SettingsAdmin from './SettingsAdmin'
-import { LayoutDashboard, UtensilsCrossed, Wine, Tag, ShoppingBag, Euro, Package, Truck, BookOpen, ShoppingCart, Star, Settings, Menu, X, LogOut, ArrowLeft, Zap, Plus, LayoutGrid } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, Wine, Tag, ShoppingBag, Euro, Package, Truck, BookOpen, ShoppingCart, Star, Settings, Menu, X, LogOut, ArrowLeft, Zap, Plus, LayoutGrid, Wand2 } from 'lucide-react'
 
 const NAV = [
   { id: 'dashboard',       label: 'Dashboard',          icon: LayoutDashboard },
+  { id: 'actions',         label: 'Commandes spéciales', icon: Wand2 },
   { id: 'customer-orders', label: 'Commandes clients',  icon: ShoppingBag },
   { id: 'tables',          label: 'Plan de salle',       icon: LayoutGrid },
   { id: 'caisse',          label: 'Caisse & CA',         icon: Euro },
@@ -78,6 +80,7 @@ export default function AdminLayout() {
       case 'extras':          return <ExtrasAdmin />
       case 'promos':          return <PromosAdmin />
       case 'tables':          return <TablesAdmin />
+      case 'actions':         return <ActionsAdmin />
       case 'customer-orders': return <CustomerOrdersAdmin />
       case 'caisse':          return <CaisseAdmin />
       case 'stock':           return <StockAdmin />

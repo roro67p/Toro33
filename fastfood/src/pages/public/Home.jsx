@@ -1,27 +1,80 @@
 import useStore from '../../store/useStore'
-import { Zap, Star, Clock, MapPin, ChevronRight, Flame } from 'lucide-react'
+import { Zap, Star, Clock, MapPin, ChevronRight, Flame, AlertTriangle, MessageSquare, Coffee } from 'lucide-react'
 
 export default function Home() {
   const { data, setActivePage, addToCart } = useStore()
-  const { restaurant, menuCategories, formules, reviews } = data
+  const { restaurant, menuCategories, formules, reviews, isOpen, rushMode, flashMessage, waitTime, happyHour, menuDuJour } = data
   const bestsellers = menuCategories.flatMap(c => c.items).filter(i => i.badge === 'populaire' || i.badge === 'signature').slice(0, 3)
   const approvedReviews = (reviews || []).filter(r => r.approved)
   const avgRating = approvedReviews.length > 0 ? (approvedReviews.reduce((s, r) => s + r.rating, 0) / approvedReviews.length).toFixed(1) : '5.0'
   const topFormule = formules?.find(f => f.badge === 'populaire') || formules?.[0]
+  const featuredItems = menuDuJour?.length > 0 ? menuDuJour : bestsellers
+
+  // Happy Hour auto-detect
+  const now = new Date()
+  const currentHour = now.getHours()
+  const isHappyHour = happyHour?.active && currentHour >= happyHour.startHour && currentHour < happyHour.endHour
 
   return (
     <div style={{ backgroundColor: '#0F172A', minHeight: '100vh' }}>
+
+      {/* Message flash */}
+      {flashMessage && (
+        <div style={{ backgroundColor: '#312E81', borderBottom: '1px solid #4338CA', padding: '10px 16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <MessageSquare size={14} color="#818CF8" />
+          <span style={{ fontSize: '13px', fontWeight: 600, color: '#C7D2FE' }}>{flashMessage}</span>
+        </div>
+      )}
+
+      {/* Happy Hour banner */}
+      {isHappyHour && (
+        <div style={{ background: 'linear-gradient(90deg, #422006, #451A03)', borderBottom: '1px solid #92400E', padding: '10px 16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <Coffee size={14} color="#F59E0B" />
+          <span style={{ fontSize: '13px', fontWeight: 700, color: '#FDE68A' }}>
+            ☕ {happyHour.label} — jusqu'à {happyHour.endHour}h00 !
+          </span>
+        </div>
+      )}
+
+      {/* Mode Rush banner */}
+      {rushMode && (
+        <div style={{ background: 'linear-gradient(90deg, #431407, #451A03)', borderBottom: '1px solid #9A3412', padding: '10px 16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <Flame size={14} color="#F97316" />
+          <span style={{ fontSize: '13px', fontWeight: 700, color: '#FED7AA' }}>
+            🔥 Forte affluence en ce moment — Temps d'attente estimé : {waitTime} min
+          </span>
+        </div>
+      )}
+
+      {/* Fermé banner */}
+      {isOpen === false && (
+        <div style={{ backgroundColor: '#4C0519', borderBottom: '1px solid #E11D48', padding: '12px 16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <AlertTriangle size={15} color="#E11D48" />
+          <span style={{ fontSize: '14px', fontWeight: 700, color: '#FCA5A5' }}>
+            Nous sommes actuellement fermés. Revenez bientôt !
+          </span>
+        </div>
+      )}
+
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #111827 0%, #0F172A 60%)', padding: '80px 0 60px' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
               <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: '#FFF1F2', color: '#E11D48' }}>
                 <Flame size={12} /> Fast-Food Lyon
               </span>
               <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: '#F59E0B' }}>
                 ★ {avgRating} ({approvedReviews.length} avis)
               </span>
+              {isOpen !== false ? (
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '999px', backgroundColor: '#064E3B', color: '#10B981' }}>🟢 Ouvert</span>
+              ) : (
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '999px', backgroundColor: '#4C0519', color: '#E11D48' }}>🔴 Fermé</span>
+              )}
+              {!rushMode && isOpen !== false && (
+                <span style={{ fontSize: '11px', color: '#6B7280' }}>⏱ ~{waitTime} min</span>
+              )}
             </div>
             <h1 className="text-5xl md:text-6xl font-black mb-4" style={{ color: 'white', lineHeight: '1.1' }}>
               {restaurant.name}
@@ -29,9 +82,11 @@ export default function Home() {
             <p className="text-xl font-semibold mb-2" style={{ color: '#E11D48' }}>{restaurant.tagline}</p>
             <p className="text-base mb-8" style={{ color: '#9CA3AF' }}>{restaurant.description}</p>
             <div className="flex gap-3 flex-wrap">
-              <button onClick={() => setActivePage('order')} className="px-7 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:scale-105"
-                style={{ backgroundColor: '#E11D48', boxShadow: '0 0 20px rgba(225,29,72,0.4)' }}>
-                Commander maintenant
+              <button onClick={() => setActivePage('order')}
+                className="px-7 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:scale-105"
+                style={{ backgroundColor: isOpen !== false ? '#E11D48' : '#374151', boxShadow: isOpen !== false ? '0 0 20px rgba(225,29,72,0.4)' : 'none', cursor: isOpen !== false ? 'pointer' : 'not-allowed' }}
+                disabled={isOpen === false}>
+                {isOpen !== false ? 'Commander maintenant' : 'Restaurant fermé'}
               </button>
               <button onClick={() => setActivePage('menu')} className="px-7 py-3.5 rounded-xl font-bold text-base transition-all hover:opacity-80"
                 style={{ backgroundColor: '#1F2937', color: 'white', border: '2px solid #374151' }}>
@@ -49,7 +104,7 @@ export default function Home() {
       <section className="py-10" style={{ backgroundColor: '#111827' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-3 gap-4">
           {[
-            { icon: Zap, title: 'Commande rapide', desc: 'Prête en moins de 10 min', color: '#F59E0B' },
+            { icon: Zap, title: 'Commande rapide', desc: `Prête en ~${waitTime} min`, color: '#F59E0B' },
             { icon: Star, title: 'Qualité garantie', desc: 'Ingrédients frais chaque jour', color: '#E11D48' },
             { icon: Clock, title: 'Ouvert 7j/7', desc: 'Dès 11h tous les jours', color: '#10B981' },
           ].map((f, i) => {
@@ -67,21 +122,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bestsellers */}
-      {bestsellers.length > 0 && (
+      {/* Menu du jour / Bestsellers */}
+      {featuredItems.length > 0 && (
         <section className="py-14">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#E11D48' }}>Nos incontournables</p>
-                <h2 className="text-3xl font-black text-white">Bestsellers</h2>
+                <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#E11D48' }}>
+                  {menuDuJour?.length > 0 ? 'Sélection du chef' : 'Nos incontournables'}
+                </p>
+                <h2 className="text-3xl font-black text-white">
+                  {menuDuJour?.length > 0 ? '⭐ Menu du jour' : 'Bestsellers'}
+                </h2>
               </div>
               <button onClick={() => setActivePage('menu')} className="flex items-center gap-1 text-sm font-semibold hover:opacity-70" style={{ color: '#E11D48' }}>
                 Tout voir <ChevronRight size={16} />
               </button>
             </div>
             <div className="grid md:grid-cols-3 gap-5">
-              {bestsellers.map(item => (
+              {featuredItems.slice(0, 3).map(item => (
                 <div key={item.id} className="rounded-2xl overflow-hidden group transition-all hover:-translate-y-1" style={{ backgroundColor: '#1F2937', border: '1px solid #374151' }}>
                   {item.image && (
                     <div className="overflow-hidden" style={{ height: '180px' }}>
@@ -92,13 +151,20 @@ export default function Home() {
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-bold text-white">{item.name}</h3>
                       {item.badge && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: '#FFF1F2', color: '#E11D48' }}>{item.badge}</span>}
+                      {menuDuJour?.length > 0 && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: '#064E3B', color: '#10B981' }}>⭐ Jour</span>}
                     </div>
                     <p className="text-xs mb-3 line-clamp-2" style={{ color: '#9CA3AF' }}>{item.description}</p>
                     <div className="flex items-center justify-between">
-                      <span className="font-black text-lg" style={{ color: '#E11D48' }}>{Number(item.price).toFixed(2)}€</span>
-                      <button onClick={() => addToCart({ cartId: item.id, name: item.name, price: item.price, type: 'menu' })}
+                      <div>
+                        <span className="font-black text-lg" style={{ color: isHappyHour ? '#F59E0B' : '#E11D48' }}>
+                          {isHappyHour ? (Number(item.price) * (1 - happyHour.discount / 100)).toFixed(2) : Number(item.price).toFixed(2)}€
+                        </span>
+                        {isHappyHour && <span className="text-xs line-through ml-1" style={{ color: '#6B7280' }}>{Number(item.price).toFixed(2)}€</span>}
+                      </div>
+                      <button onClick={() => addToCart({ cartId: item.id + '_' + Date.now(), name: item.name, price: isHappyHour ? Number(item.price) * (1 - happyHour.discount / 100) : item.price, type: 'menu' })}
+                        disabled={isOpen === false}
                         className="px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90"
-                        style={{ backgroundColor: '#E11D48' }}>
+                        style={{ backgroundColor: isOpen !== false ? '#E11D48' : '#374151', cursor: isOpen !== false ? 'pointer' : 'not-allowed' }}>
                         + Ajouter
                       </button>
                     </div>

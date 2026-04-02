@@ -174,6 +174,14 @@ export const DEFAULT_DATA = {
 
   reservations: [],
 
+  // Commandes spéciales
+  isOpen: true,
+  rushMode: false,
+  flashMessage: null,
+  waitTime: 15,
+  menuDuJour: [],
+  happyHour: { active: false, discount: 20, startHour: 15, endHour: 17, label: 'Happy Hour -20%' },
+
   tables: [
     { id: "tb1",  number: 1,  seats: 2, status: "libre",   orderId: null, zone: "salle",   x: 1, y: 1 },
     { id: "tb2",  number: 2,  seats: 2, status: "libre",   orderId: null, zone: "salle",   x: 1, y: 2 },
