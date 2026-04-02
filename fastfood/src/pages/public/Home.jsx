@@ -56,11 +56,22 @@ export default function Home() {
         </div>
       )}
 
-      {/* Hero */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #111827 0%, #0F172A 60%)', padding: '80px 0 60px' }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <div className="flex items-center gap-2 mb-4 flex-wrap">
+      {/* Hero avec grande photo */}
+      <section className="relative overflow-hidden" style={{ minHeight: '92vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Photo plein écran */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+          <img
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1600&h=900&auto=format&fit=crop&q=85"
+            alt="Burger"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(15,23,42,0.97) 0%, rgba(15,23,42,0.75) 50%, rgba(15,23,42,0.3) 100%)' }} />
+        </div>
+
+        {/* Contenu hero */}
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 flex items-center" style={{ zIndex: 1, flex: 1, paddingTop: '80px', paddingBottom: '80px' }}>
+          <div style={{ maxWidth: '580px' }}>
+            <div className="flex items-center gap-2 mb-5 flex-wrap">
               <span className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: '#FFF1F2', color: '#E11D48' }}>
                 <Flame size={12} /> Fast-Food Lyon
               </span>
@@ -73,32 +84,48 @@ export default function Home() {
                 <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '999px', backgroundColor: '#4C0519', color: '#E11D48' }}>🔴 Fermé</span>
               )}
               {!rushMode && isOpen !== false && (
-                <span style={{ fontSize: '11px', color: '#6B7280' }}>⏱ ~{waitTime} min</span>
+                <span style={{ fontSize: '11px', color: '#9CA3AF' }}>⏱ ~{waitTime} min</span>
               )}
             </div>
-            <h1 className="text-5xl md:text-6xl font-black mb-4" style={{ color: 'white', lineHeight: '1.1' }}>
+
+            <h1 style={{ fontSize: 'clamp(48px, 7vw, 80px)', fontWeight: 900, color: 'white', lineHeight: 1.05, margin: '0 0 12px', letterSpacing: '-0.03em' }}>
               {restaurant.name}
             </h1>
-            <p className="text-xl font-semibold mb-2" style={{ color: '#E11D48' }}>{restaurant.tagline}</p>
-            <p className="text-base mb-8" style={{ color: '#9CA3AF' }}>{restaurant.description}</p>
+            <p style={{ fontSize: '22px', fontWeight: 700, color: '#E11D48', margin: '0 0 14px' }}>{restaurant.tagline}</p>
+            <p style={{ fontSize: '16px', color: '#9CA3AF', margin: '0 0 36px', lineHeight: 1.6 }}>{restaurant.description}</p>
+
             <div className="flex gap-3 flex-wrap">
               <button onClick={() => setActivePage('order')}
-                className="px-7 py-3.5 rounded-xl font-bold text-white text-base transition-all hover:scale-105"
-                style={{ backgroundColor: isOpen !== false ? '#E11D48' : '#374151', boxShadow: isOpen !== false ? '0 0 20px rgba(225,29,72,0.4)' : 'none', cursor: isOpen !== false ? 'pointer' : 'not-allowed' }}
+                style={{
+                  padding: '16px 32px', borderRadius: '14px', fontWeight: 800, color: 'white', fontSize: '16px',
+                  backgroundColor: isOpen !== false ? '#E11D48' : '#374151',
+                  boxShadow: isOpen !== false ? '0 0 30px rgba(225,29,72,0.5)' : 'none',
+                  border: 'none', cursor: isOpen !== false ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.2s',
+                }}
                 disabled={isOpen === false}>
-                {isOpen !== false ? 'Commander maintenant' : 'Restaurant fermé'}
+                {isOpen !== false ? '🍔 Commander maintenant' : 'Restaurant fermé'}
               </button>
-              <button onClick={() => setActivePage('menu')} className="px-7 py-3.5 rounded-xl font-bold text-base transition-all hover:opacity-80"
-                style={{ backgroundColor: '#1F2937', color: 'white', border: '2px solid #374151' }}>
+              <button onClick={() => setActivePage('menu')}
+                style={{ padding: '16px 28px', borderRadius: '14px', fontWeight: 700, fontSize: '15px', color: 'white', backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer', backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}>
                 Voir le menu
               </button>
             </div>
           </div>
-          <div className="hidden md:flex items-center justify-center">
-            <div className="text-8xl" style={{ filter: 'drop-shadow(0 0 40px rgba(225,29,72,0.4))' }}>🍔</div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', zIndex: 1, animation: 'bounce2 2s infinite' }}>
+          <div style={{ width: '24px', height: '40px', borderRadius: '12px', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '6px' }}>
+            <div style={{ width: '4px', height: '8px', backgroundColor: 'rgba(255,255,255,0.6)', borderRadius: '2px', animation: 'scrollDown 1.5s infinite' }} />
           </div>
         </div>
       </section>
+
+      <style>{`
+        @keyframes bounce2 { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+        @keyframes scrollDown { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(10px)} }
+      `}</style>
 
       {/* Features */}
       <section className="py-10" style={{ backgroundColor: '#111827' }}>

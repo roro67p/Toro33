@@ -189,9 +189,43 @@ export default function PublicLayout({ onOpenLogin }) {
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-6 flex items-center justify-between flex-wrap gap-3" style={{ borderTop: '1px solid #1F2937' }}>
+          {/* Réseaux sociaux */}
+          <div className="mt-8 pt-6 flex items-center justify-between flex-wrap gap-4" style={{ borderTop: '1px solid #1F2937' }}>
             <p className="text-xs" style={{ color: '#6B7280' }}>© {new Date().getFullYear()} {restaurant.name}. Tous droits réservés.</p>
-            <button onClick={onOpenLogin} className="text-xs hover:opacity-80" style={{ color: '#6B7280' }}>Espace Pro</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {/* Instagram */}
+              <a href={restaurant.socialMedia?.instagram || '#'} target="_blank" rel="noopener noreferrer"
+                style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#1F2937', border: '1px solid #374151', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', textDecoration: 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E1306C'; e.currentTarget.style.borderColor = '#E1306C' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#1F2937'; e.currentTarget.style.borderColor = '#374151' }}
+                title="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              {/* Facebook */}
+              <a href={restaurant.socialMedia?.facebook || '#'} target="_blank" rel="noopener noreferrer"
+                style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#1F2937', border: '1px solid #374151', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', textDecoration: 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1877F2'; e.currentTarget.style.borderColor = '#1877F2' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#1F2937'; e.currentTarget.style.borderColor = '#374151' }}
+                title="Facebook">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+              {/* TikTok */}
+              <a href={restaurant.socialMedia?.tiktok || '#'} target="_blank" rel="noopener noreferrer"
+                style={{ width: '38px', height: '38px', borderRadius: '10px', backgroundColor: '#1F2937', border: '1px solid #374151', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', textDecoration: 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#010101'; e.currentTarget.style.borderColor = '#69C9D0' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#1F2937'; e.currentTarget.style.borderColor = '#374151' }}
+                title="TikTok">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+                </svg>
+              </a>
+              <span style={{ width: '1px', height: '24px', backgroundColor: '#374151' }} />
+              <button onClick={onOpenLogin} className="text-xs hover:opacity-80" style={{ color: '#6B7280' }}>Espace Pro</button>
+            </div>
           </div>
         </div>
       </footer>

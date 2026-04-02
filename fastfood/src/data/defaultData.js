@@ -1,11 +1,11 @@
 export const DEFAULT_DATA = {
   restaurant: {
-    name: "BurgerStop",
-    tagline: "Vite. Bon. Généreux.",
-    description: "Le meilleur fast-food de la ville — burgers généreux, frites croustillantes et service rapide depuis 2015.",
+    name: "Chez Romu",
+    tagline: "La cuisine du cœur, façon fast-food.",
+    description: "Le spot incontournable de Lyon — burgers généreux, frites croustillantes et ambiance unique depuis 2015. Bienvenue Chez Romu !",
     address: "45 Avenue de la République, 69003 Lyon",
     phone: "04 78 00 00 00",
-    email: "contact@burgerstop.fr",
+    email: "contact@chezromu.fr",
     hours: [
       { day: "Lundi",    open: "11h00", close: "22h30", closed: false },
       { day: "Mardi",    open: "11h00", close: "22h30", closed: false },
@@ -15,7 +15,7 @@ export const DEFAULT_DATA = {
       { day: "Samedi",   open: "11h00", close: "23h30", closed: false },
       { day: "Dimanche", open: "12h00", close: "22h00", closed: false },
     ],
-    socialMedia: { facebook: "#", instagram: "#", tiktok: "#" },
+    socialMedia: { facebook: "https://facebook.com", instagram: "https://instagram.com", tiktok: "https://tiktok.com" },
   },
   adminPassword: "admin123",
 
