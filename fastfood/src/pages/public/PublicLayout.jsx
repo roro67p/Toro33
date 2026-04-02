@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import useStore from '../../store/useStore'
 import BirthdayOffer from '../../components/BirthdayOffer'
+import ToastContainer from '../../components/Toast'
 import Home from './Home'
 import MenuPage from './MenuPage'
 import Drinks from './Drinks'
@@ -14,6 +15,9 @@ import Kiosk from './Kiosk'
 import SpinWheel from './SpinWheel'
 import BurgerBuilder from './BurgerBuilder'
 import VoiceOrder from './VoiceOrder'
+import Loyalty from './Loyalty'
+import BurgerCatch from './BurgerCatch'
+import NotrHistoire from './NotrHistoire'
 import Cart from '../../components/Cart'
 import { Menu as MenuIcon, X, ShoppingCart, Search, Monitor } from 'lucide-react'
 
@@ -25,16 +29,19 @@ export default function PublicLayout({ onOpenLogin }) {
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0)
 
   const navLinks = [
-    { id: 'home',    label: 'Accueil' },
-    { id: 'menu',    label: 'Menu' },
-    { id: 'drinks',  label: 'Boissons' },
-    { id: 'formules',label: 'Formules' },
-    { id: 'promos',  label: '🔥 Promos' },
-    { id: 'spin',    label: '🎰 Roue' },
-    { id: 'builder', label: '🍔 Builder' },
-    { id: 'voice',   label: '🎤 Vocal' },
-    { id: 'reviews', label: 'Avis' },
-    { id: 'contact', label: 'Horaires' },
+    { id: 'home',      label: 'Accueil' },
+    { id: 'menu',      label: 'Menu' },
+    { id: 'drinks',    label: 'Boissons' },
+    { id: 'formules',  label: 'Formules' },
+    { id: 'promos',    label: '🔥 Promos' },
+    { id: 'spin',      label: '🎰 Roue' },
+    { id: 'builder',   label: '🍔 Builder' },
+    { id: 'voice',     label: '🎤 Vocal' },
+    { id: 'loyalty',   label: '🏆 Fidélité' },
+    { id: 'catch',     label: '🎮 Jeu' },
+    { id: 'histoire',  label: '📖 Histoire' },
+    { id: 'reviews',   label: 'Avis' },
+    { id: 'contact',   label: 'Horaires' },
   ]
 
   const navigate = (page) => { setActivePage(page); setMobileOpen(false); setAnimKey(k => k + 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }
@@ -50,10 +57,13 @@ export default function PublicLayout({ onOpenLogin }) {
       case 'promos':  return <Promos />
       case 'track':   return <TrackOrder />
       case 'kiosk':   return <Kiosk />
-      case 'spin':    return <SpinWheel />
-      case 'builder': return <BurgerBuilder />
-      case 'voice':   return <VoiceOrder />
-      default:        return <Home />
+      case 'spin':     return <SpinWheel />
+      case 'builder':  return <BurgerBuilder />
+      case 'voice':    return <VoiceOrder />
+      case 'loyalty':  return <Loyalty />
+      case 'catch':    return <BurgerCatch />
+      case 'histoire': return <NotrHistoire />
+      default:         return <Home />
     }
   }
 
@@ -142,6 +152,7 @@ export default function PublicLayout({ onOpenLogin }) {
 
       <Cart />
       <BirthdayOffer />
+      <ToastContainer />
 
       <style>{`
         @keyframes pageIn {
@@ -178,6 +189,9 @@ export default function PublicLayout({ onOpenLogin }) {
                 <li><button onClick={() => navigate('spin')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🎰 Roue de la fortune</button></li>
                 <li><button onClick={() => navigate('builder')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🍔 Créer mon burger</button></li>
                 <li><button onClick={() => navigate('voice')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🎤 Commander par la voix</button></li>
+                <li><button onClick={() => navigate('loyalty')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🏆 Programme fidélité</button></li>
+                <li><button onClick={() => navigate('catch')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🎮 Burger Catch</button></li>
+                <li><button onClick={() => navigate('histoire')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>📖 Notre Histoire</button></li>
               </ul>
             </div>
             <div>

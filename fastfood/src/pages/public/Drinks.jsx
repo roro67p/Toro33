@@ -1,8 +1,10 @@
 import useStore from '../../store/useStore'
+import { useToast } from '../../components/Toast'
 import { ShoppingCart } from 'lucide-react'
 
 export default function Drinks() {
   const { data, addToCart } = useStore()
+  const toast = useToast()
   const { drinkCategories } = data
 
   return (
@@ -33,7 +35,7 @@ export default function Drinks() {
                         {item.priceMd && <div className="text-center"><div className="text-xs" style={{ color: '#6B7280' }}>M</div><div className="font-bold text-sm" style={{ color: '#E11D48' }}>{item.priceMd}€</div></div>}
                         {item.priceLg && <div className="text-center"><div className="text-xs" style={{ color: '#6B7280' }}>L</div><div className="font-bold text-sm" style={{ color: '#E11D48' }}>{item.priceLg}€</div></div>}
                       </div>
-                      <button onClick={() => addToCart({ cartId: item.id, name: item.name, price: item.priceSm, type: 'drink' })}
+                      <button onClick={() => { addToCart({ cartId: item.id, name: item.name, price: item.priceSm, type: 'drink' }); toast.cart(`${item.name} ajouté au panier`) }}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white" style={{ backgroundColor: '#E11D48' }}>
                         <ShoppingCart size={12} /> Ajouter
                       </button>

@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import useStore from '../../store/useStore'
+import { useToast } from '../../components/Toast'
 import { ShoppingCart } from 'lucide-react'
 
 const BADGE_COLOR = { populaire: '#E11D48', signature: '#7C3AED', nouveau: '#10B981', épicé: '#F97316', veggie: '#16A34A', 'coup coeur': '#E11D48', mystère: '#6B21A8' }
 
 export default function MenuPage() {
   const { data, addToCart, cart } = useStore()
+  const toast = useToast()
   const { menuCategories } = data
   const [activecat, setActivecat] = useState(menuCategories[0]?.id)
   const activeCat = menuCategories.find(c => c.id === activecat) || menuCategories[0]
@@ -56,11 +58,11 @@ export default function MenuPage() {
                       {inCart ? (
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: '#FFF1F2', color: '#E11D48' }}>x{inCart.quantity}</span>
-                          <button onClick={() => addToCart({ cartId: item.id, name: item.name, price: item.price, type: 'menu' })}
+                          <button onClick={() => { addToCart({ cartId: item.id, name: item.name, price: item.price, type: 'menu' }); toast.cart(`${item.name} ajouté au panier`) }}
                             className="px-3 py-1.5 rounded-xl text-xs font-bold text-white" style={{ backgroundColor: '#E11D48' }}>+ Ajouter</button>
                         </div>
                       ) : (
-                        <button onClick={() => addToCart({ cartId: item.id, name: item.name, price: item.price, type: 'menu' })}
+                        <button onClick={() => { addToCart({ cartId: item.id, name: item.name, price: item.price, type: 'menu' }); toast.cart(`${item.name} ajouté au panier`) }}
                           className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90"
                           style={{ backgroundColor: '#E11D48' }}>
                           <ShoppingCart size={13} /> Ajouter
