@@ -117,12 +117,78 @@ export const DEFAULT_DATA = {
   ],
 
   formules: [
-    { id: "f1", name: "Menu Classic",  description: "1 Classic Burger + Frites Maison + Soda au choix",      price: 13.90, originalPrice: 15.90, badge: "populaire", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=300&auto=format&fit=crop&q=80" },
-    { id: "f2", name: "Menu Double",   description: "1 Double Smash + Frites Maison + Soda au choix",         price: 16.90, originalPrice: 18.60, badge: "signature", available: true, image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=500&h=300&auto=format&fit=crop&q=80" },
-    { id: "f3", name: "Menu Chicken",  description: "1 Chicken Crispy + Frites Maison + Soda au choix",       price: 14.50, originalPrice: 16.20, badge: null,        available: true, image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=500&h=300&auto=format&fit=crop&q=80" },
-    { id: "f4", name: "Menu Kids",     description: "4 Nuggets + Petites Frites + Soda + 1 Sundae",           price: 8.90,  originalPrice: 11.10, badge: "enfants",   available: true, image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=500&h=300&auto=format&fit=crop&q=80" },
-    { id: "f5", name: "Menu Family",   description: "2 Burgers + 2 Frites + 2 Sodas + 2 Sundaes",            price: 32.00, originalPrice: 38.00, badge: "famille",   available: true, image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=500&h=300&auto=format&fit=crop&q=80" },
-    { id: "f6", name: "Menu Veggie",   description: "1 Veggie Burger + Coleslaw + Jus d'Orange",              price: 13.50, originalPrice: 15.20, badge: "veggie",    available: true, image: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=500&h=300&auto=format&fit=crop&q=80" },
+    {
+      id: "f1", name: "Menu Classic", badge: "populaire", available: true, price: 13.90, originalPrice: 15.90,
+      description: "Le combo parfait pour se régaler sans se ruiner.",
+      includes: ["Classic Burger", "Frites Maison", "Soda au choix"],
+      icons: ["🍔", "🍟", "🥤"],
+      color: "#E11D48",
+      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f2", name: "Menu Double Smash", badge: "signature", available: true, price: 16.90, originalPrice: 19.50,
+      description: "Double steak écrasé, double plaisir. Le choix des vrais.",
+      includes: ["Double Smash Burger", "Frites Cheese", "Soda Large"],
+      icons: ["🍔", "🧀", "🥤"],
+      color: "#7C3AED",
+      image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f3", name: "Menu Chicken", badge: null, available: true, price: 14.50, originalPrice: 16.50,
+      description: "Poulet croustillant, frites dorées, soif étanchée.",
+      includes: ["Chicken Crispy", "Frites Maison", "Soda au choix"],
+      icons: ["🍗", "🍟", "🥤"],
+      color: "#F97316",
+      image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f4", name: "Menu Spicy", badge: "épicé", available: true, price: 15.50, originalPrice: 17.50,
+      description: "Pour ceux qui aiment quand ça chauffe. Feu garanti.",
+      includes: ["Spicy Burger", "Onion Rings", "Ice Tea Pêche"],
+      icons: ["🌶️", "🧅", "🧃"],
+      color: "#DC2626",
+      image: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f5", name: "Menu Veggie", badge: "veggie", available: true, price: 13.50, originalPrice: 15.20,
+      description: "100% végétal, 100% savoureux. Zéro compromis.",
+      includes: ["Veggie Burger", "Coleslaw", "Jus d'orange pressé"],
+      icons: ["🌿", "🥗", "🍊"],
+      color: "#16A34A",
+      image: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f6", name: "Menu Kids", badge: "enfants", available: true, price: 8.90, originalPrice: 11.50,
+      description: "Parfait pour les petits aventuriers. Avec surprise !",
+      includes: ["6 Nuggets", "Petites Frites", "Soda", "Sundae Vanille"],
+      icons: ["🍗", "🍟", "🥤", "🍦"],
+      color: "#3B82F6",
+      image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f7", name: "Menu Family", badge: "famille", available: true, price: 34.90, originalPrice: 42.00,
+      description: "Le repas complet pour toute la famille. On a pensé à tout.",
+      includes: ["2 Burgers au choix", "2 Frites Maison", "2 Sodas", "2 Sundaes"],
+      icons: ["🍔🍔", "🍟🍟", "🥤🥤", "🍦🍦"],
+      color: "#F59E0B",
+      image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f8", name: "Le Romu Formule", badge: "légendaire", available: true, price: 17.90, originalPrice: 21.30,
+      description: "La formule du patron. Audacieuse, unique, inoubliable. Ou mémorable pour de mauvaises raisons. On ne saura jamais.",
+      includes: ["Le Romu Burger", "Gratin Dauphinois", "Boisson chaude"],
+      icons: ["🐟", "🥔", "☕"],
+      color: "#92400E",
+      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=350&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "f9", name: "Menu Mystère", badge: "mystère", available: true, price: 11.90, originalPrice: null,
+      description: "Vous commandez sans savoir ce que vous allez recevoir. Entrée, plat, dessert, boisson. Tout est une surprise. Prix fixe, frissons inclus.",
+      includes: ["???", "???", "???", "???"],
+      icons: ["❓", "❓", "❓", "❓"],
+      color: "#6B21A8",
+      image: "https://images.unsplash.com/photo-1493770348161-369560ae357d?w=600&h=350&auto=format&fit=crop&q=80"
+    },
   ],
 
   stock: [

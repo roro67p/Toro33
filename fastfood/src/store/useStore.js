@@ -180,7 +180,20 @@ const useStore = create(
           purchaseOrders:  persisted.data?.purchaseOrders  ?? DEFAULT_DATA.purchaseOrders,
           caisse:          persisted.data?.caisse          ?? DEFAULT_DATA.caisse,
           customerOrders:  persisted.data?.customerOrders  ?? [],
-          formules:        persisted.data?.formules        ?? DEFAULT_DATA.formules,
+          // Toujours fusionner les catégories menu pour ajouter les nouvelles (ex: Spécialités)
+          menuCategories: (() => {
+            const saved = persisted.data?.menuCategories ?? DEFAULT_DATA.menuCategories
+            const savedIds = saved.map(c => c.id)
+            const missing = DEFAULT_DATA.menuCategories.filter(c => !savedIds.includes(c.id))
+            return [...saved, ...missing]
+          })(),
+          // Toujours fusionner les formules pour ajouter les nouvelles
+          formules: (() => {
+            const saved = persisted.data?.formules ?? DEFAULT_DATA.formules
+            const savedIds = saved.map(f => f.id)
+            const missing = DEFAULT_DATA.formules.filter(f => !savedIds.includes(f.id))
+            return [...saved, ...missing]
+          })(),
           reviews:         persisted.data?.reviews         ?? DEFAULT_DATA.reviews,
           promoCodes:      persisted.data?.promoCodes      ?? DEFAULT_DATA.promoCodes,
           extras:          persisted.data?.extras          ?? DEFAULT_DATA.extras,
