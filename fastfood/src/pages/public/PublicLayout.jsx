@@ -12,6 +12,7 @@ import TrackOrder from './TrackOrder'
 import Kiosk from './Kiosk'
 import SpinWheel from './SpinWheel'
 import BurgerBuilder from './BurgerBuilder'
+import VoiceOrder from './VoiceOrder'
 import Cart from '../../components/Cart'
 import { Menu as MenuIcon, X, ShoppingCart, Search, Monitor } from 'lucide-react'
 
@@ -29,6 +30,7 @@ export default function PublicLayout({ onOpenLogin }) {
     { id: 'promos',  label: '🔥 Promos' },
     { id: 'spin',    label: '🎰 Roue' },
     { id: 'builder', label: '🍔 Builder' },
+    { id: 'voice',   label: '🎤 Vocal' },
     { id: 'reviews', label: 'Avis' },
     { id: 'contact', label: 'Horaires' },
   ]
@@ -48,6 +50,7 @@ export default function PublicLayout({ onOpenLogin }) {
       case 'kiosk':   return <Kiosk />
       case 'spin':    return <SpinWheel />
       case 'builder': return <BurgerBuilder />
+      case 'voice':   return <VoiceOrder />
       default:        return <Home />
     }
   }
@@ -160,6 +163,7 @@ export default function PublicLayout({ onOpenLogin }) {
                 <li><button onClick={() => navigate('kiosk')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Mode kiosque</button></li>
                 <li><button onClick={() => navigate('spin')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🎰 Roue de la fortune</button></li>
                 <li><button onClick={() => navigate('builder')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🍔 Créer mon burger</button></li>
+                <li><button onClick={() => navigate('voice')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🎤 Commander par la voix</button></li>
               </ul>
             </div>
             <div>
