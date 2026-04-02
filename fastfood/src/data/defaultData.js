@@ -174,6 +174,21 @@ export const DEFAULT_DATA = {
 
   reservations: [],
 
+  tables: [
+    { id: "tb1",  number: 1,  seats: 2, status: "libre",   orderId: null, zone: "salle",   x: 1, y: 1 },
+    { id: "tb2",  number: 2,  seats: 2, status: "libre",   orderId: null, zone: "salle",   x: 1, y: 2 },
+    { id: "tb3",  number: 3,  seats: 4, status: "libre",   orderId: null, zone: "salle",   x: 2, y: 1 },
+    { id: "tb4",  number: 4,  seats: 4, status: "libre",   orderId: null, zone: "salle",   x: 2, y: 2 },
+    { id: "tb5",  number: 5,  seats: 4, status: "libre",   orderId: null, zone: "salle",   x: 3, y: 1 },
+    { id: "tb6",  number: 6,  seats: 4, status: "libre",   orderId: null, zone: "salle",   x: 3, y: 2 },
+    { id: "tb7",  number: 7,  seats: 6, status: "libre",   orderId: null, zone: "salle",   x: 4, y: 1 },
+    { id: "tb8",  number: 8,  seats: 6, status: "libre",   orderId: null, zone: "salle",   x: 4, y: 2 },
+    { id: "tb9",  number: 9,  seats: 2, status: "libre",   orderId: null, zone: "terrasse", x: 1, y: 4 },
+    { id: "tb10", number: 10, seats: 2, status: "libre",   orderId: null, zone: "terrasse", x: 2, y: 4 },
+    { id: "tb11", number: 11, seats: 4, status: "libre",   orderId: null, zone: "terrasse", x: 3, y: 4 },
+    { id: "tb12", number: 12, seats: 4, status: "libre",   orderId: null, zone: "terrasse", x: 4, y: 4 },
+  ],
+
   promoCodes: [
     { id: "promo1", code: "BIENVENUE",  type: "percent", value: 10, minOrder: 10, active: true, uses: 0, maxUses: 100, description: "10% de réduction pour les nouveaux clients" },
     { id: "promo2", code: "BURGER5",    type: "fixed",   value: 5,  minOrder: 20, active: true, uses: 12, maxUses: 50, description: "5€ offerts dès 20€ d'achat" },

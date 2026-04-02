@@ -139,6 +139,17 @@ const useStore = create(
         return promo
       },
 
+      // TABLES
+      addTable: (t) => set((state) => ({ data: { ...state.data, tables: [...(state.data.tables || []), { ...t, id: `tb_${Date.now()}` }] } })),
+      updateTable: (id, updates) => set((state) => ({ data: { ...state.data, tables: (state.data.tables || []).map(t => t.id === id ? { ...t, ...updates } : t) } })),
+      deleteTable: (id) => set((state) => ({ data: { ...state.data, tables: (state.data.tables || []).filter(t => t.id !== id) } })),
+      setTableStatus: (id, status, orderId = null) => set((state) => ({
+        data: { ...state.data, tables: (state.data.tables || []).map(t => t.id === id ? { ...t, status, orderId: status === 'libre' ? null : (orderId ?? t.orderId) } : t) }
+      })),
+      assignOrderToTable: (tableId, orderId) => set((state) => ({
+        data: { ...state.data, tables: (state.data.tables || []).map(t => t.id === tableId ? { ...t, status: 'occupée', orderId } : t) }
+      })),
+
       // EXTRAS
       addExtra: (extra) => set((state) => ({ data: { ...state.data, extras: [...(state.data.extras || []), { ...extra, id: `ex_${Date.now()}` }] } })),
       updateExtra: (id, updates) => set((state) => ({ data: { ...state.data, extras: (state.data.extras || []).map(e => e.id === id ? { ...e, ...updates } : e) } })),
@@ -165,6 +176,7 @@ const useStore = create(
           reviews:         persisted.data?.reviews         ?? DEFAULT_DATA.reviews,
           promoCodes:      persisted.data?.promoCodes      ?? DEFAULT_DATA.promoCodes,
           extras:          persisted.data?.extras          ?? DEFAULT_DATA.extras,
+          tables:          persisted.data?.tables          ?? DEFAULT_DATA.tables,
         }
       }),
     }

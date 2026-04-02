@@ -9,8 +9,9 @@ import Contact from './Contact'
 import Reviews from './Reviews'
 import Promos from './Promos'
 import TrackOrder from './TrackOrder'
+import Kiosk from './Kiosk'
 import Cart from '../../components/Cart'
-import { Menu as MenuIcon, X, ShoppingCart, Search } from 'lucide-react'
+import { Menu as MenuIcon, X, ShoppingCart, Search, Monitor } from 'lucide-react'
 
 export default function PublicLayout({ onOpenLogin }) {
   const { data, activePage, setActivePage, cart } = useStore()
@@ -40,6 +41,7 @@ export default function PublicLayout({ onOpenLogin }) {
       case 'reviews': return <Reviews />
       case 'promos':  return <Promos />
       case 'track':   return <TrackOrder />
+      case 'kiosk':   return <Kiosk />
       default:        return <Home />
     }
   }
@@ -72,6 +74,9 @@ export default function PublicLayout({ onOpenLogin }) {
               ))}
               <button onClick={() => navigate('track')} className="ml-1 p-2 rounded-lg transition-all" style={{ color: '#9CA3AF' }} title="Suivre ma commande">
                 <Search size={16} />
+              </button>
+              <button onClick={() => navigate('kiosk')} className="ml-1 p-2 rounded-lg transition-all" style={{ color: '#9CA3AF' }} title="Mode kiosque">
+                <Monitor size={16} />
               </button>
               <button onClick={() => navigate('order')} className="ml-2 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white relative"
                 style={{ backgroundColor: '#E11D48' }}>
@@ -146,6 +151,7 @@ export default function PublicLayout({ onOpenLogin }) {
                 <li><button onClick={() => navigate('order')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Commander en ligne</button></li>
                 <li><button onClick={() => navigate('track')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Suivre ma commande</button></li>
                 <li><button onClick={() => navigate('promos')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Codes promo</button></li>
+                <li><button onClick={() => navigate('kiosk')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Mode kiosque</button></li>
               </ul>
             </div>
             <div>
