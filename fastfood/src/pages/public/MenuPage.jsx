@@ -2,7 +2,7 @@ import { useState } from 'react'
 import useStore from '../../store/useStore'
 import { ShoppingCart } from 'lucide-react'
 
-const BADGE_COLOR = { populaire: '#E11D48', signature: '#7C3AED', nouveau: '#10B981', épicé: '#F97316', veggie: '#16A34A', 'coup coeur': '#E11D48' }
+const BADGE_COLOR = { populaire: '#E11D48', signature: '#7C3AED', nouveau: '#10B981', épicé: '#F97316', veggie: '#16A34A', 'coup coeur': '#E11D48', mystère: '#6B21A8' }
 
 export default function MenuPage() {
   const { data, addToCart, cart } = useStore()

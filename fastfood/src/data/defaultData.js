@@ -49,6 +49,32 @@ export const DEFAULT_DATA = {
         { id: "d2", name: "Sundae Chocolat", description: "Glace vanille, sauce chocolat noir, éclats pralin",   price: 3.20, available: true, badge: "populaire", allergens: "Lait, Gluten",  image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&h=300&auto=format&fit=crop&q=80" },
         { id: "d3", name: "Cookie Maison",   description: "Cookie double chocolat cuit à la commande",           price: 2.50, available: true, badge: "nouveau",   allergens: "Gluten, Oeuf, Lait", image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&h=300&auto=format&fit=crop&q=80" },
         { id: "d4", name: "Apple Pie",       description: "Chausson aux pommes tiède, sucre cannelle",           price: 2.20, available: true, badge: null,        allergens: "Gluten, Lait",  image: "https://images.unsplash.com/photo-1621743478914-cc8a86d7e7b5?w=500&h=300&auto=format&fit=crop&q=80" },
+        { id: "d5", name: "Dessert Mystère", description: "??? Vous ne saurez pas ce que c'est avant de le recevoir. Une surprise du chef chaque jour. Osez ?", price: 3.50, available: true, badge: "mystère", allergens: "Peut contenir tout et n'importe quoi", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&h=300&auto=format&fit=crop&q=80" },
+      ]
+    },
+    {
+      id: "cat_speciales", name: "Spécialités", icon: "🤫",
+      items: [
+        {
+          id: "sp1",
+          name: "Menu Mystère",
+          description: "??? Ce menu est top secret. Entrée, plat, dessert... personne ne sait ce qu'il y a dedans. Pas même le chef. Enfin si, lui il sait. Mais il ne dira rien. Tentez l'aventure.",
+          price: 12.90,
+          available: true,
+          badge: "mystère",
+          allergens: "Mystère",
+          image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=300&auto=format&fit=crop&q=80"
+        },
+        {
+          id: "sp2",
+          name: "Le Romu Burger",
+          description: "La création iconique du patron : rillettes maison + sardines millésimées sur pain brioché grillé, accompagné d'un gratin dauphinois fondant à cœur. Un voyage gustatif audacieux. Ou pas. À vous de juger.",
+          price: 13.90,
+          available: true,
+          badge: "signature",
+          allergens: "Gluten, Poisson, Lait",
+          image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=300&auto=format&fit=crop&q=80"
+        },
       ]
     },
   ],
