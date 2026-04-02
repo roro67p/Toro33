@@ -10,6 +10,8 @@ import Reviews from './Reviews'
 import Promos from './Promos'
 import TrackOrder from './TrackOrder'
 import Kiosk from './Kiosk'
+import SpinWheel from './SpinWheel'
+import BurgerBuilder from './BurgerBuilder'
 import Cart from '../../components/Cart'
 import { Menu as MenuIcon, X, ShoppingCart, Search, Monitor } from 'lucide-react'
 
@@ -25,6 +27,8 @@ export default function PublicLayout({ onOpenLogin }) {
     { id: 'drinks',  label: 'Boissons' },
     { id: 'formules',label: 'Formules' },
     { id: 'promos',  label: '🔥 Promos' },
+    { id: 'spin',    label: '🎰 Roue' },
+    { id: 'builder', label: '🍔 Builder' },
     { id: 'reviews', label: 'Avis' },
     { id: 'contact', label: 'Horaires' },
   ]
@@ -42,6 +46,8 @@ export default function PublicLayout({ onOpenLogin }) {
       case 'promos':  return <Promos />
       case 'track':   return <TrackOrder />
       case 'kiosk':   return <Kiosk />
+      case 'spin':    return <SpinWheel />
+      case 'builder': return <BurgerBuilder />
       default:        return <Home />
     }
   }
@@ -152,6 +158,8 @@ export default function PublicLayout({ onOpenLogin }) {
                 <li><button onClick={() => navigate('track')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Suivre ma commande</button></li>
                 <li><button onClick={() => navigate('promos')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Codes promo</button></li>
                 <li><button onClick={() => navigate('kiosk')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Mode kiosque</button></li>
+                <li><button onClick={() => navigate('spin')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🎰 Roue de la fortune</button></li>
+                <li><button onClick={() => navigate('builder')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>🍔 Créer mon burger</button></li>
               </ul>
             </div>
             <div>
