@@ -173,4 +173,22 @@ export const DEFAULT_DATA = {
   ],
 
   reservations: [],
+
+  promoCodes: [
+    { id: "promo1", code: "BIENVENUE",  type: "percent", value: 10, minOrder: 10, active: true, uses: 0, maxUses: 100, description: "10% de réduction pour les nouveaux clients" },
+    { id: "promo2", code: "BURGER5",    type: "fixed",   value: 5,  minOrder: 20, active: true, uses: 12, maxUses: 50, description: "5€ offerts dès 20€ d'achat" },
+    { id: "promo3", code: "FAMILY",     type: "percent", value: 15, minOrder: 30, active: true, uses: 5,  maxUses: 200, description: "15% sur les commandes famille" },
+    { id: "promo4", code: "FRITES",     type: "fixed",   value: 3,  minOrder: 15, active: false, uses: 34, maxUses: 50, description: "3€ offerts (expiré)" },
+  ],
+
+  extras: [
+    { id: "ex1", name: "Double fromage",    price: 1.00, category: "Fromages" },
+    { id: "ex2", name: "Bacon supplémentaire", price: 1.50, category: "Viandes" },
+    { id: "ex3", name: "Sauce BBQ",         price: 0.50, category: "Sauces" },
+    { id: "ex4", name: "Sauce burger maison",price: 0.50, category: "Sauces" },
+    { id: "ex5", name: "Jalapeños",         price: 0.50, category: "Extras" },
+    { id: "ex6", name: "Avocat",            price: 1.20, category: "Extras" },
+    { id: "ex7", name: "Oeuf au plat",      price: 1.00, category: "Extras" },
+    { id: "ex8", name: "Oignons caramélisés",price: 0.80, category: "Extras" },
+  ],
 }

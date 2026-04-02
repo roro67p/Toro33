@@ -7,8 +7,10 @@ import Formules from './Formules'
 import Order from './Order'
 import Contact from './Contact'
 import Reviews from './Reviews'
+import Promos from './Promos'
+import TrackOrder from './TrackOrder'
 import Cart from '../../components/Cart'
-import { Menu as MenuIcon, X, ShoppingCart } from 'lucide-react'
+import { Menu as MenuIcon, X, ShoppingCart, Search } from 'lucide-react'
 
 export default function PublicLayout({ onOpenLogin }) {
   const { data, activePage, setActivePage, cart } = useStore()
@@ -17,10 +19,11 @@ export default function PublicLayout({ onOpenLogin }) {
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0)
 
   const navLinks = [
-    { id: 'home', label: 'Accueil' },
-    { id: 'menu', label: 'Menu' },
-    { id: 'drinks', label: 'Boissons' },
-    { id: 'formules', label: 'Formules' },
+    { id: 'home',    label: 'Accueil' },
+    { id: 'menu',    label: 'Menu' },
+    { id: 'drinks',  label: 'Boissons' },
+    { id: 'formules',label: 'Formules' },
+    { id: 'promos',  label: '🔥 Promos' },
     { id: 'reviews', label: 'Avis' },
     { id: 'contact', label: 'Horaires' },
   ]
@@ -29,23 +32,26 @@ export default function PublicLayout({ onOpenLogin }) {
 
   const renderPage = () => {
     switch (activePage) {
-      case 'menu': return <MenuPage />
-      case 'drinks': return <Drinks />
-      case 'formules': return <Formules />
-      case 'order': return <Order />
+      case 'menu':    return <MenuPage />
+      case 'drinks':  return <Drinks />
+      case 'formules':return <Formules />
+      case 'order':   return <Order />
       case 'contact': return <Contact />
       case 'reviews': return <Reviews />
-      default: return <Home />
+      case 'promos':  return <Promos />
+      case 'track':   return <TrackOrder />
+      default:        return <Home />
     }
   }
 
+  const activePromos = (data.promoCodes || []).filter(p => p.active).length
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0F172A' }}>
-      {/* Header */}
       <header className="sticky top-0 z-40" style={{ backgroundColor: '#111827', borderBottom: '1px solid #1F2937' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
-            <button onClick={() => navigate('home')} className="flex items-center gap-2.5 group">
+            <button onClick={() => navigate('home')} className="flex items-center gap-2.5">
               <span className="text-2xl">🍔</span>
               <div className="text-left">
                 <div className="font-black text-lg leading-tight" style={{ color: '#E11D48' }}>{restaurant.name}</div>
@@ -56,13 +62,18 @@ export default function PublicLayout({ onOpenLogin }) {
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map(link => (
                 <button key={link.id} onClick={() => navigate(link.id)}
-                  className="px-3 py-2 rounded-lg text-sm font-semibold transition-all"
+                  className="px-3 py-2 rounded-lg text-sm font-semibold transition-all relative"
                   style={{ backgroundColor: activePage === link.id ? '#E11D48' : 'transparent', color: activePage === link.id ? 'white' : '#9CA3AF' }}>
                   {link.label}
+                  {link.id === 'promos' && activePromos > 0 && activePage !== 'promos' && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-xs flex items-center justify-center font-bold" style={{ backgroundColor: '#F59E0B', color: 'white', fontSize: '10px' }}>{activePromos}</span>
+                  )}
                 </button>
               ))}
-              <button onClick={() => navigate('order')}
-                className="ml-2 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white relative"
+              <button onClick={() => navigate('track')} className="ml-1 p-2 rounded-lg transition-all" style={{ color: '#9CA3AF' }} title="Suivre ma commande">
+                <Search size={16} />
+              </button>
+              <button onClick={() => navigate('order')} className="ml-2 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white relative"
                 style={{ backgroundColor: '#E11D48' }}>
                 <ShoppingCart size={15} /> Commander
                 {cartCount > 0 && <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ backgroundColor: '#111827', border: '1.5px solid #E11D48' }}>{cartCount}</span>}
@@ -78,11 +89,15 @@ export default function PublicLayout({ onOpenLogin }) {
         {mobileOpen && (
           <div className="md:hidden px-4 py-3 space-y-1" style={{ borderTop: '1px solid #1F2937', backgroundColor: '#111827' }}>
             {navLinks.map(link => (
-              <button key={link.id} onClick={() => navigate(link.id)} className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold transition-all"
+              <button key={link.id} onClick={() => navigate(link.id)} className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold"
                 style={{ backgroundColor: activePage === link.id ? '#E11D48' : 'transparent', color: activePage === link.id ? 'white' : '#9CA3AF' }}>
                 {link.label}
               </button>
             ))}
+            <button onClick={() => navigate('track')} className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"
+              style={{ color: '#9CA3AF' }}>
+              <Search size={15} /> Suivre ma commande
+            </button>
             <button onClick={() => navigate('order')} className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold text-white mt-2"
               style={{ backgroundColor: '#E11D48' }}>
               <ShoppingCart size={16} /> Commander
@@ -94,7 +109,6 @@ export default function PublicLayout({ onOpenLogin }) {
 
       <main className="flex-1">{renderPage()}</main>
 
-      {/* Floating cart */}
       {activePage !== 'order' && cartCount > 0 && (
         <div className="fixed z-30" style={{ bottom: '24px', right: '24px' }}>
           <button onClick={() => navigate('order')}
@@ -108,10 +122,9 @@ export default function PublicLayout({ onOpenLogin }) {
 
       <Cart />
 
-      {/* Footer */}
       <footer style={{ backgroundColor: '#111827', borderTop: '1px solid #1F2937' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-2xl">🍔</span>
@@ -123,8 +136,16 @@ export default function PublicLayout({ onOpenLogin }) {
               <h3 className="font-bold text-white mb-3">Navigation</h3>
               <ul className="space-y-1.5">
                 {navLinks.map(link => (
-                  <li key={link.id}><button onClick={() => navigate(link.id)} className="text-sm hover:opacity-80 transition-opacity" style={{ color: '#9CA3AF' }}>{link.label}</button></li>
+                  <li key={link.id}><button onClick={() => navigate(link.id)} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>{link.label}</button></li>
                 ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-white mb-3">Commande</h3>
+              <ul className="space-y-1.5">
+                <li><button onClick={() => navigate('order')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Commander en ligne</button></li>
+                <li><button onClick={() => navigate('track')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Suivre ma commande</button></li>
+                <li><button onClick={() => navigate('promos')} className="text-sm hover:opacity-80" style={{ color: '#9CA3AF' }}>Codes promo</button></li>
               </ul>
             </div>
             <div>
@@ -138,7 +159,7 @@ export default function PublicLayout({ onOpenLogin }) {
           </div>
           <div className="mt-8 pt-6 flex items-center justify-between flex-wrap gap-3" style={{ borderTop: '1px solid #1F2937' }}>
             <p className="text-xs" style={{ color: '#6B7280' }}>© {new Date().getFullYear()} {restaurant.name}. Tous droits réservés.</p>
-            <button onClick={onOpenLogin} className="text-xs hover:opacity-80 transition-opacity" style={{ color: '#6B7280' }}>Espace Pro</button>
+            <button onClick={onOpenLogin} className="text-xs hover:opacity-80" style={{ color: '#6B7280' }}>Espace Pro</button>
           </div>
         </div>
       </footer>

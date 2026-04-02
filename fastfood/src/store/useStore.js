@@ -126,6 +126,24 @@ const useStore = create(
       updateReview: (id, updates) => set((state) => ({ data: { ...state.data, reviews: (state.data.reviews || []).map(r => r.id === id ? { ...r, ...updates } : r) } })),
       deleteReview: (id) => set((state) => ({ data: { ...state.data, reviews: (state.data.reviews || []).filter(r => r.id !== id) } })),
 
+      // PROMO CODES
+      addPromoCode: (promo) => set((state) => ({ data: { ...state.data, promoCodes: [...(state.data.promoCodes || []), { ...promo, id: `promo_${Date.now()}`, uses: 0 }] } })),
+      updatePromoCode: (id, updates) => set((state) => ({ data: { ...state.data, promoCodes: (state.data.promoCodes || []).map(p => p.id === id ? { ...p, ...updates } : p) } })),
+      deletePromoCode: (id) => set((state) => ({ data: { ...state.data, promoCodes: (state.data.promoCodes || []).filter(p => p.id !== id) } })),
+      usePromoCode: (code) => {
+        const promos = get().data.promoCodes || []
+        const promo = promos.find(p => p.code.toUpperCase() === code.toUpperCase() && p.active)
+        if (!promo) return null
+        if (promo.maxUses && promo.uses >= promo.maxUses) return null
+        set((state) => ({ data: { ...state.data, promoCodes: state.data.promoCodes.map(p => p.id === promo.id ? { ...p, uses: p.uses + 1 } : p) } }))
+        return promo
+      },
+
+      // EXTRAS
+      addExtra: (extra) => set((state) => ({ data: { ...state.data, extras: [...(state.data.extras || []), { ...extra, id: `ex_${Date.now()}` }] } })),
+      updateExtra: (id, updates) => set((state) => ({ data: { ...state.data, extras: (state.data.extras || []).map(e => e.id === id ? { ...e, ...updates } : e) } })),
+      deleteExtra: (id) => set((state) => ({ data: { ...state.data, extras: (state.data.extras || []).filter(e => e.id !== id) } })),
+
       resetData: () => set({ data: DEFAULT_DATA }),
     }),
     {
@@ -145,6 +163,8 @@ const useStore = create(
           customerOrders:  persisted.data?.customerOrders  ?? [],
           formules:        persisted.data?.formules        ?? DEFAULT_DATA.formules,
           reviews:         persisted.data?.reviews         ?? DEFAULT_DATA.reviews,
+          promoCodes:      persisted.data?.promoCodes      ?? DEFAULT_DATA.promoCodes,
+          extras:          persisted.data?.extras          ?? DEFAULT_DATA.extras,
         }
       }),
     }

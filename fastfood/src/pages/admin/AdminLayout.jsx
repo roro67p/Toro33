@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import useStore from '../../store/useStore'
 import Dashboard from './Dashboard'
 import MenuAdmin from './MenuAdmin'
@@ -11,8 +11,10 @@ import SuppliersAdmin from './SuppliersAdmin'
 import CatalogAdmin from './CatalogAdmin'
 import PurchaseOrdersAdmin from './PurchaseOrdersAdmin'
 import ReviewsAdmin from './ReviewsAdmin'
+import PromosAdmin from './PromosAdmin'
+import ExtrasAdmin from './ExtrasAdmin'
 import SettingsAdmin from './SettingsAdmin'
-import { LayoutDashboard, UtensilsCrossed, Wine, Tag, ShoppingBag, Euro, Package, Truck, BookOpen, ShoppingCart, Star, Settings, Menu, X, LogOut, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, Wine, Tag, ShoppingBag, Euro, Package, Truck, BookOpen, ShoppingCart, Star, Settings, Menu, X, LogOut, ArrowLeft, Zap, Plus } from 'lucide-react'
 
 const NAV = [
   { id: 'dashboard',       label: 'Dashboard',          icon: LayoutDashboard },
@@ -21,9 +23,11 @@ const NAV = [
   { id: 'menu',            label: 'Menu',                icon: UtensilsCrossed },
   { id: 'drinks',          label: 'Boissons',            icon: Wine },
   { id: 'formules',        label: 'Formules',            icon: Tag },
+  { id: 'extras',          label: 'Extras',              icon: Plus },
+  { id: 'promos',          label: 'Codes Promo',         icon: Zap },
   { id: 'stock',           label: 'Stock',               icon: Package },
   { id: 'suppliers',       label: 'Fournisseurs',        icon: Truck },
-  { id: 'catalog',         label: 'Catalogue achats',   icon: BookOpen },
+  { id: 'catalog',         label: 'Catalogue achats',    icon: BookOpen },
   { id: 'purchase-orders', label: 'Commandes fourn.',    icon: ShoppingCart },
   { id: 'reviews',         label: 'Avis clients',        icon: Star },
   { id: 'settings',        label: 'Paramètres',          icon: Settings },
@@ -36,6 +40,26 @@ export default function AdminLayout() {
   const { restaurant } = data
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const prevOrdersCount = useRef(newOrdersCount)
+
+  // Son notification nouvelle commande
+  useEffect(() => {
+    if (newOrdersCount > prevOrdersCount.current) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)()
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.connect(gain); gain.connect(ctx.destination)
+        osc.frequency.setValueAtTime(880, ctx.currentTime)
+        osc.frequency.setValueAtTime(660, ctx.currentTime + 0.1)
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.2)
+        gain.gain.setValueAtTime(0.3, ctx.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5)
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5)
+      } catch (e) {}
+    }
+    prevOrdersCount.current = newOrdersCount
+  }, [newOrdersCount])
 
   useEffect(() => {
     const fn = () => setIsMobile(window.innerWidth < 768)
@@ -45,19 +69,21 @@ export default function AdminLayout() {
 
   const renderPage = () => {
     switch (activeAdminPage) {
-      case 'dashboard':      return <Dashboard />
-      case 'menu':           return <MenuAdmin />
-      case 'drinks':         return <DrinksAdmin />
-      case 'formules':       return <FormulesAdmin />
-      case 'customer-orders':return <CustomerOrdersAdmin />
-      case 'caisse':         return <CaisseAdmin />
-      case 'stock':          return <StockAdmin />
-      case 'suppliers':      return <SuppliersAdmin />
-      case 'catalog':        return <CatalogAdmin />
-      case 'purchase-orders':return <PurchaseOrdersAdmin />
-      case 'reviews':        return <ReviewsAdmin />
-      case 'settings':       return <SettingsAdmin />
-      default:               return <Dashboard />
+      case 'dashboard':       return <Dashboard />
+      case 'menu':            return <MenuAdmin />
+      case 'drinks':          return <DrinksAdmin />
+      case 'formules':        return <FormulesAdmin />
+      case 'extras':          return <ExtrasAdmin />
+      case 'promos':          return <PromosAdmin />
+      case 'customer-orders': return <CustomerOrdersAdmin />
+      case 'caisse':          return <CaisseAdmin />
+      case 'stock':           return <StockAdmin />
+      case 'suppliers':       return <SuppliersAdmin />
+      case 'catalog':         return <CatalogAdmin />
+      case 'purchase-orders': return <PurchaseOrdersAdmin />
+      case 'reviews':         return <ReviewsAdmin />
+      case 'settings':        return <SettingsAdmin />
+      default:                return <Dashboard />
     }
   }
 
@@ -101,7 +127,7 @@ export default function AdminLayout() {
       </nav>
 
       <div style={{ padding: '10px', borderTop: '1px solid #1F2937' }}>
-        <button onClick={() => { logoutAdmin(); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', borderRadius: '10px', border: 'none', cursor: 'pointer', fontSize: '13px', backgroundColor: 'transparent', color: '#9CA3AF', textAlign: 'left', marginBottom: '2px' }}>
+        <button onClick={logoutAdmin} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', borderRadius: '10px', border: 'none', cursor: 'pointer', fontSize: '13px', backgroundColor: 'transparent', color: '#9CA3AF', textAlign: 'left', marginBottom: '2px' }}>
           <ArrowLeft size={17} /> Retour au site
         </button>
         <button onClick={logoutAdmin} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', borderRadius: '10px', border: 'none', cursor: 'pointer', fontSize: '13px', backgroundColor: 'transparent', color: '#EF4444', textAlign: 'left' }}>
@@ -132,9 +158,17 @@ export default function AdminLayout() {
               <p style={{ fontSize: '11px', color: '#6B7280', margin: 0 }}>{restaurant.name} · Espace Pro</p>
             </div>
           </div>
-          <button onClick={logoutAdmin} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '10px', border: 'none', cursor: 'pointer', backgroundColor: '#1F2937', color: '#E11D48', fontSize: '13px', fontWeight: 500 }}>
-            <LogOut size={14} /> Déconnexion
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {newOrdersCount > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '10px', backgroundColor: '#FFF1F2', color: '#E11D48', fontSize: '13px', fontWeight: 600 }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#E11D48', display: 'inline-block', animation: 'pulse 1s infinite' }} />
+                {newOrdersCount} nouvelle(s) commande(s)
+              </div>
+            )}
+            <button onClick={logoutAdmin} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '10px', border: 'none', cursor: 'pointer', backgroundColor: '#1F2937', color: '#E11D48', fontSize: '13px', fontWeight: 500 }}>
+              <LogOut size={14} /> Déconnexion
+            </button>
+          </div>
         </header>
         <main style={{ flex: 1, overflowY: 'auto', padding: '24px', backgroundColor: '#0F172A' }}>
           {renderPage()}
