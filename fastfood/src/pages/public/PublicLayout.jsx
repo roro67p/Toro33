@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import useStore from '../../store/useStore'
+import BirthdayOffer from '../../components/BirthdayOffer'
 import Home from './Home'
 import MenuPage from './MenuPage'
 import Drinks from './Drinks'
@@ -18,6 +19,7 @@ import { Menu as MenuIcon, X, ShoppingCart, Search, Monitor } from 'lucide-react
 
 export default function PublicLayout({ onOpenLogin }) {
   const { data, activePage, setActivePage, cart } = useStore()
+  const [animKey, setAnimKey] = useState(0)
   const { restaurant } = data
   const [mobileOpen, setMobileOpen] = useState(false)
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0)
@@ -35,7 +37,7 @@ export default function PublicLayout({ onOpenLogin }) {
     { id: 'contact', label: 'Horaires' },
   ]
 
-  const navigate = (page) => { setActivePage(page); setMobileOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const navigate = (page) => { setActivePage(page); setMobileOpen(false); setAnimKey(k => k + 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
   const renderPage = () => {
     switch (activePage) {
@@ -121,7 +123,11 @@ export default function PublicLayout({ onOpenLogin }) {
         )}
       </header>
 
-      <main className="flex-1">{renderPage()}</main>
+      <main className="flex-1">
+        <div key={animKey} style={{ animation: 'pageIn 0.3s ease forwards' }}>
+          {renderPage()}
+        </div>
+      </main>
 
       {activePage !== 'order' && cartCount > 0 && (
         <div className="fixed z-30" style={{ bottom: '24px', right: '24px' }}>
@@ -135,6 +141,14 @@ export default function PublicLayout({ onOpenLogin }) {
       )}
 
       <Cart />
+      <BirthdayOffer />
+
+      <style>{`
+        @keyframes pageIn {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
       <footer style={{ backgroundColor: '#111827', borderTop: '1px solid #1F2937' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
