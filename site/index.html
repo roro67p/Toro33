@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chez Romu — Bistrot & Convivialité</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="site-header">
+    <div class="header-top">
+        <div class="logo-area">
+            <span class="logo-emoji">🍽️</span>
+            <div>
+                <h1 class="logo-title">Chez Romu</h1>
+                <p class="logo-tagline">Bistrot · Convivialité · Surprises</p>
+            </div>
+        </div>
+        <div class="header-info">
+            <span>📍 Au cœur du quartier</span>
+            <span>🕐 Mar–Sam : 12h–14h30 & 19h–23h</span>
+        </div>
+    </div>
+    <nav class="main-nav">
+        <button class="nav-btn active" onclick="showPage('menus')">🍴 Menus &amp; Boissons</button>
+        <button class="nav-btn" onclick="showPage('evenements')">🎉 Événements</button>
+        <button class="nav-btn" onclick="showPage('surprises')">✨ Surprises</button>
+    </nav>
+</header>
+
+<main class="main-content">
+
+<!-- ══════════════════ PAGE : MENUS ══════════════════ -->
+<div id="page-menus" class="page active">
+
+    <div class="page-hero">
+        <h2 class="page-title">Nos Menus</h2>
+        <p class="page-subtitle">Des créations du chef pour tous les appétits et toutes les occasions</p>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="showTab('menu-gourmand', this)">🍽️ Menu Gourmand</button>
+            <button class="tab-btn" onclick="showTab('menu-surprise', this)">🎲 Menu Surprise</button>
+            <button class="tab-btn" onclick="showTab('menu-wow', this)">🤩 Menu Wow</button>
+            <button class="tab-btn" onclick="showTab('boissons', this)">🥤 Boissons</button>
+        </div>
+
+        <!-- MENU GOURMAND -->
+        <div id="menu-gourmand" class="tab-panel active">
+            <div class="menu-header">
+                <div class="menu-title-area">
+                    <span class="menu-big-emoji">🍽️</span>
+                    <div>
+                        <h2 class="menu-name">Menu Gourmand</h2>
+                        <p class="menu-description">L'expérience culinaire complète pour les amoureux de la bonne table.</p>
+                    </div>
+                </div>
+                <div class="menu-price-badge">35€<span class="price-label"> / pers.</span></div>
+            </div>
+            <div class="menu-courses">
+                <div class="course-section">
+                    <h3 class="course-title">🥗 Entrées</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">Velouté de potimarron</span><span class="item-dots"></span><span class="item-detail">crème fraîche, noisettes grillées</span></li>
+                        <li class="course-item"><span class="item-name">Terrine de campagne maison</span><span class="item-dots"></span><span class="item-detail">cornichons, pain grillé</span></li>
+                        <li class="course-item"><span class="item-name">Carpaccio de bœuf</span><span class="item-dots"></span><span class="item-detail">parmesan, roquette, câpres</span></li>
+                    </ul>
+                </div>
+                <div class="course-section">
+                    <h3 class="course-title">🍖 Plats</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">Filet de bœuf bordelaise</span><span class="item-dots"></span><span class="item-detail">gratin dauphinois, haricots verts</span></li>
+                        <li class="course-item"><span class="item-name">Dos de cabillaud en croûte</span><span class="item-dots"></span><span class="item-detail">écrasé de pommes de terre, beurre citronné</span></li>
+                        <li class="course-item"><span class="item-name">Risotto aux cèpes et truffe</span><span class="item-dots"></span><span class="item-detail">parmesan affiné 24 mois</span></li>
+                    </ul>
+                </div>
+                <div class="course-section">
+                    <h3 class="course-title">🍮 Desserts</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">Fondant au chocolat</span><span class="item-dots"></span><span class="item-detail">cœur coulant, glace vanille Bourbon</span></li>
+                        <li class="course-item"><span class="item-name">Crème brûlée à la vanille</span><span class="item-dots"></span><span class="item-detail">tuile amande</span></li>
+                        <li class="course-item"><span class="item-name">Tarte tatin</span><span class="item-dots"></span><span class="item-detail">crème chantilly maison</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENU SURPRISE -->
+        <div id="menu-surprise" class="tab-panel">
+            <div class="menu-header">
+                <div class="menu-title-area">
+                    <span class="menu-big-emoji">🎲</span>
+                    <div>
+                        <h2 class="menu-name">Menu Surprise</h2>
+                        <p class="menu-description">Laissez-vous guider par les inspirations du chef… vous ne savez pas ce qui vous attend !</p>
+                    </div>
+                </div>
+                <div class="menu-price-badge">28€<span class="price-label"> / pers.</span></div>
+            </div>
+            <div class="menu-courses">
+                <div class="course-section">
+                    <h3 class="course-title">🥗 Entrées</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">???</span><span class="item-dots"></span><span class="item-detail">Le chef a ses secrets</span></li>
+                        <li class="course-item"><span class="item-name">???</span><span class="item-dots"></span><span class="item-detail">Peut-être quelque chose d'inattendu</span></li>
+                        <li class="course-item"><span class="item-name">???</span><span class="item-dots"></span><span class="item-detail">Fermez les yeux et faites confiance</span></li>
+                    </ul>
+                </div>
+                <div class="course-section">
+                    <h3 class="course-title">🍖 Plats</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">???</span><span class="item-dots"></span><span class="item-detail">Un plat mystère vous attend</span></li>
+                        <li class="course-item"><span class="item-name">???</span><span class="item-dots"></span><span class="item-detail">Saison, humeur, inspiration…</span></li>
+                    </ul>
+                </div>
+                <div class="course-section">
+                    <h3 class="course-title">🍮 Desserts</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">???</span><span class="item-dots"></span><span class="item-detail">La surprise finale</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="surprise-notice">🤫 Le chef se réserve le droit de tout changer à la dernière minute. C'est ça, la surprise.</div>
+        </div>
+
+        <!-- MENU WOW -->
+        <div id="menu-wow" class="tab-panel">
+            <div class="menu-header">
+                <div class="menu-title-area">
+                    <span class="menu-big-emoji">🤩</span>
+                    <div>
+                        <h2 class="menu-name">Menu Wow</h2>
+                        <p class="menu-description">Le summum de l'expérience Chez Romu. Pour les grandes occasions (ou les mercredis qui s'ennuient).</p>
+                    </div>
+                </div>
+                <div class="menu-price-badge">55€<span class="price-label"> / pers.</span></div>
+            </div>
+            <div class="menu-courses">
+                <div class="course-section">
+                    <h3 class="course-title">🥗 Entrées</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">Foie gras poêlé</span><span class="item-dots"></span><span class="item-detail">chutney de figues, brioche toastée</span></li>
+                        <li class="course-item"><span class="item-name">Huîtres Gillardeau N°3</span><span class="item-dots"></span><span class="item-detail">mignonette échalotes-vinaigre</span></li>
+                        <li class="course-item"><span class="item-name">Tartare de thon rouge</span><span class="item-dots"></span><span class="item-detail">avocat, sésame, sauce ponzu</span></li>
+                    </ul>
+                </div>
+                <div class="course-section">
+                    <h3 class="course-title">🍖 Plats</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">Homard thermidor</span><span class="item-dots"></span><span class="item-detail">gratin de légumes du moment</span></li>
+                        <li class="course-item"><span class="item-name">Côte de bœuf Wagyu (pour 2)</span><span class="item-dots"></span><span class="item-detail">béarnaise, frites maison</span></li>
+                        <li class="course-item"><span class="item-name">Saint-Jacques poêlées</span><span class="item-dots"></span><span class="item-detail">purée de topinambour, émulsion truffée</span></li>
+                    </ul>
+                </div>
+                <div class="course-section">
+                    <h3 class="course-title">🍮 Desserts</h3>
+                    <ul class="course-list">
+                        <li class="course-item"><span class="item-name">Soufflé au Grand Marnier</span><span class="item-dots"></span><span class="item-detail">à commander en début de repas</span></li>
+                        <li class="course-item"><span class="item-name">Chariot de fromages affinés</span><span class="item-dots"></span><span class="item-detail">confiture maison, pain aux noix</span></li>
+                        <li class="course-item"><span class="item-name">Paris-Brest revisité</span><span class="item-dots"></span><span class="item-detail">praliné noisette, éclats de caramel</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOISSONS -->
+        <div id="boissons" class="tab-panel">
+            <div class="page-hero" style="padding:1rem 0 2rem; border:none; margin-bottom:1.5rem;">
+                <h2 class="page-title" style="font-size:2rem;">Carte des Boissons</h2>
+                <p class="page-subtitle">Du sérieux, du moins sérieux, et une grande fierté de la maison</p>
+            </div>
+            <div class="boissons-grid">
+
+                <div class="boisson-card featured">
+                    <div class="boisson-badge">Cuvée Prestige</div>
+                    <div class="boisson-emoji">💧</div>
+                    <h3 class="boisson-name">Eau du Robinet Pétillante</h3>
+                    <div class="boisson-price">0€</div>
+                    <p class="boisson-desc">Notre cuvée exclusive, directement tirée des entrailles de la montagne parisienne (alias le réseau municipal). Pétillante grâce à notre technologie de pointe : une gazéification artisanale réalisée à la main par notre sommelier avec une paille et beaucoup de conviction. Notes de calcaire, légère finale de chlore assumée.</p>
+                    <p class="boisson-accord"><em>Se marie avec : n'importe quoi. Vraiment.</em></p>
+                </div>
+
+                <div class="boisson-card">
+                    <div class="boisson-emoji">🍷</div>
+                    <h3 class="boisson-name">Vin Rouge de la Maison</h3>
+                    <div class="boisson-price">18€ / bouteille</div>
+                    <p class="boisson-desc">Sélection du chef. Convivial et sans chichis.</p>
+                    <p class="boisson-accord"><em>Idéal avec les viandes et les longues soirées.</em></p>
+                </div>
+
+                <div class="boisson-card">
+                    <div class="boisson-emoji">🥂</div>
+                    <h3 class="boisson-name">Vin Blanc de la Maison</h3>
+                    <div class="boisson-price">18€ / bouteille</div>
+                    <p class="boisson-desc">Frais, léger, parfait pour les beaux jours.</p>
+                    <p class="boisson-accord"><em>Accord parfait avec les poissons et fruits de mer.</em></p>
+                </div>
+
+                <div class="boisson-card">
+                    <div class="boisson-emoji">🍺</div>
+                    <h3 class="boisson-name">Bière Artisanale Locale</h3>
+                    <div class="boisson-price">6€</div>
+                    <p class="boisson-desc">Brassée à deux pas d'ici, par des gens biens.</p>
+                    <p class="boisson-accord"><em>Pour les matchs, le bowling, et les grandes occasions.</em></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="reservation-banner">
+        <h3>🗓️ Réservez votre table</h3>
+        <p>Pour les grands groupes ou les soirées événements, n'hésitez pas à passer nous voir directement.</p>
+        <div class="reservation-note">Nous accueillons jusqu'à 40 couverts — pensez à réserver !</div>
+    </div>
+</div>
+
+<!-- ══════════════════ PAGE : ÉVÉNEMENTS ══════════════════ -->
+<div id="page-evenements" class="page">
+
+    <div class="page-hero">
+        <h2 class="page-title">Nos Événements</h2>
+        <p class="page-subtitle">Parce qu'un bon repas, c'est encore meilleur avec une bonne raison de se retrouver</p>
+    </div>
+
+    <div class="events-grid">
+
+        <div class="event-card color-green" onclick="showEvent('foot')">
+            <div class="event-card-emoji">⚽</div>
+            <div class="event-card-body">
+                <h3 class="event-card-title">Foot Chez Romu</h3>
+                <p class="event-card-subtitle">Les grandes soirées matchs</p>
+                <p class="event-card-desc">Chaque soir de match, Chez Romu se transforme en antre des supporters. Grand écran, ambiance electrique, bières fraîches et sandwichs maison…</p>
+                <div class="event-card-next">📅 Prochains matchs affichés sur l'ardoise</div>
+            </div>
+            <div class="event-card-arrow">→</div>
+        </div>
+
+        <div class="event-card color-orange" onclick="showEvent('bowling')">
+            <div class="event-card-emoji">🎳</div>
+            <div class="event-card-body">
+                <h3 class="event-card-title">Soirée Bowling</h3>
+                <p class="event-card-subtitle">Strike &amp; Dîner</p>
+                <p class="event-card-desc">On part tous ensemble au bowling du coin, on revient Chez Romu pour un repas bien mérité. Bonne humeur garantie, score non garanti…</p>
+                <div class="event-card-next">📅 Tous les premiers vendredis du mois</div>
+            </div>
+            <div class="event-card-arrow">→</div>
+        </div>
+
+        <div class="event-card color-purple" onclick="showEvent('disco')">
+            <div class="event-card-emoji">🕺</div>
+            <div class="event-card-body">
+                <h3 class="event-card-title">Soirée Disco</h3>
+                <p class="event-card-subtitle">Dancefloor &amp; Bonne Bouffe</p>
+                <p class="event-card-desc">Les années 70 reviennent Chez Romu ! Vinyles, boule à facettes, platform shoes optionnelles. On dîne, on digère, on danse…</p>
+                <div class="event-card-next">📅 Un samedi par mois — guettez l'ardoise</div>
+            </div>
+            <div class="event-card-arrow">→</div>
+        </div>
+
+        <div class="event-card color-pink" onclick="showEvent('pedrosa')">
+            <div class="event-card-emoji">🌸</div>
+            <div class="event-card-body">
+                <h3 class="event-card-title">Soirée Madame Pedrosa</h3>
+                <p class="event-card-subtitle">Une soirée… particulière</p>
+                <p class="event-card-desc">Madame Pedrosa, c'est une habituée. Une figure. Une légende locale. Une fois par trimestre, on lui réserve la salle pour une soirée qui lui ressemble…</p>
+                <div class="event-card-next">📅 Les dates circulent discrètement…</div>
+            </div>
+            <div class="event-card-arrow">→</div>
+        </div>
+
+    </div>
+
+    <!-- Event detail panels -->
+    <div id="event-foot" class="event-detail color-green" style="display:none">
+        <button class="back-link" onclick="closeEvent('foot')">← Tous les événements</button>
+        <div class="event-detail-hero green-bg">
+            <div class="event-detail-emoji">⚽</div>
+            <h2 class="event-detail-title">Foot Chez Romu</h2>
+            <p class="event-detail-subtitle">Les grandes soirées matchs</p>
+        </div>
+        <div class="event-detail-body">
+            <p class="event-detail-desc">Chaque soir de match, Chez Romu se transforme en antre des supporters. Grand écran, ambiance electrique, bières fraîches et sandwichs maison. On crie, on chante, on se retrouve. Le foot c'est bien, mais le foot avec les potes Chez Romu, c'est mieux.</p>
+            <div class="event-detail-info">
+                <div class="event-details-box">
+                    <h3>📋 Les détails</h3>
+                    <ul>
+                        <li>✓ Grand écran Full HD</li>
+                        <li>✓ Happy hour pendant la première mi-temps</li>
+                        <li>✓ Menu spécial match à 15€</li>
+                        <li>✓ Réservation conseillée pour les grands matchs</li>
+                    </ul>
+                </div>
+                <div class="event-next-box">
+                    <h3>📅 Prochaine date</h3>
+                    <p>Prochains matchs affichés sur place et sur notre ardoise</p>
+                    <div class="event-contact-note">Pour réserver, venez nous voir ou appelez directement.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="event-bowling" class="event-detail color-orange" style="display:none">
+        <button class="back-link" onclick="closeEvent('bowling')">← Tous les événements</button>
+        <div class="event-detail-hero orange-bg">
+            <div class="event-detail-emoji">🎳</div>
+            <h2 class="event-detail-title">Soirée Bowling</h2>
+            <p class="event-detail-subtitle">Strike &amp; Dîner</p>
+        </div>
+        <div class="event-detail-body">
+            <p class="event-detail-desc">La formule idéale pour les soirées entre amis ou en équipe. On part tous ensemble au bowling du coin, on revient Chez Romu pour un repas bien mérité après toutes ces strikes ratées (ou réussies). Bonne humeur garantie, score non garanti.</p>
+            <div class="event-detail-info">
+                <div class="event-details-box">
+                    <h3>📋 Les détails</h3>
+                    <ul>
+                        <li>✓ Départ en groupe depuis le restaurant</li>
+                        <li>✓ 2 parties de bowling incluses</li>
+                        <li>✓ Retour au restaurant pour le dîner</li>
+                        <li>✓ Menu convivial à prix groupé</li>
+                        <li>✓ À partir de 6 personnes</li>
+                    </ul>
+                </div>
+                <div class="event-next-box">
+                    <h3>📅 Prochaine date</h3>
+                    <p>Tous les premiers vendredis du mois — inscription au restaurant</p>
+                    <div class="event-contact-note">Pour réserver, venez nous voir ou appelez directement.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="event-disco" class="event-detail color-purple" style="display:none">
+        <button class="back-link" onclick="closeEvent('disco')">← Tous les événements</button>
+        <div class="event-detail-hero purple-bg">
+            <div class="event-detail-emoji">🕺</div>
+            <h2 class="event-detail-title">Soirée Disco</h2>
+            <p class="event-detail-subtitle">Dancefloor &amp; Bonne Bouffe</p>
+        </div>
+        <div class="event-detail-body">
+            <p class="event-detail-desc">Les années 70 reviennent Chez Romu ! Vinyles, boule à facettes, platform shoes optionnelles. On dîne, on digère, on danse. Le chef cuisine en rythme, le serveur sert en glissant, et la caisse enregistreuse fait le son. Ambiance garantie ou remboursé (non remboursé).</p>
+            <div class="event-detail-info">
+                <div class="event-details-box">
+                    <h3>📋 Les détails</h3>
+                    <ul>
+                        <li>✓ Tenue disco encouragée (mais pas obligatoire)</li>
+                        <li>✓ Playlist 100% vinyle des 70s–80s</li>
+                        <li>✓ Cocktails rétro de la maison</li>
+                        <li>✓ Dîner + soirée dansante</li>
+                        <li>✓ Réservation obligatoire</li>
+                    </ul>
+                </div>
+                <div class="event-next-box">
+                    <h3>📅 Prochaine date</h3>
+                    <p>Un samedi par mois — guettez l'ardoise et les réseaux !</p>
+                    <div class="event-contact-note">Pour réserver, venez nous voir ou appelez directement.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="event-pedrosa" class="event-detail color-pink" style="display:none">
+        <button class="back-link" onclick="closeEvent('pedrosa')">← Tous les événements</button>
+        <div class="event-detail-hero pink-bg">
+            <div class="event-detail-emoji">🌸</div>
+            <h2 class="event-detail-title">Soirée Madame Pedrosa</h2>
+            <p class="event-detail-subtitle">Une soirée… particulière</p>
+        </div>
+        <div class="event-detail-body">
+            <p class="event-detail-desc">Madame Pedrosa, c'est une habituée. Une figure. Une légende locale. Une fois par trimestre, on lui réserve la salle, on prépare ses plats préférés, et on invite ses amis — et les amis de ses amis — pour une soirée qui lui ressemble : chaleureuse, colorée, et pleine de surprises délicates. On ne vous en dit pas plus. Ceux qui connaissent, connaissent.</p>
+            <div class="event-detail-info">
+                <div class="event-details-box">
+                    <h3>📋 Les détails</h3>
+                    <ul>
+                        <li>✓ Sur invitation ou par le bouche-à-oreille</li>
+                        <li>✓ Menu et ambiance selon les envies de Madame</li>
+                        <li>✓ Atmosphère intimiste et bienveillante</li>
+                        <li>✓ Chaque soirée est unique</li>
+                    </ul>
+                </div>
+                <div class="event-next-box">
+                    <h3>📅 Prochaine date</h3>
+                    <p>Les dates circulent discrètement… tendez l'oreille.</p>
+                    <div class="event-contact-note">Ceux qui sont invités, le savent. Les autres… patience.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════════════ PAGE : SURPRISES ══════════════════ -->
+<div id="page-surprises" class="page">
+
+    <div class="page-hero surprises-hero">
+        <div class="surprises-deco">✨ 🪄 ✨</div>
+        <h2 class="page-title">Les Surprises de la Maison</h2>
+        <p class="page-subtitle">Chez Romu, on croit que les meilleurs moments sont souvent ceux qu'on n'a pas planifiés.</p>
+    </div>
+
+    <p class="surprises-intro">Ces surprises ne sont pas dans la carte. Elles ne sont pas garanties. Elles arrivent quand elles arrivent. C'est exactement ce qui les rend précieuses.</p>
+
+    <div class="surprises-grid">
+        <div class="surprise-card">
+            <div class="surprise-emoji">🪄</div>
+            <h3 class="surprise-title">La Table Mystère</h3>
+            <p class="surprise-desc">Une fois par semaine, une table est réservée… pour personne. Si vous arrivez à l'improviste et que le chef est d'humeur, vous pourriez avoir droit à un repas entier dont vous ne connaîtrez ni les plats, ni le prix, ni la durée. Juste la confiance.</p>
+        </div>
+        <div class="surprise-card">
+            <div class="surprise-emoji">📝</div>
+            <h3 class="surprise-title">Le Mot du Chef</h3>
+            <p class="surprise-desc">À chaque addition, le chef glisse un petit mot manuscrit. Parfois une blague, parfois un conseil de vie, parfois une recette secrète. Parfois juste "merci". Ces mots-là valent plus que le repas.</p>
+        </div>
+        <div class="surprise-card">
+            <div class="surprise-emoji">🖊️</div>
+            <h3 class="surprise-title">L'Ardoise Invisible</h3>
+            <p class="surprise-desc">Il y a toujours au moins un plat du jour qui n'est écrit nulle part. Il faut le demander. Il faut oser. Ceux qui osent mangent souvent le meilleur plat de la semaine.</p>
+        </div>
+        <div class="surprise-card">
+            <div class="surprise-emoji">🍾</div>
+            <h3 class="surprise-title">La Bouteille Surprise</h3>
+            <p class="surprise-desc">Commandez "une surprise à boire" et laissez le sommelier choisir. Budget fixé à l'avance, surprise garantie. On a déjà sorti un Pétrus. On a aussi sorti de l'eau pétillante du robinet. C'est ça, la vie.</p>
+        </div>
+        <div class="surprise-card">
+            <div class="surprise-emoji">👻</div>
+            <h3 class="surprise-title">Le Dessert Fantôme</h3>
+            <p class="surprise-desc">Si vous terminez votre repas sans commander de dessert, il arrive parfois qu'un petit quelque chose apparaisse quand même. Le chef n'aime pas que les gens repartent sans douceur. C'est sa façon à lui de dire au revoir.</p>
+        </div>
+        <div class="surprise-card">
+            <div class="surprise-emoji">📵</div>
+            <h3 class="surprise-title">La Soirée Sans Téléphone</h3>
+            <p class="surprise-desc">Une fois par an, Romu organise un dîner où les téléphones sont gentiment confisqués à l'entrée et rendus avec le café. Les gens se parlent. Vraiment. C'est assez bluffant.</p>
+        </div>
+    </div>
+
+    <div class="mystery-banner">
+        <div class="mystery-emoji">🔮</div>
+        <h3>Et il y en a d'autres…</h3>
+        <p>Certaines surprises n'ont pas de nom. Certaines n'arrivent qu'une seule fois. La seule façon de les découvrir, c'est de passer la porte.</p>
+        <p class="mystery-quote"><em>"On ne raconte pas toutes les surprises. Sinon, ce ne sont plus des surprises."</em><br>— Romu</p>
+    </div>
+</div>
+
+</main>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-col">
+            <h3>🍽️ Chez Romu</h3>
+            <p>Le bistrot où il fait bon vivre, manger, rire et parfois danser.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Horaires</h3>
+            <p>Mardi – Vendredi : 12h–14h30 / 19h–23h</p>
+            <p>Samedi : 19h–23h30</p>
+            <p>Dimanche &amp; Lundi : repos bien mérité</p>
+        </div>
+        <div class="footer-col">
+            <h3>Nous trouver</h3>
+            <p>📍 Quelque part dans le quartier</p>
+            <p>💌 On vous attend !</p>
+        </div>
+    </div>
+    <div class="footer-bottom">© 2024 Chez Romu — Fait avec ❤️ et un peu trop de beurre</div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
