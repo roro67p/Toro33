@@ -1,5 +1,98 @@
 @import "tailwindcss";
 
-@media print {
-  .no-print { display: none !important; }
+@theme {
+  --color-primary: #1e40af;
+  --color-primary-light: #3b82f6;
+  --color-primary-dark: #1e3a8a;
+  --color-accent: #f59e0b;
+  --color-accent-light: #fbbf24;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-promo: #dc2626;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+@keyframes bounce-in {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+.animate-pulse-badge {
+  animation: pulse-badge 0.3s ease-out;
+}
+.animate-bounce-in {
+  animation: bounce-in 0.3s ease-out;
+}
+
+/* Promo badge */
+.promo-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+/* Gradient backgrounds */
+.hero-gradient {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+}
+.promo-gradient {
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
 }

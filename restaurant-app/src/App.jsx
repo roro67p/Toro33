@@ -1,29 +1,38 @@
-import { useState } from 'react'
 import './index.css'
-import Layout from './components/Layout'
-import Dashboard from './components/Dashboard'
-import MenuPage from './components/Menu'
-import Clients from './components/Clients'
-import Orders from './components/Orders'
-import Invoices from './components/Invoices'
+import useStore from './store/useStore'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import HomePage from './components/HomePage'
+import Catalog from './components/Catalog'
+import CartSidebar from './components/CartSidebar'
+import DriveBooking from './components/DriveBooking'
+import AuthModal from './components/AuthModal'
+import OrderConfirmation from './components/OrderConfirmation'
 
 export default function App() {
-  const [page, setPage] = useState('dashboard')
+  const currentPage = useStore(s => s.currentPage)
+  const cartOpen = useStore(s => s.cartOpen)
+  const authModal = useStore(s => s.authModal)
 
   const renderPage = () => {
-    switch (page) {
-      case 'dashboard': return <Dashboard setPage={setPage} />
-      case 'menu': return <MenuPage />
-      case 'clients': return <Clients />
-      case 'orders': return <Orders setPage={setPage} />
-      case 'invoices': return <Invoices />
-      default: return <Dashboard setPage={setPage} />
+    switch (currentPage) {
+      case 'home': return <HomePage />
+      case 'catalog': return <Catalog />
+      case 'drive': return <DriveBooking />
+      case 'confirmation': return <OrderConfirmation />
+      default: return <HomePage />
     }
   }
 
   return (
-    <Layout page={page} setPage={setPage}>
-      {renderPage()}
-    </Layout>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Header />
+      <main className="flex-1">
+        {renderPage()}
+      </main>
+      <Footer />
+      {cartOpen && <CartSidebar />}
+      {authModal && <AuthModal />}
+    </div>
   )
 }
