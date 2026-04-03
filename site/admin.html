@@ -29,6 +29,9 @@
         <button class="snav-btn" onclick="showSection('evenements')">🎉 Événements</button>
         <button class="snav-btn" onclick="showSection('stock')">📦 Stock & Boissons</button>
         <button class="snav-btn" onclick="showSection('notes')">📝 Notes du chef</button>
+        <button class="snav-btn" onclick="showSection('ardoise')">🍽️ Ardoise du jour</button>
+        <button class="snav-btn" onclick="showSection('planning')">👨‍🍳 Planning staff</button>
+        <button class="snav-btn" onclick="showSection('stats')">📈 Statistiques</button>
     </nav>
 
     <div class="sidebar-footer">
@@ -201,6 +204,138 @@
         </div>
     </section>
 
+    <!-- ══ ARDOISE DU JOUR ══ -->
+    <section id="section-ardoise" class="section">
+        <div class="ardoise-wrap">
+            <div class="ardoise-board">
+                <div class="ardoise-header">🍽️ Ardoise du jour</div>
+                <div class="ardoise-form">
+                    <div class="form-group">
+                        <label>Entrée du jour</label>
+                        <input type="text" id="ardoise-entree" class="form-input" placeholder="Ex: Soupe de légumes du jardin" oninput="saveArdoise()">
+                    </div>
+                    <div class="form-group">
+                        <label>Plat du jour</label>
+                        <input type="text" id="ardoise-plat" class="form-input" placeholder="Ex: Magret de canard, sauce aux cerises" oninput="saveArdoise()">
+                    </div>
+                    <div class="form-group">
+                        <label>Dessert du jour</label>
+                        <input type="text" id="ardoise-dessert" class="form-input" placeholder="Ex: Mousse au chocolat maison" oninput="saveArdoise()">
+                    </div>
+                    <div class="form-group">
+                        <label>Prix du menu du jour (€)</label>
+                        <input type="number" id="ardoise-prix" class="form-input" placeholder="18" oninput="saveArdoise()">
+                    </div>
+                    <div class="form-group">
+                        <label>Message du chef (optionnel)</label>
+                        <input type="text" id="ardoise-message" class="form-input" placeholder="Ex: Ce soir on fête les 10 ans du bistrot !" oninput="saveArdoise()">
+                    </div>
+                    <div class="ardoise-status" id="ardoise-status">✓ Sauvegardé et visible sur le site</div>
+                </div>
+            </div>
+            <div class="ardoise-preview" id="ardoise-preview">
+                <div class="preview-label">Aperçu sur le site</div>
+                <div class="preview-card" id="preview-card"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ PLANNING STAFF ══ -->
+    <section id="section-planning" class="section">
+        <div class="section-toolbar">
+            <div class="toolbar-left">
+                <strong>Semaine du</strong>
+                <input type="date" id="planning-semaine" class="select-input" onchange="renderPlanning()">
+            </div>
+            <button class="btn-primary" onclick="openPlanningModal()">+ Ajouter un créneau</button>
+        </div>
+        <div class="planning-grid" id="planning-grid"></div>
+    </section>
+
+    <!-- ══ STATISTIQUES ══ -->
+    <section id="section-stats" class="section">
+        <div class="stats-period">
+            <button class="period-btn active" onclick="setPeriod('semaine', this)">Cette semaine</button>
+            <button class="period-btn" onclick="setPeriod('mois', this)">Ce mois</button>
+            <button class="period-btn" onclick="setPeriod('total', this)">Tout</button>
+        </div>
+        <div class="stats-grid" style="margin-bottom:1.5rem">
+            <div class="stat-card rouge"><div class="stat-icon">💶</div><div class="stat-info"><div class="stat-value" id="stats-ca">0€</div><div class="stat-label">Chiffre d'affaires</div></div></div>
+            <div class="stat-card or"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value" id="stats-cmds">0</div><div class="stat-label">Commandes</div></div></div>
+            <div class="stat-card vert"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value" id="stats-couverts">0</div><div class="stat-label">Couverts</div></div></div>
+            <div class="stat-card bleu"><div class="stat-icon">🍽️</div><div class="stat-info"><div class="stat-value" id="stats-panier">0€</div><div class="stat-label">Panier moyen</div></div></div>
+        </div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>🏆 Menus les plus commandés</h3>
+                <div id="chart-menus" class="bar-chart"></div>
+            </div>
+            <div class="chart-card">
+                <h3>📅 CA par jour</h3>
+                <div id="chart-ca" class="bar-chart"></div>
+            </div>
+            <div class="chart-card">
+                <h3>🗓️ Réservations par soir</h3>
+                <div id="chart-resa" class="bar-chart"></div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- ══ MODAL PLANNING ══ -->
+<div id="modal-planning" class="modal-overlay" style="display:none">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>👨‍🍳 Ajouter un créneau</h3>
+            <button onclick="closeModal('modal-planning')" class="modal-close">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Employé</label>
+                    <input type="text" id="planning-nom" class="form-input" placeholder="Prénom">
+                </div>
+                <div class="form-group">
+                    <label>Rôle</label>
+                    <select id="planning-role" class="form-input">
+                        <option>Chef</option>
+                        <option>Second de cuisine</option>
+                        <option>Serveur</option>
+                        <option>Barman</option>
+                        <option>Plongeur</option>
+                        <option>Hôte / Hôtesse</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Jour</label>
+                    <select id="planning-jour" class="form-input">
+                        <option value="0">Lundi</option>
+                        <option value="1">Mardi</option>
+                        <option value="2">Mercredi</option>
+                        <option value="3">Jeudi</option>
+                        <option value="4">Vendredi</option>
+                        <option value="5">Samedi</option>
+                        <option value="6">Dimanche</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Début</label>
+                    <input type="time" id="planning-debut" class="form-input" value="11:00">
+                </div>
+                <div class="form-group">
+                    <label>Fin</label>
+                    <input type="time" id="planning-fin" class="form-input" value="23:00">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('modal-planning')" class="btn-secondary">Annuler</button>
+            <button onclick="savePlanning()" class="btn-primary">Ajouter</button>
+        </div>
+    </div>
 </div>
 
 <!-- ══ MODAL COMMANDE ══ -->

@@ -103,6 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var cdn = document.getElementById('chef-note-dash');
     if (cdn) cdn.value = load('note-jour', '');
 
+    // Planning semaine courante
+    var ps = document.getElementById('planning-semaine');
+    if (ps) ps.value = todayStr();
+
     renderAll();
 });
 
@@ -115,6 +119,9 @@ function renderAll() {
     renderMenus();
     renderStock();
     renderEvents();
+    loadArdoise();
+    renderPlanning();
+    renderStats('semaine');
 }
 
 // ── Navigation ──────────────────────────────────
@@ -124,6 +131,9 @@ var sectionTitles = {
     reservations: '🗓️ Réservations',
     menus: '🍴 Menus',
     evenements: '🎉 Événements',
+    ardoise: '🍽️ Ardoise du jour',
+    planning: '👨‍🍳 Planning staff',
+    stats: '📈 Statistiques',
     stock: '📦 Stock & Boissons',
     notes: '📝 Notes du chef',
 };
@@ -533,4 +543,200 @@ function toast(msg) {
     el.style.display = 'block';
     clearTimeout(toast._t);
     toast._t = setTimeout(function() { el.style.display = 'none'; }, 3000);
+}
+
+// ════════════════════════════════════════════════
+//  ARDOISE DU JOUR
+// ════════════════════════════════════════════════
+function saveArdoise() {
+    var data = {
+        entree:  document.getElementById('ardoise-entree').value,
+        plat:    document.getElementById('ardoise-plat').value,
+        dessert: document.getElementById('ardoise-dessert').value,
+        prix:    document.getElementById('ardoise-prix').value,
+        message: document.getElementById('ardoise-message').value,
+        date:    todayStr(),
+    };
+    save('ardoise', data);
+    updateArdoisePreview(data);
+}
+
+function loadArdoise() {
+    var data = load('ardoise', {});
+    if (document.getElementById('ardoise-entree')) {
+        document.getElementById('ardoise-entree').value  = data.entree  || '';
+        document.getElementById('ardoise-plat').value    = data.plat    || '';
+        document.getElementById('ardoise-dessert').value = data.dessert || '';
+        document.getElementById('ardoise-prix').value    = data.prix    || '';
+        document.getElementById('ardoise-message').value = data.message || '';
+        updateArdoisePreview(data);
+    }
+}
+
+function updateArdoisePreview(data) {
+    var el = document.getElementById('preview-card');
+    if (!el) return;
+    el.innerHTML =
+        '<div class="preview-date">📅 ' + formatDate(data.date || todayStr()) + '</div>' +
+        (data.entree  ? '<div class="preview-row"><span class="preview-cat">Entrée</span><span>' + data.entree  + '</span></div>' : '') +
+        (data.plat    ? '<div class="preview-row"><span class="preview-cat">Plat</span><span>'   + data.plat    + '</span></div>' : '') +
+        (data.dessert ? '<div class="preview-row"><span class="preview-cat">Dessert</span><span>'+ data.dessert + '</span></div>' : '') +
+        (data.prix    ? '<div class="preview-prix">' + data.prix + '€ / pers.</div>' : '') +
+        (data.message ? '<div class="preview-message">💬 ' + data.message + '</div>' : '');
+}
+
+// ════════════════════════════════════════════════
+//  PLANNING STAFF
+// ════════════════════════════════════════════════
+var planning = load('planning', []);
+var nextPlanId = load('nextPlanId', 1);
+
+var JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var ROLE_COLORS = {
+    'Chef': '#8B1A1A',
+    'Second de cuisine': '#C0392B',
+    'Serveur': '#1565c0',
+    'Barman': '#6a1b9a',
+    'Plongeur': '#2e7d32',
+    'Hôte / Hôtesse': '#e65100',
+};
+
+function renderPlanning() {
+    var grid = document.getElementById('planning-grid');
+    if (!grid) return;
+    grid.innerHTML = JOURS.map(function(jour, idx) {
+        var slots = planning.filter(function(p) { return p.jour == idx; });
+        return '<div class="planning-day">' +
+            '<div class="planning-day-header">' + jour + '</div>' +
+            '<div class="planning-day-slots">' +
+            (slots.length ? slots.map(function(s) {
+                var col = ROLE_COLORS[s.role] || '#666';
+                return '<div class="planning-slot" style="border-left-color:' + col + '">' +
+                    '<div class="slot-name">' + s.nom + '</div>' +
+                    '<div class="slot-role" style="color:' + col + '">' + s.role + '</div>' +
+                    '<div class="slot-time">⏰ ' + s.debut + ' – ' + s.fin + '</div>' +
+                    '<button class="slot-del" onclick="deletePlanSlot(' + s.id + ')">✕</button>' +
+                '</div>';
+            }).join('') : '<div class="slot-empty">—</div>') +
+            '</div></div>';
+    }).join('');
+}
+
+function openPlanningModal() {
+    document.getElementById('planning-nom').value = '';
+    document.getElementById('modal-planning').style.display = 'flex';
+}
+
+function savePlanning() {
+    var nom = document.getElementById('planning-nom').value.trim();
+    if (!nom) { toast('⚠️ Prénom requis'); return; }
+    planning.push({
+        id:    nextPlanId++,
+        nom:   nom,
+        role:  document.getElementById('planning-role').value,
+        jour:  parseInt(document.getElementById('planning-jour').value),
+        debut: document.getElementById('planning-debut').value,
+        fin:   document.getElementById('planning-fin').value,
+    });
+    save('planning', planning);
+    save('nextPlanId', nextPlanId);
+    closeModal('modal-planning');
+    renderPlanning();
+    toast('✓ Créneau ajouté');
+}
+
+function deletePlanSlot(id) {
+    planning = planning.filter(function(p) { return p.id !== id; });
+    save('planning', planning);
+    renderPlanning();
+    toast('Créneau supprimé');
+}
+
+// ════════════════════════════════════════════════
+//  STATISTIQUES
+// ════════════════════════════════════════════════
+function setPeriod(period, btn) {
+    document.querySelectorAll('.period-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderStats(period);
+}
+
+function renderStats(period) {
+    var filtered = filterByPeriod(commandes, period);
+
+    var ca = filtered.reduce(function(a, c) { return a + (parseFloat(c.total) || 0); }, 0);
+    var couverts = filtered.reduce(function(a, c) { return a + (parseInt(c.pers) || 0); }, 0);
+    var panier = filtered.length ? (ca / filtered.length) : 0;
+
+    var caEl = document.getElementById('stats-ca');
+    if (caEl) {
+        caEl.textContent = ca.toFixed(0) + '€';
+        document.getElementById('stats-cmds').textContent = filtered.length;
+        document.getElementById('stats-couverts').textContent = couverts;
+        document.getElementById('stats-panier').textContent = panier.toFixed(0) + '€';
+        renderBarChart('chart-menus', menuStats(filtered));
+        renderBarChart('chart-ca', caByDay(filtered));
+        renderBarChart('chart-resa', resaByDay(filterByPeriod(reservations, period)));
+    }
+}
+
+function filterByPeriod(arr, period) {
+    var now = new Date();
+    return arr.filter(function(item) {
+        var d = new Date(item.date + 'T00:00:00');
+        if (period === 'semaine') {
+            var startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay());
+            return d >= startOfWeek;
+        } else if (period === 'mois') {
+            return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        }
+        return true;
+    });
+}
+
+function menuStats(cmds) {
+    var counts = {};
+    cmds.forEach(function(c) {
+        var menus_str = c.menus || '';
+        ['Gourmand','Surprise','Wow'].forEach(function(m) {
+            if (menus_str.indexOf(m) !== -1) counts[m] = (counts[m] || 0) + 1;
+        });
+    });
+    if (!Object.keys(counts).length) return [{ label: 'Aucune donnée', val: 0 }];
+    return Object.keys(counts).map(function(k) { return { label: k, val: counts[k] }; });
+}
+
+function caByDay(cmds) {
+    var days = {};
+    cmds.forEach(function(c) {
+        var d = c.date ? c.date.slice(5) : '?';
+        days[d] = (days[d] || 0) + (parseFloat(c.total) || 0);
+    });
+    if (!Object.keys(days).length) return [{ label: 'Aucune donnée', val: 0 }];
+    return Object.keys(days).sort().slice(-7).map(function(d) { return { label: d, val: days[d] }; });
+}
+
+function resaByDay(resas) {
+    var days = {};
+    resas.forEach(function(r) {
+        var d = r.date ? r.date.slice(5) : '?';
+        days[d] = (days[d] || 0) + 1;
+    });
+    if (!Object.keys(days).length) return [{ label: 'Aucune donnée', val: 0 }];
+    return Object.keys(days).sort().slice(-7).map(function(d) { return { label: d, val: days[d] }; });
+}
+
+function renderBarChart(containerId, data) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    var max = Math.max.apply(null, data.map(function(d) { return d.val; })) || 1;
+    el.innerHTML = data.map(function(d) {
+        var pct = Math.round((d.val / max) * 100);
+        return '<div class="bar-row">' +
+            '<div class="bar-label">' + d.label + '</div>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
+            '<div class="bar-val">' + (Number.isInteger(d.val) ? d.val : d.val.toFixed(0) + '€') + '</div>' +
+        '</div>';
+    }).join('');
 }

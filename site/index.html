@@ -30,6 +30,10 @@
         <button class="nav-btn active" onclick="showPage('menus')">🍴 Menus &amp; Boissons</button>
         <button class="nav-btn" onclick="showPage('evenements')">🎉 Événements</button>
         <button class="nav-btn" onclick="showPage('surprises')">✨ Surprises</button>
+        <button class="nav-btn" onclick="showPage('ardoise')">🍽️ Ardoise</button>
+        <button class="nav-btn" onclick="showPage('galerie')">📸 Galerie</button>
+        <button class="nav-btn" onclick="showPage('livreor')">💬 Livre d'or</button>
+        <button class="nav-btn" onclick="showPage('trouver')">🗺️ Nous trouver</button>
     </nav>
 </header>
 
@@ -443,6 +447,105 @@
         <h3>Et il y en a d'autres…</h3>
         <p>Certaines surprises n'ont pas de nom. Certaines n'arrivent qu'une seule fois. La seule façon de les découvrir, c'est de passer la porte.</p>
         <p class="mystery-quote"><em>"On ne raconte pas toutes les surprises. Sinon, ce ne sont plus des surprises."</em><br>— Romu</p>
+    </div>
+</div>
+
+<!-- ══════════════════ PAGE : ARDOISE ══════════════════ -->
+<div id="page-ardoise" class="page">
+    <div class="page-hero">
+        <h2 class="page-title">🍽️ Ardoise du jour</h2>
+        <p class="page-subtitle">Les créations du chef pour aujourd'hui</p>
+    </div>
+    <div id="ardoise-site-content" class="ardoise-site"></div>
+</div>
+
+<!-- ══════════════════ PAGE : GALERIE ══════════════════ -->
+<div id="page-galerie" class="page">
+    <div class="page-hero">
+        <h2 class="page-title">📸 Galerie</h2>
+        <p class="page-subtitle">Les moments et les plats de la maison</p>
+    </div>
+    <div class="galerie-filters">
+        <button class="gal-filter active" onclick="filterGalerie('tous', this)">Tous</button>
+        <button class="gal-filter" onclick="filterGalerie('plats', this)">🍖 Plats</button>
+        <button class="gal-filter" onclick="filterGalerie('soirees', this)">🎉 Soirées</button>
+        <button class="gal-filter" onclick="filterGalerie('ambiance', this)">✨ Ambiance</button>
+    </div>
+    <div class="galerie-grid" id="galerie-grid"></div>
+</div>
+
+<!-- ══════════════════ PAGE : LIVRE D'OR ══════════════════ -->
+<div id="page-livreor" class="page">
+    <div class="page-hero">
+        <h2 class="page-title">💬 Livre d'or</h2>
+        <p class="page-subtitle">Ce que nos clients pensent de Chez Romu</p>
+    </div>
+    <div class="livreor-form-wrap">
+        <h3>✍️ Laissez un mot</h3>
+        <div class="livreor-form">
+            <div class="livreor-inputs">
+                <input type="text" id="lor-nom" class="lor-input" placeholder="Votre prénom">
+                <div class="lor-stars" id="lor-stars">
+                    <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span>
+                    <span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span>
+                    <span onclick="setStars(5)">★</span>
+                </div>
+            </div>
+            <textarea id="lor-message" class="lor-textarea" placeholder="Dites-nous ce que vous avez aimé…"></textarea>
+            <button class="btn-lor" onclick="submitLivreOr()">Publier mon message 💌</button>
+        </div>
+    </div>
+    <div class="livreor-messages" id="livreor-messages"></div>
+</div>
+
+<!-- ══════════════════ PAGE : NOUS TROUVER ══════════════════ -->
+<div id="page-trouver" class="page">
+    <div class="page-hero">
+        <h2 class="page-title">🗺️ Nous trouver</h2>
+        <p class="page-subtitle">On vous attend !</p>
+    </div>
+    <div class="trouver-grid">
+        <div class="trouver-card">
+            <h3>📍 Adresse</h3>
+            <p>Chez Romu<br>Au cœur du quartier<br>À deux pas du marché</p>
+            <div class="trouver-map">
+                <div class="map-placeholder">
+                    <span>🗺️</span>
+                    <p>Plan disponible à l'accueil</p>
+                    <p style="font-size:0.8rem;opacity:0.6">Demandez à Romu, il vous explique le chemin mieux que Google Maps</p>
+                </div>
+            </div>
+        </div>
+        <div class="trouver-card">
+            <h3>🕐 Horaires</h3>
+            <div class="horaires-table">
+                <div class="horaire-row"><span>Lundi</span><span class="closed">Fermé</span></div>
+                <div class="horaire-row"><span>Mardi</span><span>12h–14h30 / 19h–23h</span></div>
+                <div class="horaire-row"><span>Mercredi</span><span>12h–14h30 / 19h–23h</span></div>
+                <div class="horaire-row"><span>Jeudi</span><span>12h–14h30 / 19h–23h</span></div>
+                <div class="horaire-row"><span>Vendredi</span><span>12h–14h30 / 19h–23h</span></div>
+                <div class="horaire-row today-row"><span>Samedi</span><span>19h–23h30</span></div>
+                <div class="horaire-row"><span>Dimanche</span><span class="closed">Fermé</span></div>
+            </div>
+        </div>
+        <div class="trouver-card">
+            <h3>📞 Contact</h3>
+            <div class="contact-items">
+                <div class="contact-item"><span class="contact-icon">📞</span><span>Réservations en direct<br><small>Passez nous voir ou appelez</small></span></div>
+                <div class="contact-item"><span class="contact-icon">🅿️</span><span>Parking gratuit<br><small>Place du marché à 2 min à pied</small></span></div>
+                <div class="contact-item"><span class="contact-icon">♿</span><span>Accès PMR<br><small>Entrée de plain-pied</small></span></div>
+                <div class="contact-item"><span class="contact-icon">🐕</span><span>Animaux acceptés<br><small>En terrasse avec plaisir</small></span></div>
+            </div>
+        </div>
+        <div class="trouver-card">
+            <h3>🚌 Comment venir</h3>
+            <div class="transport-items">
+                <div class="transport-item">🚶 <strong>À pied :</strong> 5 min depuis la place centrale</div>
+                <div class="transport-item">🚲 <strong>Vélo :</strong> Rack à vélos devant le restaurant</div>
+                <div class="transport-item">🚗 <strong>Voiture :</strong> Parking du marché, gratuit le soir</div>
+                <div class="transport-item">🚌 <strong>Bus :</strong> Arrêt "Le Marché" à 2 min</div>
+            </div>
+        </div>
     </div>
 </div>
 
