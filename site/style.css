@@ -456,8 +456,8 @@ body {
 .gal-filter.active { background: var(--rouge); border-color: var(--rouge); color: white; }
 .galerie-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.2rem;
     margin-bottom: 2rem;
 }
 .gal-item {
@@ -469,24 +469,82 @@ body {
     cursor: pointer;
     border-bottom: 3px solid transparent;
 }
-.gal-item:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--ombre); }
+.gal-item:hover { transform: translateY(-6px); box-shadow: 0 14px 35px var(--ombre); }
 .gal-plats    { border-bottom-color: var(--rouge); }
 .gal-soirees  { border-bottom-color: #6a1b9a; }
 .gal-ambiance { border-bottom-color: var(--or); }
-.gal-emoji {
-    font-size: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 130px;
-    background: var(--creme);
+.gal-photo {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: var(--gris-light);
 }
-.gal-plats    .gal-emoji { background: #fdf0f0; }
-.gal-soirees  .gal-emoji { background: #f3e5f5; }
-.gal-ambiance .gal-emoji { background: var(--or-light); }
+.gal-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+.gal-item:hover .gal-photo img { transform: scale(1.07); }
+.gal-overlay {
+    position: absolute; inset: 0;
+    background: rgba(61,43,31,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+.gal-item:hover .gal-overlay { opacity: 1; }
 .gal-info { padding: 0.9rem; }
 .gal-titre { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--rouge); margin-bottom: 0.2rem; font-weight: 700; }
 .gal-desc { font-size: 0.8rem; color: var(--gris); font-style: italic; }
+
+/* ── LIGHTBOX ── */
+.lightbox-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    animation: fadeIn 0.25s ease;
+    cursor: zoom-out;
+}
+.lb-close {
+    position: fixed; top: 1.2rem; right: 1.5rem;
+    background: rgba(255,255,255,0.15);
+    border: none; color: white;
+    font-size: 1.4rem; width: 42px; height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9001;
+    transition: background var(--transition);
+}
+.lb-close:hover { background: rgba(255,255,255,0.3); }
+.lightbox-content {
+    max-width: 900px; width: 100%;
+    cursor: default;
+    animation: fadeIn 0.3s ease;
+}
+.lightbox-content img {
+    width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: var(--radius);
+    display: block;
+}
+.lb-caption {
+    padding: 1rem 0.5rem 0;
+    text-align: center;
+}
+.lb-titre {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: white;
+    margin-bottom: 0.25rem;
+}
+.lb-desc { color: rgba(255,255,255,0.6); font-style: italic; font-size: 0.9rem; }
 
 /* ── LIVRE D'OR ── */
 .livreor-form-wrap {

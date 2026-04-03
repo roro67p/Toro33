@@ -576,6 +576,18 @@
     </div>
 </footer>
 
+<!-- LIGHTBOX -->
+<div id="lightbox" style="display:none" onclick="closeLightbox()" class="lightbox-overlay">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <img id="lb-img" src="" alt="">
+        <div class="lb-caption">
+            <div id="lb-titre" class="lb-titre"></div>
+            <div id="lb-desc" class="lb-desc"></div>
+        </div>
+    </div>
+</div>
+
 <script src="main.js"></script>
 </body>
 </html>

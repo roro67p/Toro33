@@ -69,20 +69,20 @@ function loadArdoiseSite() {
 //  GALERIE
 // ════════════════════════════════════════════════
 var GALERIE_ITEMS = [
-    { cat:'plats',    emoji:'🥩', titre:'Côte de bœuf Wagyu', desc:'La pièce maîtresse du Menu Wow' },
-    { cat:'plats',    emoji:'🐟', titre:'Dos de cabillaud', desc:'Croustillant, fondant, parfait' },
-    { cat:'plats',    emoji:'🍮', titre:'Fondant au chocolat', desc:'Le cœur coulant qui fait soupirer' },
-    { cat:'plats',    emoji:'🦞', titre:'Homard thermidor', desc:'Pour les grandes occasions' },
-    { cat:'plats',    emoji:'🥗', titre:'Carpaccio de bœuf', desc:'Finesse et fraîcheur' },
-    { cat:'plats',    emoji:'🍰', titre:'Paris-Brest revisité', desc:'Praliné noisette, caramel' },
-    { cat:'soirees',  emoji:'⚽', titre:'Soirée Match', desc:'Quand le foot s\'invite au bistrot' },
-    { cat:'soirees',  emoji:'🕺', titre:'Soirée Disco', desc:'Les 70s sont de retour' },
-    { cat:'soirees',  emoji:'🎳', titre:'Soirée Bowling', desc:'Strike & dîner, la formule gagnante' },
-    { cat:'soirees',  emoji:'🌸', titre:'Soirée Madame Pedrosa', desc:'Une soirée comme elle seule sait les faire' },
-    { cat:'ambiance', emoji:'🍷', titre:'La cave à vins', desc:'Nos sélections confidentielles' },
-    { cat:'ambiance', emoji:'🕯️', titre:'En salle', desc:'L\'atmosphère chaleureuse de Chez Romu' },
-    { cat:'ambiance', emoji:'👨‍🍳', titre:'En cuisine', desc:'Romu aux commandes' },
-    { cat:'ambiance', emoji:'🌿', titre:'La terrasse', desc:'Les beaux soirs d\'été' },
+    { cat:'plats',    img:'https://images.unsplash.com/photo-1546833998-877b37c2e5c6?w=500&q=80', titre:'Côte de bœuf Wagyu', desc:'La pièce maîtresse du Menu Wow' },
+    { cat:'plats',    img:'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500&q=80', titre:'Dos de cabillaud', desc:'Croustillant, fondant, parfait' },
+    { cat:'plats',    img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80', titre:'Fondant au chocolat', desc:'Le cœur coulant qui fait soupirer' },
+    { cat:'plats',    img:'https://images.unsplash.com/photo-1525164286253-04e68b9d94c6?w=500&q=80', titre:'Homard thermidor', desc:'Pour les grandes occasions' },
+    { cat:'plats',    img:'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80', titre:'Carpaccio de bœuf', desc:'Finesse et fraîcheur' },
+    { cat:'plats',    img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&q=80', titre:'Paris-Brest revisité', desc:'Praliné noisette, caramel' },
+    { cat:'soirees',  img:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500&q=80', titre:'Soirée Match', desc:'Quand le foot s\'invite au bistrot' },
+    { cat:'soirees',  img:'https://images.unsplash.com/photo-1571266028243-d220c6a7a0cf?w=500&q=80', titre:'Soirée Disco', desc:'Les 70s sont de retour' },
+    { cat:'soirees',  img:'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=500&q=80', titre:'Soirée Bowling', desc:'Strike & dîner, la formule gagnante' },
+    { cat:'soirees',  img:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=500&q=80', titre:'Soirée Madame Pedrosa', desc:'Une soirée comme elle seule sait les faire' },
+    { cat:'ambiance', img:'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&q=80', titre:'La cave à vins', desc:'Nos sélections confidentielles' },
+    { cat:'ambiance', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80', titre:'En salle', desc:'L\'atmosphère chaleureuse de Chez Romu' },
+    { cat:'ambiance', img:'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=500&q=80', titre:'En cuisine', desc:'Romu aux commandes' },
+    { cat:'ambiance', img:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80', titre:'La terrasse', desc:'Les beaux soirs d\'été' },
 ];
 
 var currentGalerieFilter = 'tous';
@@ -101,14 +101,31 @@ function renderGalerie() {
         ? GALERIE_ITEMS
         : GALERIE_ITEMS.filter(function(i) { return i.cat === currentGalerieFilter; });
     grid.innerHTML = items.map(function(item) {
-        return '<div class="gal-item gal-' + item.cat + '">' +
-            '<div class="gal-emoji">' + item.emoji + '</div>' +
+        return '<div class="gal-item gal-' + item.cat + '" onclick="openLightbox(\'' + item.img + '\', \'' + item.titre.replace(/'/g,"\\'") + '\', \'' + item.desc.replace(/'/g,"\\'") + '\')">' +
+            '<div class="gal-photo">' +
+                '<img src="' + item.img + '" alt="' + item.titre + '" loading="lazy">' +
+                '<div class="gal-overlay"><span>🔍</span></div>' +
+            '</div>' +
             '<div class="gal-info">' +
                 '<div class="gal-titre">' + item.titre + '</div>' +
                 '<div class="gal-desc">' + item.desc + '</div>' +
             '</div>' +
         '</div>';
     }).join('');
+}
+
+function openLightbox(img, titre, desc) {
+    var lb = document.getElementById('lightbox');
+    if (!lb) return;
+    document.getElementById('lb-img').src = img;
+    document.getElementById('lb-titre').textContent = titre;
+    document.getElementById('lb-desc').textContent = desc;
+    lb.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.body.style.overflow = '';
 }
 
 // ════════════════════════════════════════════════
